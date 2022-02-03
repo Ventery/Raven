@@ -57,7 +57,6 @@ namespace Raven
 			readSet_ = oriReadSet_;
 			writeSet_ = oriWriteSet_;
 			int rs = select(fdNum_, &readSet_, &writeSet_, 0, 0); //select for cross platform
-			std::cout << "rs :" << rs << std::endl;
 			if (rs < 0)
 			{
 				if (errno == EINTR)

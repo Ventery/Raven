@@ -9,8 +9,13 @@ BUILD_TYPE=${BUILD_TYPE:-Debug}
 CONF_DIR=$HOME"/conf/"
 CONF_NAME="Raven.conf"
 
-mkdir -p $CONF_DIR && cp $CONF_NAME $CONF_DIR
+if [ ! -d "$CONF_DIR" ]; then
+  mkdir $CONF_DIR
+fi
 
+if [ ! -f "$CONF_DIR$CONF_NAME" ]; then
+  cp $CONF_NAME $CONF_DIR
+fi
 
 mkdir -p $BUILD_DIR/$BUILD_TYPE"_Raven" \
     && cd $BUILD_DIR/$BUILD_TYPE"_Raven" \
