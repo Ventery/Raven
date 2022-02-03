@@ -1,12 +1,12 @@
 # Raven
-Raven is like a simplified SSH with NAT traversal.
+Raven works like a simplified SSH with NAT traversal.
 
 Now developing...
 But you can still have a test for fun!
 Just fill server_ip in Raven.conf and excute ./build.sh.
 Oh,your server is supposed to have a public IPV4 ip.
 
-If you are intrested in it, you can contact with me.
+If you are intrested in it for further development, please contact me.
 
 My e-mail: 1297054069@qq.com
 
