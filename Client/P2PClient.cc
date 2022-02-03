@@ -180,8 +180,8 @@ namespace Raven
 		std::cout << "handleRead!" << std::endl;
 		bool zero = false;
 		int readNum = context_->readNoBlock(zero);
-			std::cout <<"readNum : "<<readNum<< std::endl;
-			std::cout <<"zero : "<<zero<< std::endl;
+		std::cout <<"readNum : "<<readNum<< std::endl;
+		std::cout <<"zero : "<<zero<< std::endl;
 
 		if (readNum < 0 || (zero && readNum == 0))
 		{
