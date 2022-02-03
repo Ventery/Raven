@@ -54,6 +54,7 @@ namespace Raven
 			if (state == PARSE_PROTOCOL_SUCCESS)
 			{
 				sockInfo_.sockState = STATE_PARSE_HEADERS;
+				sockInfo_.headers.clear();
 			}
 			else if (state == PARSE_PROTOCOL_AGAIN)
 			{
