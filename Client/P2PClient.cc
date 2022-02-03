@@ -118,7 +118,6 @@ namespace Raven
 
 	void P2PClient::handleSignal()
 	{
-		std::cout << "handleSignal!" << std::endl;
 		char signals[1024];
 		int ret = read(subscriberFd_, signals, sizeof(signals));
 		if (ret > 0)
@@ -145,14 +144,12 @@ namespace Raven
 
 	void P2PClient::handleReadWin()
 	{
-		std::cout << "handleReadWin!" << std::endl;
 		int ret = read(STDIN_FILENO, buff_, MAX_BUFF);
 		newMessage_ += HptpContext::makeMessage(std::string(buff_, ret), RavenConfigIns.aesKeyToPeer_, generateStr(kBlockSize), CIPHERTEXT);
 	}
 
 	void P2PClient::handleReadWinCTL()
 	{
-		std::cout << "handleReadWinCTL!" << std::endl;
 		int ret = read(winSubscriberFd_, buff_, MAX_BUFF);
 		buff_[ret] = '\0';
 		int row, col;
@@ -162,7 +159,6 @@ namespace Raven
 
 	void P2PClient::handleWrite()
 	{
-		std::cout << "handleWrite!" << std::endl;
 		if (useTransfer)
 		{
 			newMessage_ = HptpContext::makeMessage(newMessage_, "", "", TRANSFER);
@@ -177,11 +173,8 @@ namespace Raven
 
 	void P2PClient::handleRead()
 	{
-		std::cout << "handleRead!" << std::endl;
 		bool zero = false;
 		int readNum = context_->readNoBlock(zero);
-		std::cout <<"readNum : "<<readNum<< std::endl;
-		std::cout <<"zero : "<<zero<< std::endl;
 
 		if (readNum < 0 || (zero && readNum == 0))
 		{
@@ -194,7 +187,6 @@ namespace Raven
 		while (!context_->isReadBufferEmpty())
 		{
 			MessageState state = context_->parseMessage();
-			std::cout << "state :" << state << std::endl;
 			if (state == PARSE_ERROR)
 			{
 				system(STTY_DEF);
