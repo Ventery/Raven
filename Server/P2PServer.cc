@@ -171,8 +171,6 @@ namespace Raven
                 int peerSock = context->getPeerSock();
                 if (peerSock > 0)
                 {
-                    std::cout<<"Get Transfer!"<<std::endl;
-                    std::cout<<"from fd: "<< fd <<"  to fd : "<< peerSock<<std::endl;
                     auto peerContext = mapSock2Address_[peerSock];
                     peerContext->pushToWriteBuff(context->getText());
                     handleWrite(peerSock);
