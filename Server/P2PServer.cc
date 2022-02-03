@@ -168,11 +168,14 @@ namespace Raven
             }
             else if (state == PARSE_SUCCESS_TRANSFER)
             {
-                if (context->getPeerSock() > 0)
+                int peerSock = context->getPeerSock();
+                if (peerSock > 0)
                 {
-                    auto peerContext = mapSock2Address_[context->getPeerSock()];
+                    std::cout<<"Get Transfer!"<<std::endl;
+                    std::cout<<"from fd: "<< fd <<"  to fd : "<< peerSock<<std::endl;
+                    auto peerContext = mapSock2Address_[peerSock];
                     peerContext->pushToWriteBuff(context->getText());
-                    handleWrite(context->getPeerSock());
+                    handleWrite(peerSock);
                 }
             }
             else //(state==PARSE_SUCCESS ,make peer

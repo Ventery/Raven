@@ -19,7 +19,6 @@
 #include "RavenConfig.h"
 #include "HptpContext.h"
 
-using namespace std;
 namespace Raven
 {
 	const std::string kMsgTooMuch = HptpContext::makeMessage("Too much Connection!", "", "", PLAINTEXT);
@@ -196,9 +195,9 @@ namespace Raven
 					formatTime();
 					for (int i = 0; i < timeOutSec - seconds; i++)
 					{
-						cout << ".";
+						std::cout << ".";
 					}
-					cout << endl;
+					std::cout << std::endl;
 					continue;
 				}
 			}
