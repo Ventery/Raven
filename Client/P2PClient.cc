@@ -186,7 +186,7 @@ namespace Raven
 		while (!context_->isReadBufferEmpty())
 		{
 			MessageState state = context_->parseMessage();
-			//cout << "state :" << state << endl;
+			std::cout << "state :" << state << std::endl;
 			if (state == PARSE_ERROR)
 			{
 				system(STTY_DEF);
