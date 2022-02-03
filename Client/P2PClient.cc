@@ -180,14 +180,16 @@ namespace Raven
 		std::cout << "handleRead!" << std::endl;
 		bool zero = false;
 		int readNum = context_->readNoBlock(zero);
+			std::cout <<"readNum : "<<readNum<< std::endl;
+			std::cout <<"zero : "<<zero<< std::endl;
+
 		if (readNum < 0 || (zero && readNum == 0))
 		{
 			system(STTY_DEF);
 			isRunning_ = false;
-			std::cout << std::endl;
 			formatTime("connection is going to close!\n");
 		}
-
+		
 		//select is Level Triggered.
 		while (!context_->isReadBufferEmpty())
 		{
