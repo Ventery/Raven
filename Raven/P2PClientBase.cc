@@ -18,6 +18,7 @@ namespace Raven
         {
 			formatTime("Connect to Host failed.Now use server as transfer...\n");
             close(fdToPeer);
+            setNoBlocking(peerInfo.sockToServer);
             contactFd_ = peerInfo.sockToServer;
             useTransfer = true;
         }
