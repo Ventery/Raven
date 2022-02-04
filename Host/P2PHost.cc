@@ -22,7 +22,6 @@ namespace Raven
     {
         slaveFd_ = open(ptsname(masterFd_), O_RDWR);
         bashPid_ = getBash(slaveFd_);
-        sleep(1);
         formatTime("bash Pid = ");
         if (bashPid_ < 0)
         {
