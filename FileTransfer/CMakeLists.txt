@@ -5,6 +5,6 @@ set(LIB_SRC
 include_directories(../Base)
 include_directories(../Raven)
 
-add_executable(raven_filetransfer ${LIB_SRC})
+add_executable(TestFileTransfer ${LIB_SRC})
 
-target_link_libraries(raven_filetransfer raven_util)
+target_link_libraries(TestFileTransfer raven_util)

@@ -31,6 +31,7 @@ mkdir -p $BUILD_DIR/$BUILD_TYPE"_Raven" \
             $SOURCE_DIR \
     && make $* \
     && CURRENT_DIR=`pwd` \
-    && sudo ln -s -f $CURRENT_DIR/Server/Test/TestRavenServer /usr/local/bin/TestRavenServer \
     && sudo ln -s -f $CURRENT_DIR/Host/Test/TestRavenHost /usr/local/bin/TestRavenHost \
     && sudo ln -s -f $CURRENT_DIR/Client/Test/TestRavenClient /usr/local/bin/TestRavenClient \
+    && sudo ln -s -f $CURRENT_DIR/FileTransfer/TestFileTransfer /usr/local/bin/TestRavenClient \
+    && sudo ln -s -f $CURRENT_DIR/Server/Test/TestRavenServer /usr/local/bin/TestRavenServer \
