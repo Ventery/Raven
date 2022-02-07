@@ -14,9 +14,10 @@ namespace Raven
 
         virtual void init();
         virtual void run();
-    
+        static bool isContinuous() { return isContinuous_; };
+
     protected:
-        virtual void signalHandler(int sig); 
+        virtual void signalHandler(int sig);
         virtual void handleSignal();
         virtual void handleRead();
         virtual void handleWrite();
@@ -29,13 +30,14 @@ namespace Raven
 
     private:
         void handleStop();
-    	int masterFd_;
-	    int slaveFd_;
+        int masterFd_;
+        int slaveFd_;
         int bashPid_;
-        bool isBashRunning;
-        fd_set oriReadSet, readSet;
-	    fd_set oriWriteSet, writeSet;
-		char buff_[MAX_BUFF + 1];
+        bool isBashRunning_;
+        static bool isContinuous_;
+        fd_set oriReadSet_, readSet_;
+        fd_set oriWriteSet_, writeSet_;
+        char buff_[MAX_BUFF + 1];
         std::string MessageToBash_;
         std::string newMessageToPeer_;
         std::string newMessageToBash_;

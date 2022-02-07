@@ -37,11 +37,11 @@ namespace Raven
         setSocketFD_CLOEXEC(subscriberFd_);
         setSocketFD_CLOEXEC(contactFd_);
 
-        FD_ZERO(&oriReadSet);
-        FD_ZERO(&oriWriteSet);
-        FD_SET(contactFd_, &oriReadSet);
-        FD_SET(masterFd_, &oriReadSet);
-        FD_SET(subscriberFd_, &oriReadSet);
+        FD_ZERO(&oriReadSet_);
+        FD_ZERO(&oriWriteSet_);
+        FD_SET(contactFd_, &oriReadSet_);
+        FD_SET(masterFd_, &oriReadSet_);
+        FD_SET(subscriberFd_, &oriReadSet_);
 
         addSig(SIGCHLD, std::bind(&P2PHost::signalHandler, this, SIGCHLD));
     }
@@ -69,15 +69,15 @@ namespace Raven
     {
         runState_ = STATE_PROCESSING;
         formatTime("Running...\n");
-        isBashRunning = true;
+        isBashRunning_ = true;
         isRunning_ = true;
         addAlarm(contactFd_);
 
         while (isRunning_)
         {
-            readSet = oriReadSet;
-            writeSet = oriWriteSet;
-            int rs = select(fdNum_, &readSet, &writeSet, 0, 0);
+            readSet_ = oriReadSet_;
+            writeSet_ = oriWriteSet_;
+            int rs = select(fdNum_, &readSet_, &writeSet_, 0, 0);
             if (rs < 0)
             {
                 if (errno == EINTR)
@@ -88,15 +88,15 @@ namespace Raven
             }
             else
             {
-                if (FD_ISSET(contactFd_, &writeSet))
+                if (FD_ISSET(contactFd_, &writeSet_))
                 {
                     handleWriteRemains();
                 }
-                if (FD_ISSET(masterFd_, &writeSet))
+                if (FD_ISSET(masterFd_, &writeSet_))
                 {
                     handleBashWriteRemains();
                 }
-                if (FD_ISSET(subscriberFd_, &readSet))
+                if (FD_ISSET(subscriberFd_, &readSet_))
                 {
                     handleSignal();
                 }
@@ -108,11 +108,11 @@ namespace Raven
                 newMessageToPeer_.clear();
                 newMessageToBash_.clear();
 
-                if (FD_ISSET(contactFd_, &readSet))
+                if (FD_ISSET(contactFd_, &readSet_))
                 {
                     handleRead();
                 }
-                if (FD_ISSET(masterFd_, &readSet))
+                if (FD_ISSET(masterFd_, &readSet_))
                 {
                     handleBashRead();
                 }
@@ -136,7 +136,7 @@ namespace Raven
         context_->writeNoBlock();
         if (context_->isWriteBufferEmpty())
         {
-            FD_CLR(contactFd_, &oriWriteSet);
+            FD_CLR(contactFd_, &oriWriteSet_);
         }
     }
 
@@ -145,7 +145,7 @@ namespace Raven
         writen(masterFd_, MessageToBash_);
         if (MessageToBash_.empty())
         {
-            FD_CLR(masterFd_, &oriWriteSet);
+            FD_CLR(masterFd_, &oriWriteSet_);
         }
     }
 
@@ -168,11 +168,12 @@ namespace Raven
                 case SIGHUP:
                     std::cout << "Terminated signal" << std::endl;
                     isRunning_ = false;
+                    isContinuous_ = false;
                     continue;
                 case SIGCHLD:
                     std::cout << "SIGCHLD" << std::endl;
                     isRunning_ = false;
-                    isBashRunning = false;
+                    isBashRunning_ = false;
                     continue;
                 default:
                     std::cout << "Unknown signal : " << buff_[i] << std::endl;
@@ -252,7 +253,7 @@ namespace Raven
         context_->writeNoBlock();
         if (!context_->isWriteBufferEmpty())
         {
-            FD_SET(contactFd_, &oriWriteSet);
+            FD_SET(contactFd_, &oriWriteSet_);
         }
     }
 
@@ -262,16 +263,16 @@ namespace Raven
         writen(masterFd_, MessageToBash_);
         if (!MessageToBash_.empty())
         {
-            FD_SET(masterFd_, &oriWriteSet);
+            FD_SET(masterFd_, &oriWriteSet_);
         }
     }
 
     void P2PHost::handleStop()
     {
         formatTime("Stopping......\n");
-        if (isBashRunning)
+        if (isBashRunning_)
         {
-            kill(bashPid_,SIGHUP);//bash has it's own session,so we sent SIGHUP to it.
+            kill(bashPid_, SIGHUP); //bash has it's own session,so we sent SIGHUP to it.
             std::string msg;
             setNoBlocking(subscriberFd_);
             read(subscriberFd_, buff_, MAX_BUFF); //handle remain signal
@@ -298,4 +299,5 @@ namespace Raven
         }
         errno = saveErrno;
     }
+    bool P2PHost::isContinuous_ = true;
 } //namespace Raven
