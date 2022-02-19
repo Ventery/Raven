@@ -10,7 +10,7 @@
 
 namespace Raven
 {
-	P2PClient::P2PClient(int localPort, std::string serverIp, int serverPort) : P2PClientBase(localPort, serverIp, serverPort)
+	P2PClient::P2PClient(int localPort, std::string serverIp, int serverPort, EndPointType type) : P2PClientBase(localPort, serverIp, serverPort, type)
 	{
 		runState_ = STATE_BEGIN;
 		assert(socketpair(PF_UNIX, SOCK_STREAM, 0, winPipeFds_) != -1);
@@ -144,7 +144,7 @@ namespace Raven
 	void P2PClient::handleReadWin()
 	{
 		int ret = read(STDIN_FILENO, buff_, MAX_BUFF);
-		newMessage_ += HptpContext::makeMessage(std::string(buff_, ret), RavenConfigIns.aesKeyToPeer_, generateStr(kBlockSize), CIPHERTEXT);
+		newMessage_ += HptpContext::makeMessage(std::string(buff_, ret), "", "", PLAINTEXT);
 	}
 
 	void P2PClient::handleReadWinCTL()
@@ -153,11 +153,13 @@ namespace Raven
 		buff_[ret] = '\0';
 		int row, col;
 		sscanf(buff_, "%d%d", &row, &col);
-		newMessage_ += HptpContext::makeMessage(std::to_string(row) + " " + std::to_string(col), RavenConfigIns.aesKeyToPeer_, generateStr(kBlockSize), CIPHERTEXT_WINCTL);
+		newMessage_ += HptpContext::makeMessage(std::to_string(row) + " " + std::to_string(col), "", "", PLAINTEXT_WINCTL);
 	}
 
 	void P2PClient::handleWrite()
 	{
+		//CIPHERTEXT is the default mode
+		newMessage_ = HptpContext::makeMessage(newMessage_, RavenConfigIns.aesKeyToPeer_, generateStr(kBlockSize), CIPHERTEXT);
 		if (useTransfer)
 		{
 			newMessage_ = HptpContext::makeMessage(newMessage_, "", "", TRANSFER);
@@ -181,7 +183,7 @@ namespace Raven
 			isRunning_ = false;
 			formatTime("connection is going to close!\n");
 		}
-		
+
 		//select is Level Triggered.
 		while (!context_->isReadBufferEmpty())
 		{

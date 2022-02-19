@@ -16,7 +16,7 @@ namespace Raven
     {
     public:
         P2PClientBase() = delete;
-        P2PClientBase(int localPort, std::string serverIp, int serverPort);
+        P2PClientBase(int localPort, std::string serverIp, int serverPort , EndPointType type);
         ~P2PClientBase();
 
         virtual void init();
@@ -29,8 +29,10 @@ namespace Raven
         virtual void handleWrite() = 0;
         virtual void handleWriteRemains() = 0;
 
+        std::string unixSocketPath;
         bool useTransfer; 
         ProgressState runState_;
+        EndPointType endPointType;
     };
 } // namespace Raven
 

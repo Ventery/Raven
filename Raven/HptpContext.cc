@@ -5,9 +5,10 @@
 namespace Raven
 {
 	//static
-	std::string HptpContext::makeMessage(const std::string &msg, const std::string &key, const std::string &iv, const HPTPMessageType &textType)
+	std::string HptpContext::makeMessage(const std::string &msg, const std::string &key, const std::string &iv, const HPTPMessageType &textType, const Dict &addtionHeaders)
 	{
 		std::string message = "HPTP/1.0 " + std::to_string((int)textType) + "\r\n";
+		std::string text = msg;
 
 		switch (textType)
 		{
@@ -16,17 +17,14 @@ namespace Raven
 		case TRANSFER:
 		{ // treat TRANSFER message as plaintext
 			message += "length: " + std::to_string(msg.size()) + "\r\n";
-			message += "\r\n" + msg + "\r\n";
 			break;
 		}
 
 		case CIPHERTEXT:
-		case CIPHERTEXT_WINCTL:
 		{
 			message += "iv: " + iv + "\r\n";
 			message += "length: " + std::to_string(msg.size()) + "\r\n";
-			std::string text = encode(msg, key, iv);
-			message += "\r\n" + text + "\r\n";
+			text = encode(msg, key, iv);
 			break;
 		}
 
@@ -41,6 +39,15 @@ namespace Raven
 		}
 		} //end switch
 
+		if (!addtionHeaders.empty())
+		{
+			for (auto it : addtionHeaders)
+			{
+				message += it.first + ": " + it.second + "\r\n";
+			}
+		}
+
+		message += "\r\n" + text + "\r\n";
 		return message;
 	}
 
@@ -237,6 +244,6 @@ namespace Raven
 
 	void HptpContext::pushToWriteBuff(const std::string &message)
 	{
-		sockInfo_.writeBuffer+=message;
+		sockInfo_.writeBuffer += message;
 	}
 } //namespace Raven

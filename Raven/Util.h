@@ -13,6 +13,13 @@ namespace Raven
 	using namespace Global;
 //Definiton
 	//enum for parse HPTP
+	enum EndPointType
+	{
+		TYPE_CLIENT = 0,
+		TYPE_HOST,
+		TYPE_SERVER,
+	};
+
 	enum ProgressState
 	{
 		STATE_BEGIN = 0,
@@ -26,9 +33,8 @@ namespace Raven
 		PLAINTEXT = 100,		 
 		PLAINTEXT_WINCTL = 101,	 
 		CIPHERTEXT = 200,		 
-		CIPHERTEXT_WINCTL = 201, 
 		KEEPALIVE = 300,		 
-		TRANSFER = 400			 
+		TRANSFER = 400,
 	};
 
 	enum SocketState

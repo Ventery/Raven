@@ -9,13 +9,15 @@
 namespace Raven
 {
 	class HptpContext : public Global::Noncopyable
-	{ 
+	{
+		typedef std::map<std::string, std::string> Dict;
+
 	public:
 		HptpContext(int fd, std::string ip = "", int port = -1) : sockInfo_(fd, ip, port){};
 		~HptpContext(){};
 
 		//static
-		static std::string makeMessage(const std::string &msg, const std::string &key, const std::string &iv, const HPTPMessageType &textType);
+		static std::string makeMessage(const std::string &msg, const std::string &key, const std::string &iv, const HPTPMessageType &textType, const Dict &addtionHeaders = Dict());
 
 		MessageState parseMessage();
 
@@ -36,7 +38,7 @@ namespace Raven
 		const __uint32_t &getLastEvent() { return sockInfo_.lastEvent; }
 		void setLastEvent(const __uint32_t &event) { sockInfo_.lastEvent = event; }
 		const int &getSock() { return sockInfo_.sock; }
-		const std::string getAddress(){return sockInfo_.ip+" "+std::to_string(sockInfo_.port);}
+		const std::string getAddress() { return sockInfo_.ip + " " + std::to_string(sockInfo_.port); }
 		const int &getPeerSock() { return sockInfo_.peerSock; }
 		void setPeerSock(const int &fd) { sockInfo_.peerSock = fd; }
 		const std::string &getIdentifyKey() { return sockInfo_.identifyKey; }
@@ -68,7 +70,7 @@ namespace Raven
 			SocketState sockState;
 			ConnectionState connState;
 
-			std::map<std::string, std::string> headers;
+			Dict headers;
 			__uint32_t lastEvent;
 		};
 

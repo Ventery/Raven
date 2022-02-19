@@ -8,7 +8,7 @@
 
 namespace Raven
 {
-    P2PHost::P2PHost(int localPort, std::string serverIp, int serverPort) : P2PClientBase(localPort, serverIp, serverPort), masterFd_(posix_openpt(O_RDWR))
+    P2PHost::P2PHost(int localPort, std::string serverIp, int serverPort, EndPointType type) : P2PClientBase(localPort, serverIp, serverPort, type), masterFd_(posix_openpt(O_RDWR))
     {
         runState_ = STATE_BEGIN;
         setSocketFD_CLOEXEC(masterFd_);
@@ -220,7 +220,7 @@ namespace Raven
                 {
                     tempMsg = decode(context_->getText(), RavenConfigIns.aesKeyToPeer_, context_->getValueByKey("iv"), stoi(context_->getValueByKey("length")));
                 }
-                if (context_->getCurrentTextType() == CIPHERTEXT_WINCTL || context_->getCurrentTextType() == PLAINTEXT_WINCTL)
+                if (context_->getCurrentTextType() == PLAINTEXT_WINCTL)
                 {
                     struct winsize size;
                     sscanf(tempMsg.c_str(), "%hu%hu", &(size.ws_row), &(size.ws_col));
