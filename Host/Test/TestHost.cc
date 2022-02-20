@@ -9,7 +9,8 @@ int main()
         {
             Raven::P2PHost host(RavenConfigIns.hostPortFrom_,
                                 RavenConfigIns.serverIp_,
-                                RavenConfigIns.serverPort_);
+                                RavenConfigIns.serverPort_,
+                                Global::EndPointType::TYPE_HOST);
             host.init();
             host.run();
         }

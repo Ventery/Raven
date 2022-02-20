@@ -43,7 +43,14 @@
 #define ConfigIns Global::Config::GetInstance()
 namespace Global
 {
-//Definiton
+    //Definiton
+
+    enum EndPointType
+    {
+        TYPE_CLIENT = 1,
+        TYPE_HOST,
+        TYPE_SERVER,
+    };
 
     struct PeerInfo
     {
@@ -52,7 +59,7 @@ namespace Global
         std::string port;
     };
 
-//Var
+    //Var
     //const var
     extern const std::string kHomePath;
     extern const std::string kConfigPath;
@@ -65,7 +72,7 @@ namespace Global
     extern MutexLock mSignalHandlerMap;
     extern MutexLock mGetBash;
 
-//Func
+    //Func
     //aes
     std::string encode(const std::string &, const std::string &, const std::string &);
     std::string decode(const std::string &, const std::string &, const std::string &, const int &);
@@ -92,7 +99,7 @@ namespace Global
     void resetSig(int sig);
     void sigHandler(int sig);
     void ifDaemon();
-    
+
     //others
     pid_t getTid();
     std::string getExePath(int upLevel = 0);

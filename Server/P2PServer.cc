@@ -178,26 +178,23 @@ namespace Raven
             }
             else //(state==PARSE_SUCCESS ,make peer
             {
-                std::string identifyKey;
-                auto &textType = context->getCurrentTextType();
-                if (textType == PLAINTEXT)
-                {
-                    identifyKey = context->getText();
-                }
-                else if (textType == CIPHERTEXT)
-                {
-                    identifyKey = decode(context->getText(), RavenConfigIns.aesKeyToServer_, context->getValueByKey("iv"), stoi(context->getValueByKey("length")));
-                }
-                else
-                {
-                    socksToClose_.insert(fd);
-                    break;
-                }
+                std::string identifyKey = context->getValueByKey("IdentifyKey");
                 context->setIdentifyKey(identifyKey);
-                auto it = mapIdkey2Address_.find(identifyKey); //Check whether the peer is online or not.
-                if (it == mapIdkey2Address_.end())
+
+                bool isHost = stoi(context->getValueByKey("EndPointType"));
+                auto it = mapIdkey2Address_[1 - isHost].find(identifyKey); //Check whether the peer is online or not.
+                if (it == mapIdkey2Address_[1 - isHost].end())
                 {
-                    mapIdkey2Address_[identifyKey] = context;
+                    if (mapIdkey2Address_[isHost].find(identifyKey) == mapIdkey2Address_[isHost].end())
+                    {
+                    mapIdkey2Address_[isHost][identifyKey] = context;
+                    }
+                    else
+                    {
+                        context->setConnectionState(STATE_ERROR);
+                        socksToClose_.insert(fd);
+                        return;
+                    }
                 }
                 else
                 {
@@ -210,7 +207,7 @@ namespace Raven
                     peerContext->pushToWriteBuff(HptpContext::makeMessage(context->getAddress(), RavenConfigIns.aesKeyToServer_, generateStr(kBlockSize), CIPHERTEXT));
                     handleWrite(peerContext->getSock());
 
-                    mapIdkey2Address_.erase(identifyKey);
+                    mapIdkey2Address_[1 - isHost].erase(identifyKey);
                 }
             }
         }
@@ -262,7 +259,8 @@ namespace Raven
                 }
                 resetSock(context);
                 allSocksToClose.insert(context->getSock());
-                mapIdkey2Address_.erase(context->getIdentifyKey());
+                mapIdkey2Address_[0].erase(context->getIdentifyKey());
+                mapIdkey2Address_[1].erase(context->getIdentifyKey());
             }
         }
 

@@ -11,18 +11,13 @@
 namespace Raven
 {
 	using namespace Global;
+	typedef std::map<std::string, std::string> Dict;
 //Definiton
 	//enum for parse HPTP
-	enum EndPointType
-	{
-		TYPE_CLIENT = 0,
-		TYPE_HOST,
-		TYPE_SERVER,
-	};
 
 	enum ProgressState
 	{
-		STATE_BEGIN = 0,
+		STATE_BEGIN = 1,
 		STATE_GETTING_INFO,
 		STATE_PROCESSING,
 		STATE_END,
@@ -41,7 +36,7 @@ namespace Raven
 	{
 		STATE_PARSE_PROTOCOL = 1, 
 		STATE_PARSE_HEADERS,	  
-		STATE_CIPHERTEXT,		  
+		STATE_PARSE_TEXT,		  
 	};
 
 	enum ConnectionState
@@ -76,11 +71,11 @@ namespace Raven
 		PARSE_HEADER_SUCCESS,
 	};
 
-	enum CiphertextState
+	enum TextState
 	{ 
-		CIPHERTEXT_AGAIN = 1,
-		CIPHERTEXT_SUCCESS,
-		CIPHERTEXT_ERROR
+		PARSE_TEXT_AGAIN = 1,
+		PARSE_TEXT_SUCCESS,
+		PARSE_TEXT_ERROR
 	};
 
 //Var
@@ -94,7 +89,7 @@ namespace Raven
 	extern MutexLock m_keepAliveFds;
 
 //Func
-	PeerInfo getPeerInfo(const int &port, const bool &useCipher);
+	PeerInfo getPeerInfo(const int &port, const bool &useCipher,const EndPointType &);
 	bool noBlockConnect(const int &fd, const struct PeerInfo &peer, const int &timeOutSec);
 	void addAlarm(const int &fd);
 	void delAlarm(const int &fd);

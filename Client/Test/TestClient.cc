@@ -8,7 +8,8 @@ int main(int argc, char *argv[])
     {
         Raven::P2PClient client(RavenConfigIns.clientPort_,
                                 RavenConfigIns.serverIp_,
-                                RavenConfigIns.serverPort_);
+                                RavenConfigIns.serverPort_,
+                                Global::EndPointType::TYPE_CLIENT);
         client.init();
         client.run();
     }

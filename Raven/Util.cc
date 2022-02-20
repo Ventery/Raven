@@ -22,7 +22,7 @@
 namespace Raven
 {
 	const std::string kMsgTooMuch = HptpContext::makeMessage("Too much Connection!", "", "", PLAINTEXT);
-	const std::string kKeepaliveMessage = HptpContext::makeMessage("","","",KEEPALIVE);
+	const std::string kKeepaliveMessage = HptpContext::makeMessage("", "", "", KEEPALIVE);
 	const std::string kMsgPeerClosed = HptpContext::makeMessage("From server : peer closed!\n", "", "", PLAINTEXT);
 	std::set<int> keepAliveFds;
 	MutexLock m_keepAliveFds;
@@ -70,20 +70,24 @@ namespace Raven
 		alarm(RavenConfigIns.keepAliveSec_);
 	}
 
-	PeerInfo getPeerInfo(const int &port, const bool &useCipher)
+	PeerInfo getPeerInfo(const int &port, const bool &useCipher, const EndPointType &type)
 	{
-		HPTPMessageType textType = useCipher ? CIPHERTEXT : PLAINTEXT;
-
 		struct sockaddr_in serverAddr;
 		memset(&serverAddr, 0, sizeof(serverAddr));
 		serverAddr.sin_family = AF_INET;
 		serverAddr.sin_addr.s_addr = inet_addr(RavenConfigIns.serverIp_.c_str());
 		serverAddr.sin_port = htons(RavenConfigIns.serverPort_);
+
 		int fd = socketReUsePort(port);
 		PeerInfo result;
 		formatTime("Connecting to server...\n");
 
+		Dict dic;
+		dic["EndPointType"] = std::to_string((int)type);
+		dic["IdentifyKey"] = RavenConfigIns.identifyKey_;
+		std::string shakeMessage = HptpContext::makeMessage("", "", "", PLAINTEXT, dic);
 		int ret = 0;
+
 		while (true)
 		{
 			if (ret == -1)
@@ -109,9 +113,16 @@ namespace Raven
 					continue;
 				}
 			}
-
-			std::string message = HptpContext::makeMessage(RavenConfigIns.identifyKey_, RavenConfigIns.aesKeyToServer_, generateStr(kBlockSize), textType);
-			HptpContext context(fd);
+			HptpContext context(fd, RavenConfigIns.aesKeyToServer_);
+			std::string message;
+			if (useCipher)
+			{
+				message = HptpContext::makeMessage(shakeMessage, context.getAesKey(), generateStr(kBlockSize), CIPHERTEXT);
+			}
+			else
+			{
+				message = shakeMessage;
+			}
 			context.writeBlock(message);
 			formatTime("Connected and waiting peer...\n");
 			addAlarm(fd);
@@ -123,7 +134,7 @@ namespace Raven
 					ret = -1;
 					break;
 				}
-				
+
 				while (!context.isReadBufferEmpty())
 				{
 					auto code = context.parseMessage();
@@ -155,13 +166,8 @@ namespace Raven
 			}
 
 			std::string buf = context.getText();
-			if (useCipher)
-			{
-				buf = decode(buf, RavenConfigIns.aesKeyToServer_, context.getValueByKey("iv"), stoi(context.getValueByKey("length")));
-			}
-			std::size_t pos = buf.find(" ");
-			result.ip = buf.substr(0, pos);
-			result.port = buf.substr(pos + 1);
+			result.ip = context.getValueByKey("PeerIp");
+			result.port = stoi(context.getValueByKey("PeerPort"));
 			result.sockToServer = fd;
 			break;
 		}

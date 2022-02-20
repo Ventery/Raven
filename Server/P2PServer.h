@@ -27,7 +27,7 @@ namespace Raven
         virtual void handleClose();
         void resetSock(std::shared_ptr<HptpContext>&);
 
-        std::map<std::string, std::shared_ptr<HptpContext>> mapIdkey2Address_;
+        std::map<std::string, std::shared_ptr<HptpContext>> mapIdkey2Address_[2];   //mapIdkey2Address_[0] for client and 1 for host.
         std::map<int, std::shared_ptr<HptpContext>> mapSock2Address_;
         std::set<int> socksToClose_;
     };

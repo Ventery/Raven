@@ -82,7 +82,7 @@ namespace Raven
 			HeaderState state = parseHeader();
 			if (state == PARSE_HEADER_SUCCESS)
 			{
-				sockInfo_.sockState = STATE_CIPHERTEXT;
+				sockInfo_.sockState = STATE_PARSE_TEXT;
 			}
 			else if (state == PARSE_HEADER_AGAIN)
 			{
@@ -94,22 +94,26 @@ namespace Raven
 			}
 		}
 
-		case STATE_CIPHERTEXT:
+		case STATE_PARSE_TEXT:
 		{
-			CiphertextState state = parseCiphertext();
-			if (state == CIPHERTEXT_SUCCESS)
+			TextState state = parseText();
+			if (state == PARSE_TEXT_SUCCESS)
 			{
 				sockInfo_.sockState = STATE_PARSE_PROTOCOL;
-				if (sockInfo_.textType == TRANSFER)
+				if (sockInfo_.textType == CIPHERTEXT)
+				{
+					return parseMessage();
+				}
+				else if(sockInfo_.textType == TRANSFER)
 				{
 					return PARSE_SUCCESS_TRANSFER;
 				}
-				else
+				else 
 				{
 					return PARSE_SUCCESS;
 				}
 			}
-			else if (state == CIPHERTEXT_AGAIN)
+			else if (state == PARSE_TEXT_AGAIN)
 			{
 				return PARSE_AGAIN;
 			}
@@ -187,15 +191,15 @@ namespace Raven
 	}
 
 	//check the length
-	CiphertextState HptpContext::parseCiphertext()
+	TextState HptpContext::parseText()
 	{
 		int cipherLength = atoi((sockInfo_.headers["length"]).c_str());
 		if (cipherLength <= 0)
 		{
-			return CIPHERTEXT_ERROR;
+			return PARSE_TEXT_ERROR;
 		}
 		int trueLength;
-		if (sockInfo_.textType == PLAINTEXT || sockInfo_.textType == PLAINTEXT_WINCTL || sockInfo_.textType == TRANSFER)
+		if (sockInfo_.textType != CIPHERTEXT)
 		{
 			trueLength = cipherLength;
 		}
@@ -206,17 +210,24 @@ namespace Raven
 
 		if (sockInfo_.readBuffer.size() < (unsigned int)(trueLength + 2))
 		{
-			return CIPHERTEXT_AGAIN;
+			return PARSE_TEXT_AGAIN;
 		}
 
 		if (sockInfo_.readBuffer.c_str()[trueLength] != '\r' || sockInfo_.readBuffer.c_str()[trueLength + 1] != '\n')
 		{
-			return CIPHERTEXT_ERROR;
+			return PARSE_TEXT_ERROR;
 		}
 
 		sockInfo_.payload = sockInfo_.readBuffer.substr(0, trueLength);
-		sockInfo_.readBuffer = sockInfo_.readBuffer.substr(trueLength + 2);
-		return CIPHERTEXT_SUCCESS;
+		if (sockInfo_.textType == CIPHERTEXT)
+		{
+			sockInfo_.readBuffer = decode(sockInfo_.payload,getAesKey(),sockInfo_.headers["iv"],stoi(sockInfo_.headers["length"])) + sockInfo_.readBuffer.substr(trueLength + 2);
+		}
+		else
+		{
+			sockInfo_.readBuffer = sockInfo_.readBuffer.substr(trueLength + 2);
+		}
+		return PARSE_TEXT_SUCCESS;
 	}
 
 	int HptpContext::readBlock()

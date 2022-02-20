@@ -8,16 +8,16 @@
 
 namespace Raven
 {
+	static const Dict emptyDict;
+
 	class HptpContext : public Global::Noncopyable
 	{
-		typedef std::map<std::string, std::string> Dict;
-
 	public:
-		HptpContext(int fd, std::string ip = "", int port = -1) : sockInfo_(fd, ip, port){};
+		HptpContext(int fd, const std::string aesKey, std::string ip = "", int port = -1) : sockInfo_(fd, ip, port, aesKey){};
 		~HptpContext(){};
 
 		//static
-		static std::string makeMessage(const std::string &msg, const std::string &key, const std::string &iv, const HPTPMessageType &textType, const Dict &addtionHeaders = Dict());
+		static std::string makeMessage(const std::string &msg, const std::string &key, const std::string &iv, const HPTPMessageType &textType, const Dict &addtionHeaders = emptyDict);
 
 		MessageState parseMessage();
 
@@ -43,25 +43,28 @@ namespace Raven
 		void setPeerSock(const int &fd) { sockInfo_.peerSock = fd; }
 		const std::string &getIdentifyKey() { return sockInfo_.identifyKey; }
 		void setIdentifyKey(const std::string &key) { sockInfo_.identifyKey = key; }
+		const std::string &getAesKey() { return sockInfo_.aesKey; }
 
 	private:
 		struct SockInfo
 		{
 			SockInfo() = delete;
-			SockInfo(int fd, std::string ip, unsigned int port) : sock(fd),
-																  peerSock(-4396),
-																  ip(ip),
-																  port(port),
-																  textType(PLAINTEXT),
-																  sockState(STATE_PARSE_PROTOCOL),
-																  connState(STATE_CONNECTED),
-																  lastEvent(DEFAULT_EPOLL_EVENT) {}
+			SockInfo(int fd, std::string ip, unsigned int port, const std::string aesKey) : sock(fd),
+																							peerSock(-4396),
+																							ip(ip),
+																							port(port),
+																							aesKey(aesKey),
+																							textType(PLAINTEXT),
+																							sockState(STATE_PARSE_PROTOCOL),
+																							connState(STATE_CONNECTED),
+																							lastEvent(DEFAULT_EPOLL_EVENT) {}
 			int sock;
 			int peerSock;
 			std::string ip;
 			unsigned int port;
 			HPTPMessageType textType;
 			std::string identifyKey;
+			std::string aesKey;
 
 			std::string readBuffer;
 			std::string writeBuffer;
@@ -76,7 +79,7 @@ namespace Raven
 
 		ProtocolState parseProtocol();
 		HeaderState parseHeader();
-		CiphertextState parseCiphertext();
+		TextState parseText();
 
 		struct SockInfo sockInfo_;
 	};

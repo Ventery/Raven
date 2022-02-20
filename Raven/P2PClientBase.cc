@@ -9,7 +9,7 @@ namespace Raven
     void P2PClientBase::init()
     {
         ClientBase::init();
-        Global::PeerInfo peerInfo = getPeerInfo(localPort_, true);
+        Global::PeerInfo peerInfo = getPeerInfo(localPort_, true, endPointType);
         formatTime();
         std::cout << "Peer :" << peerInfo.ip << " " << peerInfo.port << std::endl;
 
