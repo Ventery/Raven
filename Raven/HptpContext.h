@@ -38,7 +38,9 @@ namespace Raven
 		const __uint32_t &getLastEvent() { return sockInfo_.lastEvent; }
 		void setLastEvent(const __uint32_t &event) { sockInfo_.lastEvent = event; }
 		const int &getSock() { return sockInfo_.sock; }
-		const std::string getAddress() { return sockInfo_.ip + " " + std::to_string(sockInfo_.port); }
+		const std::string &getIp() { return sockInfo_.ip; }
+		const unsigned int &getPort() { return sockInfo_.port; }
+
 		const int &getPeerSock() { return sockInfo_.peerSock; }
 		void setPeerSock(const int &fd) { sockInfo_.peerSock = fd; }
 		const std::string &getIdentifyKey() { return sockInfo_.identifyKey; }

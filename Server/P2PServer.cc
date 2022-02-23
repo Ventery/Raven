@@ -188,7 +188,7 @@ namespace Raven
                 {
                     if (mapIdkey2Address_[isHost].find(identifyKey) == mapIdkey2Address_[isHost].end())
                     {
-                    mapIdkey2Address_[isHost][identifyKey] = context;
+                        mapIdkey2Address_[isHost][identifyKey] = context;
                     }
                     else
                     {
@@ -203,9 +203,15 @@ namespace Raven
                     context->setPeerSock(peerContext->getSock());
                     peerContext->setPeerSock(context->getSock());
                     std::string message;
-                    context->pushToWriteBuff(HptpContext::makeMessage(peerContext->getAddress(), RavenConfigIns.aesKeyToServer_, generateStr(kBlockSize), CIPHERTEXT));
+                    Dict dict;
+                    dict["PeerIp"] = peerContext->getIp();
+                    dict["PeerPort"] = std::to_string(peerContext->getPort());
+                    context->pushToWriteBuff(HptpContext::makeMessage(HptpContext::makeMessage("","","", PLAINTEXT,dict),RavenConfigIns.aesKeyToServer_,generateStr(kBlockSize),CIPHERTEXT));
                     handleWrite(context->getSock());
-                    peerContext->pushToWriteBuff(HptpContext::makeMessage(context->getAddress(), RavenConfigIns.aesKeyToServer_, generateStr(kBlockSize), CIPHERTEXT));
+
+                    dict["PeerIp"] = context->getIp();
+                    dict["PeerPort"] = std::to_string(context->getPort());
+                    peerContext->pushToWriteBuff(HptpContext::makeMessage(HptpContext::makeMessage("","","", PLAINTEXT,dict),RavenConfigIns.aesKeyToServer_,generateStr(kBlockSize),CIPHERTEXT));
                     handleWrite(peerContext->getSock());
 
                     mapIdkey2Address_[1 - isHost].erase(identifyKey);
