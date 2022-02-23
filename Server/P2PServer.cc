@@ -181,8 +181,9 @@ namespace Raven
             {
                 std::string identifyKey = context->getValueByKey("IdentifyKey");
                 context->setIdentifyKey(identifyKey);
-
                 bool isHost = stoi(context->getValueByKey("EndPointType"));
+                std::cout << "IdentifyKey : " << identifyKey << " isHost: " << isHost << std::endl;
+
                 auto it = mapIdkey2Address_[1 - isHost].find(identifyKey); //Check whether the peer is online or not.
                 if (it == mapIdkey2Address_[1 - isHost].end())
                 {
@@ -206,12 +207,12 @@ namespace Raven
                     Dict dict;
                     dict["PeerIp"] = peerContext->getIp();
                     dict["PeerPort"] = std::to_string(peerContext->getPort());
-                    context->pushToWriteBuff(HptpContext::makeMessage(HptpContext::makeMessage("","","", PLAINTEXT,dict),RavenConfigIns.aesKeyToServer_,generateStr(kBlockSize),CIPHERTEXT));
+                    context->pushToWriteBuff(HptpContext::makeMessage(HptpContext::makeMessage("", "", "", PLAINTEXT, dict), RavenConfigIns.aesKeyToServer_, generateStr(kBlockSize), CIPHERTEXT));
                     handleWrite(context->getSock());
 
                     dict["PeerIp"] = context->getIp();
                     dict["PeerPort"] = std::to_string(context->getPort());
-                    peerContext->pushToWriteBuff(HptpContext::makeMessage(HptpContext::makeMessage("","","", PLAINTEXT,dict),RavenConfigIns.aesKeyToServer_,generateStr(kBlockSize),CIPHERTEXT));
+                    peerContext->pushToWriteBuff(HptpContext::makeMessage(HptpContext::makeMessage("", "", "", PLAINTEXT, dict), RavenConfigIns.aesKeyToServer_, generateStr(kBlockSize), CIPHERTEXT));
                     handleWrite(peerContext->getSock());
 
                     mapIdkey2Address_[1 - isHost].erase(identifyKey);
