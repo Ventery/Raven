@@ -248,7 +248,7 @@ namespace Raven
 			}
 		}
 	}
-
+/*
 	//Deprecated
 	pid_t get_tid()
 	{
@@ -260,5 +260,6 @@ namespace Raven
 		return static_cast<pid_t>(syscall(SYS_thread_selfid));
 #endif
 	}
+*/
 
 } // namespace Raven
