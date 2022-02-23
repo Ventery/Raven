@@ -120,6 +120,7 @@ namespace Raven
             std::cout << newFd << std::endl;
             mapSock2Address_[newFd] = std::make_shared<HptpContext>(newFd,
                                                                     RavenConfigIns.aesKeyToPeer_,
+                                                                    false,
                                                                     std::string(inet_ntoa(clientAddress_.sin_addr)),
                                                                     ntohs(clientAddress_.sin_port));
             addFd(epollFd_, newFd);
@@ -182,6 +183,7 @@ namespace Raven
                 std::string identifyKey = context->getValueByKey("IdentifyKey");
                 context->setIdentifyKey(identifyKey);
                 bool isHost = stoi(context->getValueByKey("EndPointType"));
+                context->setIsHost(isHost);
                 std::cout << "IdentifyKey : " << identifyKey << " isHost: " << isHost << std::endl;
 
                 auto it = mapIdkey2Address_[1 - isHost].find(identifyKey); //Check whether the peer is online or not.
@@ -207,12 +209,12 @@ namespace Raven
                     Dict dict;
                     dict["PeerIp"] = peerContext->getIp();
                     dict["PeerPort"] = std::to_string(peerContext->getPort());
-                    context->pushToWriteBuff(HptpContext::makeMessage(HptpContext::makeMessage("", "", "", PLAINTEXT, dict), RavenConfigIns.aesKeyToServer_, generateStr(kBlockSize), CIPHERTEXT));
+                    context->pushToWriteBuff(HptpContext::makeMessage(HptpContext::makeMessage("", "", "", PLAINTEXT, dict), context->getAesKey(), generateStr(kBlockSize), CIPHERTEXT));
                     handleWrite(context->getSock());
 
                     dict["PeerIp"] = context->getIp();
                     dict["PeerPort"] = std::to_string(context->getPort());
-                    peerContext->pushToWriteBuff(HptpContext::makeMessage(HptpContext::makeMessage("", "", "", PLAINTEXT, dict), RavenConfigIns.aesKeyToServer_, generateStr(kBlockSize), CIPHERTEXT));
+                    peerContext->pushToWriteBuff(HptpContext::makeMessage(HptpContext::makeMessage("", "", "", PLAINTEXT, dict), peerContext->getAesKey(), generateStr(kBlockSize), CIPHERTEXT));
                     handleWrite(peerContext->getSock());
 
                     mapIdkey2Address_[1 - isHost].erase(identifyKey);
@@ -267,8 +269,7 @@ namespace Raven
                 }
                 resetSock(context);
                 allSocksToClose.insert(context->getSock());
-                mapIdkey2Address_[0].erase(context->getIdentifyKey());
-                mapIdkey2Address_[1].erase(context->getIdentifyKey());
+                mapIdkey2Address_[context->isHost()].erase(context->getIdentifyKey());
             }
         }
 

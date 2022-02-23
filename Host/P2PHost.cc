@@ -31,7 +31,7 @@ namespace Raven
 
         runState_ = STATE_GETTING_INFO;
         P2PClientBase::init();
-        context_ = std::make_shared<HptpContext>(contactFd_, RavenConfigIns.aesKeyToPeer_);
+        context_ = std::make_shared<HptpContext>(contactFd_, RavenConfigIns.aesKeyToPeer_,true);
         ifDaemon();
         setSocketFD_CLOEXEC(publisherFd_);
         setSocketFD_CLOEXEC(subscriberFd_);
