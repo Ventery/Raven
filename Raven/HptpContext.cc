@@ -73,7 +73,7 @@ namespace Raven
 			}
 			else
 			{
-				return PARSE_ERROR;
+				return PARSE_ERROR_PROTOCOL;
 			}
 		}
 
@@ -90,7 +90,7 @@ namespace Raven
 			}
 			else
 			{
-				return PARSE_ERROR;
+				return PARSE_ERROR_HEADER;
 			}
 		}
 
@@ -104,11 +104,11 @@ namespace Raven
 				{
 					return parseMessage();
 				}
-				else if(sockInfo_.textType == TRANSFER)
+				else if (sockInfo_.textType == TRANSFER)
 				{
 					return PARSE_SUCCESS_TRANSFER;
 				}
-				else 
+				else
 				{
 					return PARSE_SUCCESS;
 				}
@@ -119,14 +119,14 @@ namespace Raven
 			}
 			else
 			{
-				return PARSE_ERROR;
+				return PARSE_ERROR_TEXT;
 			}
 		}
 
 		default:
 		{
 			formatTime("Program should not come here!\n");
-			return PARSE_ERROR;
+			return PARSE_ERROR_PROTOCOL;
 		}
 		} //end switch
 	}
@@ -193,19 +193,19 @@ namespace Raven
 	//check the length
 	TextState HptpContext::parseText()
 	{
-		int cipherLength = atoi((sockInfo_.headers["length"]).c_str());
-		if (cipherLength <= 0)
+		if (sockInfo_.headers.find("length") == sockInfo_.headers.end())
 		{
 			return PARSE_TEXT_ERROR;
 		}
+		int textLength = atoi((sockInfo_.headers["length"]).c_str());
 		int trueLength;
 		if (sockInfo_.textType != CIPHERTEXT)
 		{
-			trueLength = cipherLength;
+			trueLength = textLength;
 		}
 		else
 		{
-			trueLength = (cipherLength % kBlockSize == 0 ? cipherLength : ((cipherLength) / kBlockSize + 1) * kBlockSize); //encrypted text
+			trueLength = (textLength % kBlockSize == 0 ? textLength : ((textLength) / kBlockSize + 1) * kBlockSize); //encrypted text
 		}
 
 		if (sockInfo_.readBuffer.size() < (unsigned int)(trueLength + 2))
@@ -221,7 +221,7 @@ namespace Raven
 		sockInfo_.payload = sockInfo_.readBuffer.substr(0, trueLength);
 		if (sockInfo_.textType == CIPHERTEXT)
 		{
-			sockInfo_.readBuffer = decode(sockInfo_.payload,getAesKey(),sockInfo_.headers["iv"],stoi(sockInfo_.headers["length"])) + sockInfo_.readBuffer.substr(trueLength + 2);
+			sockInfo_.readBuffer = decode(sockInfo_.payload, getAesKey(), sockInfo_.headers["iv"], stoi(sockInfo_.headers["length"])) + sockInfo_.readBuffer.substr(trueLength + 2);
 		}
 		else
 		{

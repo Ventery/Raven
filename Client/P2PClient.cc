@@ -191,7 +191,7 @@ namespace Raven
 		while (!context_->isReadBufferEmpty())
 		{
 			MessageState state = context_->parseMessage();
-			if (state == PARSE_ERROR)
+			if (state >= PARSE_ERROR_PROTOCOL)
 			{
 				system(STTY_DEF);
 				isRunning_ = false;

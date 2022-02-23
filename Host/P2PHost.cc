@@ -196,7 +196,7 @@ namespace Raven
         {
             MessageState state = context_->parseMessage();
 
-            if (state == PARSE_ERROR)
+            if (state >= PARSE_ERROR_PROTOCOL)
             {
                 isRunning_ = false;
                 break;

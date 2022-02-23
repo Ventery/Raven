@@ -142,7 +142,7 @@ namespace Raven
 					{
 						break;
 					}
-					else if (code == PARSE_ERROR)
+					else if (code >= PARSE_ERROR_PROTOCOL)
 					{
 						ret = -1;
 						break;
