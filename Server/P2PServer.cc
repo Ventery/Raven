@@ -119,6 +119,7 @@ namespace Raven
             formatTime("Come new connection! fd : ");
             std::cout << newFd << std::endl;
             mapSock2Address_[newFd] = std::make_shared<HptpContext>(newFd,
+                                                                    RavenConfigIns.aesKeyToPeer_,
                                                                     std::string(inet_ntoa(clientAddress_.sin_addr)),
                                                                     ntohs(clientAddress_.sin_port));
             addFd(epollFd_, newFd);

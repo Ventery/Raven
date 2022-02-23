@@ -31,7 +31,7 @@ namespace Raven
 
         runState_ = STATE_GETTING_INFO;
         P2PClientBase::init();
-        context_ = std::make_shared<HptpContext>(contactFd_);
+        context_ = std::make_shared<HptpContext>(contactFd_, RavenConfigIns.aesKeyToPeer_);
         ifDaemon();
         setSocketFD_CLOEXEC(publisherFd_);
         setSocketFD_CLOEXEC(subscriberFd_);
@@ -212,18 +212,13 @@ namespace Raven
             else //(state==PARSE_SUCCESS
             {
                 std::string tempMsg;
-                if (context_->getCurrentTextType() == PLAINTEXT || context_->getCurrentTextType() == PLAINTEXT_WINCTL)
-                {
-                    tempMsg = context_->getText();
-                }
-                else
-                {
-                    tempMsg = decode(context_->getText(), RavenConfigIns.aesKeyToPeer_, context_->getValueByKey("iv"), stoi(context_->getValueByKey("length")));
-                }
+                tempMsg = context_->getText();
                 if (context_->getCurrentTextType() == PLAINTEXT_WINCTL)
                 {
                     struct winsize size;
-                    sscanf(tempMsg.c_str(), "%hu%hu", &(size.ws_row), &(size.ws_col));
+                    size.ws_row = stoi(context_->getValueByKey("Row"));
+                    size.ws_col = stoi(context_->getValueByKey("Colomn"));
+
                     if (ioctl(slaveFd_, TIOCSWINSZ, (char *)&size) < 0)
                     {
                         printf("TIOCGWINSZ error");

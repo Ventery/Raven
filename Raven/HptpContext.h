@@ -13,7 +13,7 @@ namespace Raven
 	class HptpContext : public Global::Noncopyable
 	{
 	public:
-		HptpContext(int fd, const std::string aesKey, std::string ip = "", int port = -1) : sockInfo_(fd, ip, port, aesKey){};
+		HptpContext(int fd, const std::string aesKey, std::string ip = "", int port = -1) : sockInfo_(fd, aesKey, ip, port){};
 		~HptpContext(){};
 
 		//static
@@ -49,22 +49,22 @@ namespace Raven
 		struct SockInfo
 		{
 			SockInfo() = delete;
-			SockInfo(int fd, std::string ip, unsigned int port, const std::string aesKey) : sock(fd),
-																							peerSock(-4396),
-																							ip(ip),
-																							port(port),
-																							aesKey(aesKey),
-																							textType(PLAINTEXT),
-																							sockState(STATE_PARSE_PROTOCOL),
-																							connState(STATE_CONNECTED),
-																							lastEvent(DEFAULT_EPOLL_EVENT) {}
+			SockInfo(int fd, const std::string &aesKey, std::string ip, unsigned int port) : sock(fd),
+																							 aesKey(aesKey),
+																							 peerSock(-4396),
+																							 ip(ip),
+																							 port(port),
+																							 textType(PLAINTEXT),
+																							 sockState(STATE_PARSE_PROTOCOL),
+																							 connState(STATE_CONNECTED),
+																							 lastEvent(DEFAULT_EPOLL_EVENT) {}
 			int sock;
+			std::string aesKey;
 			int peerSock;
 			std::string ip;
 			unsigned int port;
 			HPTPMessageType textType;
 			std::string identifyKey;
-			std::string aesKey;
 
 			std::string readBuffer;
 			std::string writeBuffer;

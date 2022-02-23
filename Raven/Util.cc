@@ -165,7 +165,6 @@ namespace Raven
 				continue;
 			}
 
-			std::string buf = context.getText();
 			result.ip = context.getValueByKey("PeerIp");
 			result.port = stoi(context.getValueByKey("PeerPort"));
 			result.sockToServer = fd;

@@ -23,7 +23,7 @@ namespace Raven
 	{
 		runState_ = STATE_GETTING_INFO;
 		P2PClientBase::init();
-		context_ = std::make_shared<HptpContext>(contactFd_);
+		context_ = std::make_shared<HptpContext>(contactFd_, RavenConfigIns.aesKeyToPeer_);
 		setSocketNodelay(subscriberFd_);
 
 		FD_ZERO(&oriReadSet_);
@@ -153,7 +153,10 @@ namespace Raven
 		buff_[ret] = '\0';
 		int row, col;
 		sscanf(buff_, "%d%d", &row, &col);
-		newMessage_ += HptpContext::makeMessage(std::to_string(row) + " " + std::to_string(col), "", "", PLAINTEXT_WINCTL);
+		Dict dict;
+		dict["Row"] = row;
+		dict["Colomn"] = col;
+		newMessage_ += HptpContext::makeMessage("", "", "", PLAINTEXT_WINCTL, dict);
 	}
 
 	void P2PClient::handleWrite()
@@ -210,7 +213,7 @@ namespace Raven
 				}
 				else
 				{
-					std::cout << decode(context_->getText(), RavenConfigIns.aesKeyToPeer_, context_->getValueByKey("iv"), stoi(context_->getValueByKey("length")));
+					std::cout << context_->getText();
 				}
 				fflush(stdout);
 			}

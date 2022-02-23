@@ -1,7 +1,6 @@
 #include <getopt.h>
 #include <stdio.h>
 #include "../P2PClient.h"
-static void usage();
 int main(int argc, char *argv[])
 {
     try
