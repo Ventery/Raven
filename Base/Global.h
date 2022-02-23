@@ -47,7 +47,7 @@ namespace Global
 
     enum EndPointType
     {
-        TYPE_CLIENT = 1,
+        TYPE_CLIENT = 0,
         TYPE_HOST,
         TYPE_SERVER,
     };
