@@ -221,7 +221,7 @@ namespace Raven
 		sockInfo_.payload = sockInfo_.readBuffer.substr(0, trueLength);
 		if (sockInfo_.textType == CIPHERTEXT)
 		{
-			sockInfo_.readBuffer = decode(sockInfo_.payload, getAesKey(), sockInfo_.headers["iv"], stoi(sockInfo_.headers["length"])) + sockInfo_.readBuffer.substr(trueLength + 2);
+			sockInfo_.readBuffer = decode(sockInfo_.payload, getAesKey(), sockInfo_.headers["iv"], trueLength) + sockInfo_.readBuffer.substr(trueLength + 2);
 		}
 		else
 		{

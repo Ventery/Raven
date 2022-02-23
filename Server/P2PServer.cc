@@ -155,7 +155,7 @@ namespace Raven
         {
             MessageState state = context->parseMessage();
             std::cout << state << std::endl;
-            if (state >= PARSE_ERROR_PROTOCOL)
+            if (state >= PARSE_PROTOCOL_ERROR)
             {
                 context->setConnectionState(STATE_ERROR);
                 socksToClose_.insert(fd);
