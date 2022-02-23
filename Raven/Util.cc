@@ -166,7 +166,7 @@ namespace Raven
 			}
 
 			result.ip = context.getValueByKey("PeerIp");
-			result.port = stoi(context.getValueByKey("PeerPort"));
+			result.port = context.getValueByKey("PeerPort");
 			result.sockToServer = fd;
 			break;
 		}
