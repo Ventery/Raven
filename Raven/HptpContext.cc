@@ -149,10 +149,9 @@ namespace Raven
 			return PARSE_PROTOCOL_ERROR;
 		}
 		sockInfo_.textType = (HPTPMessageType)stoi(str.substr(posProtocol + 9, 3));
-		str = str.substr(posEnd + 2);
 		if (sockInfo_.textType == KEEPALIVE)
 		{
-			str = str.substr(posEnd + 6);
+			str = str.substr(posEnd + 4);
 			return PARSE_PROTOCOL_SUCCESS_KEEPALIVE;
 		}
 		else
