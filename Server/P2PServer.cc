@@ -154,7 +154,7 @@ namespace Raven
         while (!context->isReadBufferEmpty())
         {
             MessageState state = context->parseMessage();
-            std::cout << state << std::endl;
+            //std::cout << state << std::endl;
             if (state >= PARSE_ERROR_PROTOCOL)
             {
                 context->setConnectionState(STATE_ERROR);
@@ -185,7 +185,7 @@ namespace Raven
                 context->setIdentifyKey(identifyKey);
                 bool isHost = stoi(context->getValueByKey("EndPointType"));
                 context->setIsHost(isHost);
-                std::cout << "IdentifyKey : " << identifyKey << " isHost: " << isHost << std::endl;
+                //std::cout << "IdentifyKey : " << identifyKey << " isHost: " << isHost << std::endl;
 
                 auto it = mapIdkey2Address_[1 - isHost].find(identifyKey); //Check whether the peer is online or not.
                 if (it == mapIdkey2Address_[1 - isHost].end())

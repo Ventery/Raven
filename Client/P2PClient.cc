@@ -207,14 +207,7 @@ namespace Raven
 			}
 			else //(state==PARSE_SUCCESS
 			{
-				if (context_->getCurrentTextType() == PLAINTEXT || context_->getCurrentTextType() == PLAINTEXT_WINCTL)
-				{
-					std::cout << context_->getText();
-				}
-				else
-				{
-					std::cout << context_->getText();
-				}
+				std::cout << context_->getText();
 				fflush(stdout);
 			}
 		}
