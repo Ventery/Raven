@@ -151,7 +151,7 @@ namespace Raven
 		sockInfo_.textType = (HPTPMessageType)stoi(str.substr(posProtocol + 9, 3));
 		if (sockInfo_.textType == KEEPALIVE)
 		{
-			str = str.substr(posEnd + 4);
+			str = str.substr(posEnd + 6);
 			return PARSE_PROTOCOL_SUCCESS_KEEPALIVE;
 		}
 		else
