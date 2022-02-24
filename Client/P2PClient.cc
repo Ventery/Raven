@@ -154,8 +154,8 @@ namespace Raven
 		int row, col;
 		sscanf(buff_, "%d%d", &row, &col);
 		Dict dict;
-		dict["Row"] = row;
-		dict["Colomn"] = col;
+		dict["Row"] = std::to_string(row);
+		dict["Colomn"] = std::to_string(col);
 		newMessage_ += HptpContext::makeMessage("", "", "", PLAINTEXT_WINCTL, dict);
 	}
 
