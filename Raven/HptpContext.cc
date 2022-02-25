@@ -53,8 +53,8 @@ namespace Raven
 
 	MessageState HptpContext::parseMessage()
 	{
-		//std::cout<<sockInfo_.readBuffer<<std::endl;
-		//std::cout<<sockInfo_.readBuffer.length()<<std::endl;
+		std::cout<<sockInfo_.readBuffer<<std::endl;
+		std::cout<<sockInfo_.readBuffer.length()<<std::endl;
 
 		switch (sockInfo_.sockState)
 		{
@@ -136,6 +136,7 @@ namespace Raven
 
 	ProtocolState HptpContext::parseProtocol()
 	{
+		std::cout<<"parseProtocol"<<std::endl;
 		std::string &str = sockInfo_.readBuffer;
 		size_t posEnd = str.find(std::string("\r\n"));
 		if (posEnd == std::string::npos)
@@ -166,6 +167,7 @@ namespace Raven
 
 	HeaderState HptpContext::parseHeader()
 	{
+		std::cout<<"parseHeader"<<std::endl;
 		std::string &str = sockInfo_.readBuffer;
 		while (true)
 		{
@@ -197,6 +199,7 @@ namespace Raven
 	//check the length
 	TextState HptpContext::parseText()
 	{
+		std::cout<<"parseText"<<std::endl;
 		if (sockInfo_.headers.find("length") == sockInfo_.headers.end())
 		{
 			return PARSE_TEXT_ERROR;
