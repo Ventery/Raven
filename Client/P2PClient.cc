@@ -184,7 +184,8 @@ namespace Raven
 		{
 			system(STTY_DEF);
 			isRunning_ = false;
-			formatTime("\nconnection is going to close!\n");
+			std::cout<<std::endl;
+			formatTime("connection is going to close!\n");
 		}
 
 		//select is Level Triggered.
