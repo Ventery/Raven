@@ -31,7 +31,7 @@ namespace Raven
 
         runState_ = STATE_GETTING_INFO;
         P2PClientBase::init();
-        context_ = std::make_shared<HptpContext>(contactFd_, RavenConfigIns.aesKeyToPeer_,true);
+        context_ = std::make_shared<HptpContext>(contactFd_, RavenConfigIns.aesKeyToPeer_, true);
         ifDaemon();
         setSocketFD_CLOEXEC(publisherFd_);
         setSocketFD_CLOEXEC(subscriberFd_);
@@ -235,11 +235,13 @@ namespace Raven
     void P2PHost::handleBashRead()
     {
         int ret = read(masterFd_, buff_, MAX_BUFF);
-        newMessageToPeer_ += HptpContext::makeMessage(std::string(buff_, ret), RavenConfigIns.aesKeyToPeer_, generateStr(kBlockSize), CIPHERTEXT);
+        newMessageToPeer_ += HptpContext::makeMessage(std::string(buff_, ret), "", "", PLAINTEXT);
     }
 
     void P2PHost::handleWrite()
     {
+        //CIPHERTEXT is the default mode
+        newMessageToPeer_ = HptpContext::makeMessage(newMessageToPeer_, context_->getAesKey(), generateStr(kBlockSize), CIPHERTEXT);
         if (useTransfer)
         {
             newMessageToPeer_ = HptpContext::makeMessage(newMessageToPeer_, "", "", TRANSFER);

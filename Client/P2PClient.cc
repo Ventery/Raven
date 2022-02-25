@@ -162,7 +162,7 @@ namespace Raven
 	void P2PClient::handleWrite()
 	{
 		//CIPHERTEXT is the default mode
-		newMessage_ = HptpContext::makeMessage(newMessage_, RavenConfigIns.aesKeyToPeer_, generateStr(kBlockSize), CIPHERTEXT);
+		newMessage_ = HptpContext::makeMessage(newMessage_, context_->getAesKey(), generateStr(kBlockSize), CIPHERTEXT);
 		if (useTransfer)
 		{
 			newMessage_ = HptpContext::makeMessage(newMessage_, "", "", TRANSFER);
@@ -191,7 +191,7 @@ namespace Raven
 		while (!context_->isReadBufferEmpty())
 		{
 			MessageState state = context_->parseMessage();
-			std::cout<<state<<std::endl;
+			//std::cout<<state<<std::endl;
 			if (state >= PARSE_ERROR_PROTOCOL)
 			{
 				system(STTY_DEF);
