@@ -141,6 +141,7 @@ namespace Raven
 		size_t posEnd = str.find(std::string("\r\n"));
 		if (posEnd == std::string::npos)
 		{
+			std::cout<<sockInfo_.readBuffer.length()<<std::endl;
 			return PARSE_PROTOCOL_AGAIN;
 		}
 		size_t posProtocol = str.rfind("HPTP/1.0", posEnd);
