@@ -23,7 +23,7 @@ namespace Raven
 	{
 		runState_ = STATE_GETTING_INFO;
 		P2PClientBase::init();
-		context_ = std::make_shared<HptpContext>(contactFd_, RavenConfigIns.aesKeyToPeer_,false);
+		context_ = std::make_shared<HptpContext>(contactFd_, RavenConfigIns.aesKeyToPeer_, false);
 		setSocketNodelay(subscriberFd_);
 
 		FD_ZERO(&oriReadSet_);
@@ -32,6 +32,7 @@ namespace Raven
 		FD_SET(contactFd_, &oriReadSet_);
 		FD_SET(subscriberFd_, &oriReadSet_);
 		FD_SET(winSubscriberFd_, &oriReadSet_);
+		FD_SET(fileTransferFd_, &oriReadSet_);
 
 		addSig(SIGWINCH, std::bind(&P2PClient::signalHandler, this, SIGWINCH));
 	}
@@ -70,10 +71,6 @@ namespace Raven
 			}
 			else
 			{
-				if (FD_ISSET(contactFd_, &writeSet_))
-				{
-					handleWriteRemains();
-				}
 				if (FD_ISSET(subscriberFd_, &readSet_))
 				{
 					handleSignal();
@@ -87,17 +84,36 @@ namespace Raven
 				{
 					handleReadWin();
 				}
+				if (FD_ISSET(fileTransferFd_, &readSet_))
+				{
+					handleRead();
+				}
 				if (FD_ISSET(winSubscriberFd_, &readSet_))
 				{
 					handleReadWinCTL();
+				}
+				if (FD_ISSET(contactFd_, &readSet_))
+				{
+					handleRead();
+				}
+				if (FD_ISSET(fileTransferFd_, &readSet_))
+				{
+					handleNewFileTransFd();
+				}
+				for (auto it : mapFd2FileTransFerInfo_)
+				{
+					if (FD_ISSET(it.first, &readSet_))
+					{
+						handleReadFileTransfer(it.second);
+					}
 				}
 				if (!newMessage_.empty())
 				{
 					handleWrite();
 				}
-				if (FD_ISSET(contactFd_, &readSet_))
+				if (FD_ISSET(contactFd_, &writeSet_))
 				{
-					handleRead();
+					handleWriteRemains();
 				}
 			}
 		}
@@ -184,7 +200,7 @@ namespace Raven
 		{
 			system(STTY_DEF);
 			isRunning_ = false;
-			std::cout<<std::endl;
+			std::cout << std::endl;
 			formatTime("connection is going to close!\n");
 		}
 
@@ -241,5 +257,12 @@ namespace Raven
 			write(winPublisherFd_, message.c_str(), message.length());
 		}
 		errno = saveErrno;
+	}
+
+	void P2PClient::removeFdFromSet(int fd)
+	{
+		FD_CLR(fd, &oriReadSet_);
+        mapFd2FileTransFerInfo_.erase(fd);
+		close(fd);
 	}
 } // namepace Raven

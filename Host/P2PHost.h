@@ -22,6 +22,7 @@ namespace Raven
         virtual void handleRead();
         virtual void handleWrite();
         virtual void handleWriteRemains();
+        virtual void removeFdFromSet(int fd);
 
         //new virtual
         virtual void handleBashWriteRemains();
@@ -39,11 +40,8 @@ namespace Raven
         fd_set oriWriteSet_, writeSet_;
         char buff_[MAX_BUFF + 1];
         std::string MessageToBash_;
-        std::string newMessageToPeer_;
         std::string newMessageToBash_;
         int fdNum_;
-
-        std::shared_ptr<HptpContext> context_;
     };
 } // namespace Raven
 

@@ -31,9 +31,10 @@
 
 //NETWORK
 #define MAX_EVENT_NUMBER 1024
-#define MAX_BUFF 1024 * 100
+#define MAX_BUFF 1024
 #define MAX_CONNECT_NUMBER 2048
 #define MAX_PATH 1024
+#define MAX_FILE_BUFFER 1024*1000
 #ifdef __linux__
 #define DEFAULT_EPOLL_EVENT EPOLLIN | EPOLLRDHUP | EPOLLHUP | EPOLLET
 #else
@@ -63,6 +64,7 @@ namespace Global
     //const var
     extern const std::string kHomePath;
     extern const std::string kConfigPath;
+    extern const std::string kFileTransferPath;
     extern const size_t kKeySize;
     extern const size_t kBlockSize;
     extern const unsigned kTimeSeed;

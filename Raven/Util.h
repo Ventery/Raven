@@ -23,6 +23,13 @@ namespace Raven
 		STATE_END,
 	};
 
+	enum FileTransFerState
+	{
+		STATE_PREPARE = 1,
+		STATE_TRANSFERRING,
+		STATE_TRANS_END,
+	};
+
 	enum HPTPMessageType
 	{
 		PLAINTEXT = 100,		 
@@ -30,6 +37,7 @@ namespace Raven
 		CIPHERTEXT = 200,		 
 		KEEPALIVE = 300,		 
 		TRANSFER = 400,
+		FILETRANSFER = 500
 	};
 
 	enum SocketState

@@ -20,6 +20,7 @@ namespace Global
 {
 	const std::string kHomePath = getenv("HOME");
 	const std::string kConfigPath = kHomePath + "/conf/Raven.conf";
+	const std::string kFileTransferPath = kHomePath + "/RavenTrans/";
 	const size_t kKeySize = gcry_cipher_get_algo_keylen(CIPHER_ALGO);
 	const size_t kBlockSize = gcry_cipher_get_algo_blklen(CIPHER_ALGO);
 	const unsigned kTimeSeed = time(0);

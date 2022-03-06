@@ -8,6 +8,7 @@
 
 namespace Raven
 {
+    bool P2PHost::isContinuous_ = true;
     P2PHost::P2PHost(int localPort, std::string serverIp, int serverPort, EndPointType type) : P2PClientBase(localPort, serverIp, serverPort, type), masterFd_(posix_openpt(O_RDWR))
     {
         runState_ = STATE_BEGIN;
@@ -88,14 +89,6 @@ namespace Raven
             }
             else
             {
-                if (FD_ISSET(contactFd_, &writeSet_))
-                {
-                    handleWriteRemains();
-                }
-                if (FD_ISSET(masterFd_, &writeSet_))
-                {
-                    handleBashWriteRemains();
-                }
                 if (FD_ISSET(subscriberFd_, &readSet_))
                 {
                     handleSignal();
@@ -105,7 +98,7 @@ namespace Raven
                     break;
                 }
 
-                newMessageToPeer_.clear();
+                newMessage_.clear();
                 newMessageToBash_.clear();
 
                 if (FD_ISSET(contactFd_, &readSet_))
@@ -116,13 +109,32 @@ namespace Raven
                 {
                     handleBashRead();
                 }
-                if (!newMessageToPeer_.empty())
+				if (FD_ISSET(fileTransferFd_, &readSet_))
+				{
+					handleNewFileTransFd();
+				}
+				for (auto it : mapFd2FileTransFerInfo_)
+				{
+					if (FD_ISSET(it.first, &readSet_))
+					{
+						handleReadFileTransfer(it.second);
+					}
+				}
+                if (!newMessage_.empty())
                 {
                     handleWrite();
+                }
+                if (FD_ISSET(contactFd_, &writeSet_))
+                {
+                    handleWriteRemains();
                 }
                 if (!newMessageToBash_.empty())
                 {
                     handleBashWrite();
+                }
+                if (FD_ISSET(masterFd_, &writeSet_))
+                {
+                    handleBashWriteRemains();
                 }
             }
         }
@@ -235,18 +247,18 @@ namespace Raven
     void P2PHost::handleBashRead()
     {
         int ret = read(masterFd_, buff_, MAX_BUFF);
-        newMessageToPeer_ += HptpContext::makeMessage(std::string(buff_, ret), "", "", PLAINTEXT);
+        newMessage_ += HptpContext::makeMessage(std::string(buff_, ret), "", "", PLAINTEXT);
     }
 
     void P2PHost::handleWrite()
     {
         //CIPHERTEXT is the default mode
-        newMessageToPeer_ = HptpContext::makeMessage(newMessageToPeer_, context_->getAesKey(), generateStr(kBlockSize), CIPHERTEXT);
+        newMessage_ = HptpContext::makeMessage(newMessage_, context_->getAesKey(), generateStr(kBlockSize), CIPHERTEXT);
         if (useTransfer)
         {
-            newMessageToPeer_ = HptpContext::makeMessage(newMessageToPeer_, "", "", TRANSFER);
+            newMessage_ = HptpContext::makeMessage(newMessage_, "", "", TRANSFER);
         }
-        context_->pushToWriteBuff(newMessageToPeer_);
+        context_->pushToWriteBuff(newMessage_);
         context_->writeNoBlock();
         if (!context_->isWriteBufferEmpty())
         {
@@ -296,5 +308,11 @@ namespace Raven
         }
         errno = saveErrno;
     }
-    bool P2PHost::isContinuous_ = true;
+
+    void P2PHost::removeFdFromSet(int fd)
+	{
+		FD_CLR(fd, &oriReadSet_);
+        mapFd2FileTransFerInfo_.erase(fd);
+		close(fd);
+	}
 } //namespace Raven
