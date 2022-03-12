@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
     }
     closedir (dir);
     cout<<"Raven file transfer path: "<<TransferPath<<endl;
-    for(auto it : fileName)
+    for(auto it : fileList)
     {
         cout<<it<<endl;
     }
