@@ -109,17 +109,17 @@ namespace Raven
                 {
                     handleBashRead();
                 }
-				if (FD_ISSET(fileTransferFd_, &readSet_))
-				{
-					handleNewFileTransFd();
-				}
-				for (auto it : mapFd2FileTransFerInfo_)
-				{
-					if (FD_ISSET(it.first, &readSet_))
-					{
-						handleReadFileTransfer(it.second);
-					}
-				}
+                if (FD_ISSET(fileTransferFd_, &readSet_))
+                {
+                    handleNewFileTransFd();
+                }
+                for (auto it : mapFd2FileTransFerInfo_)
+                {
+                    if (FD_ISSET(it.first, &readSet_))
+                    {
+                        handleReadFileTransfer(it.second);
+                    }
+                }
                 if (!newMessage_.empty())
                 {
                     handleWrite();
@@ -221,7 +221,12 @@ namespace Raven
             {
                 continue;
             }
-            else //(state==PARSE_SUCCESS
+            //(state==PARSE_SUCCESS
+            else if (context_->getCurrentTextType() == FILETRANSFER)
+            {
+                handleFileTransferMessage(context_);
+            } 
+            else 
             {
                 std::string tempMsg;
                 tempMsg = context_->getText();
@@ -310,9 +315,9 @@ namespace Raven
     }
 
     void P2PHost::removeFdFromSet(int fd)
-	{
-		FD_CLR(fd, &oriReadSet_);
+    {
+        FD_CLR(fd, &oriReadSet_);
         mapFd2FileTransFerInfo_.erase(fd);
-		close(fd);
-	}
+        close(fd);
+    }
 } //namespace Raven

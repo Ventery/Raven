@@ -131,7 +131,6 @@ namespace Raven
         {
             newMessage_ += HptpContext::makeMessage(std::string(fileBuff_, ret), "",
                                                     "", FILETRANSFER, dict);
-            it->alreadySentLength += ret;
         }
         else
         {
@@ -142,13 +141,15 @@ namespace Raven
 
     void P2PClientBase::handleFileTransferMessage(std::shared_ptr<HptpContext> it)
     {
-        if (!it->getValueByKey("Confirmed").empty()) //For receiver
+        if (!it->getValueByKey("Confirmed").empty()) //For sender
         {
             int localSockFd = stoi(it->getValueByKey("IdentifyId"));
             std::string bytesHaveReceived = it->getValueByKey("Confirmed") + " ";
+            mapFd2FileTransFerInfo_[localSockFd]->alreadySentLength = stoi(it->getValueByKey("Confirmed"));
             write(localSockFd, bytesHaveReceived.c_str(), bytesHaveReceived.size());
+            write(localSockFd," ",1);
         }
-        else if (!it->getValueByKey("AlreadySentLength").empty()) //For sender
+        else if (!it->getValueByKey("AlreadySentLength").empty()) //For receiver
         {
             int identifyId = stoi(it->getValueByKey("IdentifyId"));
             if (mapIdentify2FilePtr_.find(identifyId) == mapIdentify2FilePtr_.end())
@@ -165,7 +166,6 @@ namespace Raven
             {
                 fclose(mapIdentify2FilePtr_[identifyId]);
                 mapIdentify2FilePtr_.erase(identifyId);
-                return;
             }
             else
             {

@@ -223,7 +223,12 @@ namespace Raven
 			{
 				continue;
 			}
-			else //(state==PARSE_SUCCESS
+			//(state==PARSE_SUCCESS
+            else if (context_->getCurrentTextType() == FILETRANSFER)
+            {
+                handleFileTransferMessage(context_);
+            } 
+			else 
 			{
 				std::cout << context_->getText();
 				fflush(stdout);
