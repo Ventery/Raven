@@ -6,19 +6,18 @@ SOURCE_DIR=`pwd`
 BUILD_DIR=${BUILD_DIR:-../build}
 BUILD_TYPE=${BUILD_TYPE:-Debug}
 
+#For config file
 CONF_DIR=$HOME"/conf/"
 CONF_NAME="Raven.conf"
-
-#For file transmission
-FILE_DIR=$HOME"/RavenTrans/"    
-
 if [ ! -d "$CONF_DIR" ]; then
   mkdir $CONF_DIR
 fi
-
 if [ ! -f "$CONF_DIR$CONF_NAME" ]; then
   cp $CONF_NAME $CONF_DIR
 fi
+
+#For file transmission
+FILE_DIR=$HOME"/RavenTrans/"    
 
 if [ ! -d "$RavenTrans" ]; then
   mkdir $RavenTrans

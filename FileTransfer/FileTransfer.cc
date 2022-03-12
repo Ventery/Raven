@@ -44,12 +44,12 @@ void usage()
 
 void fileNotReadable()
 {
-    cout << "Path is not exist or readable!" << endl;
+    cout << "Path is not exist or readable." << endl;
     exit(0);
 }
 
 void isNotFile()
 {
-    cout << "It is not a file" << endl;
+    cout << "Input is not a file,please check it." << endl;
     exit(0);
 }
