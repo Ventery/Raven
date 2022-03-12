@@ -19,7 +19,7 @@ fi
 #For file transmission
 FILE_DIR=$HOME"/RavenTrans/"    
 
-if [ ! -d "$RavenTrans" ]; then
+if [ ! -d "$FILE_DIR" ]; then
   mkdir $RavenTrans
 fi
 
