@@ -20,7 +20,7 @@ fi
 FILE_DIR=$HOME"/RavenTrans/"    
 
 if [ ! -d "$FILE_DIR" ]; then
-  mkdir $RavenTrans
+  mkdir $FILE_DIR
 fi
 
 mkdir -p $BUILD_DIR/$BUILD_TYPE"_Raven" \
