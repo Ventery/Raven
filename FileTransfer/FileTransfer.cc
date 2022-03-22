@@ -1,6 +1,8 @@
 #include <dirent.h>
 #include <iostream>
 #include <string>
+#include <stddef.h>  
+#include <stdlib.h>  
 #include <sys/stat.h>
 #include <sys/socket.h>
 #include <sys/types.h>
