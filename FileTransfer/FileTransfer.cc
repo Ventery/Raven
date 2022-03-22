@@ -72,14 +72,14 @@ int main(int argc, char *argv[])
             cout << "Please run RavenClient or RavenHost first!" << endl;
         }
         cout << "Local sockets:" << endl;
-        for (int i = 0; i < socketList.size(); i++)
+        for (size_t i = 0; i < socketList.size(); i++)
         {
             cout << i + 1 << " : " << socketList[i] << endl;
         }
         cout << "--------------------------------" << endl;
         cout << "Please select a socket,input index:" << endl;
         int socketIndex;
-        for (;;)
+        while(true)
         {
             cin >> socketIndex;
             if (socketIndex > 0 && socketIndex <= socketList.size())
@@ -172,11 +172,19 @@ void beginTrans(string fullPath, string fileName, int fileSize, int clientFd, st
         if (ret > 0)
         {
             write(clientFd, buff, ret);
-            int readNum = read(clientFd, readBuff, 1024);
+            int readNum = 0;
+            while(true){
+                readNum += read(clientFd, readBuff, 1024);
+                if (readBuff[readNum-1] == ' ') 
+                {
+                    break;
+                }
+            }
             int confirmedBytes;
             sscanf(readBuff,"%d ",&confirmedBytes);
             cout<<confirmedBytes<<endl;
         }
+        
         if (feof(filePtr))
         {
             close(clientFd);

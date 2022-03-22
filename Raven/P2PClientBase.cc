@@ -111,7 +111,7 @@ namespace Raven
         char filePath[256];
         memset(filePath, 0, 256);
         int fileLength;
-        sscanf(fileBuff_, "%s %d ", filePath, fileLength);
+        sscanf(fileBuff_, "%s %d ", filePath, &fileLength);
 
         mapFd2FileTransFerInfo_[fd] =
             std::make_shared<FileTransFerInfo>(fd, filePath, fileLength);
