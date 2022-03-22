@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
         while(true)
         {
             cin >> socketIndex;
-            if (socketIndex > 0 && socketIndex <= socketList.size())
+            if (socketIndex > 0 && socketIndex <= (int)(socketList.size()))
             {
                 break;
             }
@@ -184,7 +184,7 @@ void beginTrans(string fullPath, string fileName, int fileSize, int clientFd, st
             sscanf(readBuff,"%d ",&confirmedBytes);
             cout<<confirmedBytes<<endl;
         }
-        
+
         if (feof(filePtr))
         {
             close(clientFd);
