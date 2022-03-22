@@ -2,17 +2,21 @@
 #include <iostream>
 #include <string>
 #include <sys/stat.h>
+#include <sys/socket.h>
 #include <sys/types.h>
+#include <sys/un.h>
 #include <unistd.h>
 #include <vector>
 
 #include "../Base/Global.h"
 #include "../Raven/Util.h"
+#define MAX_SEND_BUFF 1024
 using namespace std;
-
 void usage();
 void fileNotReadable();
 void isNotFile();
+int connectToSocket(string);
+void beginTrans(string, string, int, int, struct stat &);
 int main(int argc, char *argv[])
 {
     if (argc < 2)
@@ -25,9 +29,9 @@ int main(int argc, char *argv[])
         fileNotReadable();
     }
 
-    struct stat s_buf;
-    stat(argv[1], &s_buf);
-    if (!S_ISREG(s_buf.st_mode))
+    struct stat statBuff;
+    stat(argv[1], &statBuff);
+    if (!S_ISREG(statBuff.st_mode))
     {
         isNotFile();
     }
@@ -37,23 +41,61 @@ int main(int argc, char *argv[])
     cout << "File name is : " << fileName << endl;
 
     vector<string> fileList;
+    vector<string> socketList;
+
     DIR *dir;
     struct dirent *ent;
     string TransferPath = Global::kFileTransferPath;
-    if ((dir = opendir (TransferPath.c_str())) != NULL) {
-
-    while ((ent = readdir (dir)) != NULL) {
-      if (!strcmp(ent->d_name, ".") || !strcmp(ent->d_name, ".."))
-        continue;
-      fileList.push_back(ent->d_name);
-    }
-    closedir (dir);
-    cout<<"Raven file transfer path: "<<TransferPath<<endl;
-    for(auto it : fileList)
+    if ((dir = opendir(TransferPath.c_str())) != NULL)
     {
-        cout<<it<<endl;
+
+        while ((ent = readdir(dir)) != NULL)
+        {
+            if (!strcmp(ent->d_name, ".") || !strcmp(ent->d_name, ".."))
+                continue;
+            fileList.push_back(ent->d_name);
+            if (string(ent->d_name).find("server.socket"))
+            {
+                socketList.push_back(ent->d_name);
+            }
+        }
+        closedir(dir);
+        cout << "--------------------------------" << endl;
+        cout << "Raven file transfer path: " << TransferPath << endl;
+        for (auto it : fileList)
+        {
+            cout << it << endl;
+        }
+        cout << "--------------------------------" << endl;
+        if (socketList.empty())
+        {
+            cout << "Please run RavenClient or RavenHost first!" << endl;
+        }
+        cout << "Local sockets:" << endl;
+        for (int i = 0; i < socketList.size(); i++)
+        {
+            cout << i + 1 << " : " << socketList[i] << endl;
+        }
+        cout << "--------------------------------" << endl;
+        cout << "Please select a socket,input index:" << endl;
+        int socketIndex;
+        for (;;)
+        {
+            cin >> socketIndex;
+            if (socketIndex > 0 && socketIndex <= socketList.size())
+            {
+                break;
+            }
+            else
+            {
+                cout << "Please input valid index:" << endl;
+            }
+        }
+
+        string socket = socketList[socketIndex];
+        int clientFd = connectToSocket(socket);
+        beginTrans(fullPath, fileName, statBuff.st_size, clientFd, statBuff);
     }
-  }
     return 0;
 }
 
@@ -73,4 +115,72 @@ void isNotFile()
 {
     cout << "Input is not a file,please check it." << endl;
     exit(0);
+}
+
+int connectToSocket(string serverSocket)
+{
+    string clientSocket = serverSocket.substr(0, 8) + "client.socket";
+    struct sockaddr_un clientConfig, servefrConfig;
+
+    int clientSockFd;
+    if ((clientSockFd = socket(AF_UNIX, SOCK_STREAM, 0)) < 0)
+    {
+        perror("client socket error");
+        exit(1);
+    }
+
+    memset(&clientConfig, 0, sizeof(clientConfig));
+    memset(&servefrConfig, 0, sizeof(servefrConfig));
+    strcpy(clientConfig.sun_path, clientSocket.c_str());
+    int len = offsetof(struct sockaddr_un, sun_path) + strlen(clientConfig.sun_path);
+    unlink(clientConfig.sun_path);
+    if (bind(clientSockFd, (struct sockaddr *)&clientConfig, len) < 0)
+    {
+        perror("bind error");
+        exit(1);
+    }
+
+    servefrConfig.sun_family = AF_UNIX;
+    strcpy(servefrConfig.sun_path, serverSocket.c_str());
+    len = offsetof(struct sockaddr_un, sun_path) + strlen(servefrConfig.sun_path);
+    if (connect(clientSockFd, (struct sockaddr *)&servefrConfig, len) < 0)
+    {
+        perror("connect error");
+        exit(1);
+    }
+
+    return clientSockFd;
+}
+int min(int a, int b) { return a < b ? a : b; }
+
+void beginTrans(string fullPath, string fileName, int fileSize, int clientFd, struct stat &statBuff)
+{
+    write(clientFd, fileName.c_str(), fileName.length());
+    write(clientFd, " ", 1);
+
+    string tempStream = to_string(fileSize);
+    write(clientFd, tempStream.c_str(), tempStream.length());
+    write(clientFd, " ", 1);
+
+    FILE *filePtr = fopen(fullPath.c_str(), "r");
+    int fileBlock = min(MAX_SEND_BUFF, statBuff.st_size / 10);
+    char buff[fileBlock];
+    char readBuff[1024];
+    while (true)
+    {
+        int ret = fread(buff, 1, fileBlock, filePtr);
+        if (ret > 0)
+        {
+            write(clientFd, buff, ret);
+            int readNum = read(clientFd, readBuff, 1024);
+            int confirmedBytes;
+            sscanf(readBuff,"%d ",&confirmedBytes);
+            cout<<confirmedBytes<<endl;
+        }
+        if (feof(filePtr))
+        {
+            close(clientFd);
+            fclose(filePtr);
+        }
+    }
 }

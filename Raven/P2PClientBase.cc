@@ -42,7 +42,7 @@ namespace Raven
 
     void P2PClientBase::createTransferSocket()
     {
-        FileTransferSocketPath_ = generateStr(8) + ".socket";
+        FileTransferSocketPath_ = generateStr(8) + "server.socket";
 
         struct sockaddr_un serverConfig;
         int fileTransferFd_;
@@ -127,15 +127,12 @@ namespace Raven
         dict["AlreadySentLength"] = std::to_string(it->alreadySentLength);
         dict["IdentifyId"] = std::to_string(it->fd);
 
-        if (ret)
-        {
-            newMessage_ += HptpContext::makeMessage(std::string(fileBuff_, ret), "",
-                                                    "", FILETRANSFER, dict);
-        }
-        else
+        newMessage_ += HptpContext::makeMessage(std::string(fileBuff_, ret), "",
+                                                "", FILETRANSFER, dict);
+
+        if (ret == 0)
         {
             removeFdFromSet(it->fd);
-            newMessage_ += HptpContext::makeMessage("", "", "", FILETRANSFER, dict);
         }
     }
 
@@ -147,7 +144,7 @@ namespace Raven
             std::string bytesHaveReceived = it->getValueByKey("Confirmed") + " ";
             mapFd2FileTransFerInfo_[localSockFd]->alreadySentLength = stoi(it->getValueByKey("Confirmed"));
             write(localSockFd, bytesHaveReceived.c_str(), bytesHaveReceived.size());
-            write(localSockFd," ",1);
+            write(localSockFd, " ", 1);
         }
         else if (!it->getValueByKey("AlreadySentLength").empty()) //For receiver
         {
