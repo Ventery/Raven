@@ -1,6 +1,7 @@
 #include <dirent.h>
 #include <iostream>
 #include <string>
+#include <stdio.h>
 #include <stddef.h>  
 #include <stdlib.h>  
 #include <sys/stat.h>
