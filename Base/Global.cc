@@ -316,7 +316,7 @@ namespace Global
 		{
 			tempStr[i] = number2Char(rand() % 62);
 		}
-		return tempStr;
+		return std::string(tempStr,length);
 	}
 
 	pid_t getBash(const int slaveFd)
