@@ -42,7 +42,7 @@ namespace Raven
 
     void P2PClientBase::createTransferSocket()
     {
-        FileTransferSocketPath_ = generateStr(8) + "server.socket";
+        FileTransferSocketPath_ = kFileTransferPath + generateStr(8) + "server.socket";
 
         struct sockaddr_un serverConfig;
         int fileTransferFd_;
@@ -59,7 +59,7 @@ namespace Raven
             offsetof(struct sockaddr_un, sun_path) + strlen(serverConfig.sun_path);
         if (int ret = bind(fileTransferFd_, (struct sockaddr *)&serverConfig, size) < 0)
         {
-            std::cout<<ret<<std::endl;
+            std::cout << ret << std::endl;
             throw "Error occurred while binding file Socket fd!";
         }
         std::cout << "FileTransferSocket :" << FileTransferSocketPath_ << std::endl;
@@ -139,7 +139,7 @@ namespace Raven
 
     void P2PClientBase::handleFileTransferMessage(std::shared_ptr<HptpContext> it)
     {
-        if (!it->getValueByKey("Confirmed").empty()) //For sender
+        if (!it->getValueByKey("Confirmed").empty()) // For sender
         {
             int localSockFd = stoi(it->getValueByKey("IdentifyId"));
             std::string bytesHaveReceived = it->getValueByKey("Confirmed") + " ";
@@ -147,7 +147,7 @@ namespace Raven
             write(localSockFd, bytesHaveReceived.c_str(), bytesHaveReceived.size());
             write(localSockFd, " ", 1);
         }
-        else if (!it->getValueByKey("AlreadySentLength").empty()) //For receiver
+        else if (!it->getValueByKey("AlreadySentLength").empty()) // For receiver
         {
             int identifyId = stoi(it->getValueByKey("IdentifyId"));
             if (mapIdentify2FilePtr_.find(identifyId) == mapIdentify2FilePtr_.end())
