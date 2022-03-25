@@ -16,13 +16,13 @@ namespace Global
 
     void ClientBase::init()
     {
-        Global::printCurrentSystem();
-        srand(kTimeSeed);
-
-        setNoBlocking(publisherFd_);
         addSig(SIGTERM, std::bind(&ClientBase::signalHandler, this, SIGTERM));
         addSig(SIGINT, std::bind(&ClientBase::signalHandler, this, SIGINT));
         addSig(SIGHUP, std::bind(&ClientBase::signalHandler, this, SIGHUP));
+
+        Global::printCurrentSystem();
+        srand(kTimeSeed);
+        setNoBlocking(publisherFd_);
     }
 
     ClientBase::~ClientBase()

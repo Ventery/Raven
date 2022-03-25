@@ -22,6 +22,7 @@ namespace Raven
 	void P2PClient::init()
 	{
 		runState_ = STATE_GETTING_INFO;
+		addSig(SIGWINCH, std::bind(&P2PClient::signalHandler, this, SIGWINCH));
 		P2PClientBase::init();
 		context_ = std::make_shared<HptpContext>(contactFd_, RavenConfigIns.aesKeyToPeer_, false);
 		setSocketNodelay(subscriberFd_);
@@ -33,8 +34,6 @@ namespace Raven
 		FD_SET(subscriberFd_, &oriReadSet_);
 		FD_SET(winSubscriberFd_, &oriReadSet_);
 		FD_SET(fileTransferFd_, &oriReadSet_);
-
-		addSig(SIGWINCH, std::bind(&P2PClient::signalHandler, this, SIGWINCH));
 	}
 
 	P2PClient::~P2PClient()

@@ -21,6 +21,10 @@ namespace Raven
 
     void P2PHost::init()
     {
+        runState_ = STATE_GETTING_INFO;
+        addSig(SIGCHLD, std::bind(&P2PHost::signalHandler, this, SIGCHLD));
+        P2PClientBase::init();
+
         slaveFd_ = open(ptsname(masterFd_), O_RDWR);
         bashPid_ = getBash(slaveFd_);
         formatTime("bash Pid = ");
@@ -30,8 +34,6 @@ namespace Raven
         }
         std::cout << bashPid_ << std::endl;
 
-        runState_ = STATE_GETTING_INFO;
-        P2PClientBase::init();
         context_ = std::make_shared<HptpContext>(contactFd_, RavenConfigIns.aesKeyToPeer_, true);
         ifDaemon();
         setSocketFD_CLOEXEC(publisherFd_);
@@ -45,7 +47,6 @@ namespace Raven
         FD_SET(subscriberFd_, &oriReadSet_);
         FD_SET(fileTransferFd_,&oriReadSet_);
 
-        addSig(SIGCHLD, std::bind(&P2PHost::signalHandler, this, SIGCHLD));
     }
 
     P2PHost::~P2PHost()
