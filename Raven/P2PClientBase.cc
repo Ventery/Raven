@@ -43,6 +43,7 @@ namespace Raven
     void P2PClientBase::createTransferSocket()
     {
         FileTransferSocketPath_ = kFileTransferPath + generateStr(8) + "server.socket";
+        std::cout << "FileTransferSocket :" << FileTransferSocketPath_ << std::endl;
 
         struct sockaddr_un serverConfig;
         int fileTransferFd_;
@@ -62,7 +63,6 @@ namespace Raven
             std::cout << ret << std::endl;
             throw "Error occurred while binding file Socket fd!";
         }
-        std::cout << "FileTransferSocket :" << FileTransferSocketPath_ << std::endl;
 
         if (listen(fileTransferFd_, 20) < 0)
         {
