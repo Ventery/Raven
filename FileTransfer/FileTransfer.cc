@@ -137,7 +137,7 @@ int connectToSocket(string serverSocket)
     strcpy(clientConfig.sun_path, clientSocket.c_str());
     int len = offsetof(struct sockaddr_un, sun_path) + strlen(clientConfig.sun_path);
     unlink(clientConfig.sun_path);
-    if (bind(clientSockFd, (struct sockaddr *)&clientConfig, len) < 0)
+    if (::bind(clientSockFd, (struct sockaddr *)&clientConfig, len) < 0)
     {
         perror("bind error");
         exit(1);
