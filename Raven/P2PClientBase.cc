@@ -57,8 +57,9 @@ namespace Raven
         strcpy(serverConfig.sun_path, FileTransferSocketPath_.c_str());
         int size =
             offsetof(struct sockaddr_un, sun_path) + strlen(serverConfig.sun_path);
-        if (bind(fileTransferFd_, (struct sockaddr *)&serverConfig, size) < 0)
+        if (int ret = bind(fileTransferFd_, (struct sockaddr *)&serverConfig, size) < 0)
         {
+            std::cout<<ret<<std::endl;
             throw "Error occurred while binding file Socket fd!";
         }
         std::cout << "FileTransferSocket :" << FileTransferSocketPath_ << std::endl;

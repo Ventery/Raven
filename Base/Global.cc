@@ -294,6 +294,9 @@ namespace Global
 	}
 
 	char number2Char(long num)
+	//0~25 a~z
+	//26~51 A~Z	
+	//52~61 0~9
 	{
 		if (num < 26)
 		{
