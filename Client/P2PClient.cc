@@ -84,10 +84,6 @@ namespace Raven
 				{
 					handleReadWin();
 				}
-				if (FD_ISSET(fileTransferFd_, &readSet_))
-				{
-					handleRead();
-				}
 				if (FD_ISSET(winSubscriberFd_, &readSet_))
 				{
 					handleReadWinCTL();
