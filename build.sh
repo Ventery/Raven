@@ -1,5 +1,9 @@
 #!/bin/sh
-
+result=$(id | awk '{print $1}')
+if [ $result != "uid=0(root)" ]; then
+    colorEcho $RED " 请以root身份执行该脚本"
+    exit 1
+fi
 set -x
 
 SOURCE_DIR=`pwd`
