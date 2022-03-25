@@ -72,7 +72,6 @@ namespace Raven
 
     P2PClientBase::~P2PClientBase()
     {
-        std::cout<<"~P2PClientBase()"<<std::endl;
         close(contactFd_);
         close(fileTransferFd_);
         unlink(FileTransferSocketPath_.c_str());
