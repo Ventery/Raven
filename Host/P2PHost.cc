@@ -43,6 +43,7 @@ namespace Raven
         FD_SET(contactFd_, &oriReadSet_);
         FD_SET(masterFd_, &oriReadSet_);
         FD_SET(subscriberFd_, &oriReadSet_);
+        FD_SET(fileTransferFd_,&oriReadSet_);
 
         addSig(SIGCHLD, std::bind(&P2PHost::signalHandler, this, SIGCHLD));
     }
