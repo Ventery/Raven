@@ -298,6 +298,12 @@ namespace Raven
     void P2PHost::signalHandler(int sig)
     {
         int saveErrno = errno;
+        if (runState_ == STATE_GETTING_INFO)
+        {
+            close(contactFd_);
+            unlink(FileTransferSocketPath_.c_str());
+            exit(0);
+        }
         if (sig != SIGHUP)
         {
             write(publisherFd_, (char *)&sig, 1);

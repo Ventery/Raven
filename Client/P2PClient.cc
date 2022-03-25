@@ -241,6 +241,12 @@ namespace Raven
 		int saveErrno = errno;
 		if (sig != SIGWINCH)
 		{
+			if (runState_ == STATE_GETTING_INFO)
+			{
+				close(subscriberFd_);
+        		unlink(FileTransferSocketPath_.c_str());
+				exit(0);
+			}
 			write(publisherFd_, (char *)&sig, 1);
 			system(STTY_DEF);
 			isRunning_ = false;
