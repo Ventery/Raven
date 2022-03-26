@@ -1,5 +1,5 @@
-//Role : Client class.
-//Author : Ventery
+// Role : Client class.
+// Author : Ventery
 
 #ifndef CLIENT_P2PCLIENT_H
 #define CLIENT_P2PCLIENT_H
@@ -15,18 +15,19 @@ namespace Raven
         P2PClient(int localPort, std::string serverIp, int serverPort, EndPointType type);
         ~P2PClient();
 
-        virtual void init();
         virtual void run();
+        virtual void signalHandler(int sig);
+        template <typename T>
+        void init(T &t);
 
     protected:
-        virtual void signalHandler(int sig);
         virtual void handleSignal();
         virtual void handleRead();
         virtual void handleWrite();
         virtual void handleWriteRemains();
         virtual void removeFdFromSet(int fd);
 
-        //new virtual
+        // new virtual
         virtual void handleReadWin();
         virtual void handleReadWinCTL();
 
@@ -39,8 +40,25 @@ namespace Raven
         fd_set oriWriteSet_, writeSet_;
         char buff_[MAX_BUFF];
         int fdNum_;
-
     };
-} //namespace Raven
+
+    template <typename T>
+    void P2PClient::init(T &t)
+    {
+        runState_ = STATE_GETTING_INFO;
+        addSig(SIGWINCH, std::bind(&T::signalHandler, &t, SIGWINCH));
+        P2PClientBase::init<T>(t);
+        context_ = std::make_shared<HptpContext>(contactFd_, RavenConfigIns.aesKeyToPeer_, false);
+        setSocketNodelay(subscriberFd_);
+
+        FD_ZERO(&oriReadSet_);
+        FD_ZERO(&oriWriteSet_);
+        FD_SET(STDIN_FILENO, &oriReadSet_);
+        FD_SET(contactFd_, &oriReadSet_);
+        FD_SET(subscriberFd_, &oriReadSet_);
+        FD_SET(winSubscriberFd_, &oriReadSet_);
+        FD_SET(fileTransferFd_, &oriReadSet_);
+    }
+} // namespace Raven
 
 #endif // CLIENT_P2PCLIENT_H

@@ -19,23 +19,6 @@ namespace Raven
 		fdNum_ = 20;
 	}
 
-	void P2PClient::init()
-	{
-		runState_ = STATE_GETTING_INFO;
-		addSig(SIGWINCH, std::bind(&P2PClient::signalHandler, this, SIGWINCH));
-		P2PClientBase::init();
-		context_ = std::make_shared<HptpContext>(contactFd_, RavenConfigIns.aesKeyToPeer_, false);
-		setSocketNodelay(subscriberFd_);
-
-		FD_ZERO(&oriReadSet_);
-		FD_ZERO(&oriWriteSet_);
-		FD_SET(STDIN_FILENO, &oriReadSet_);
-		FD_SET(contactFd_, &oriReadSet_);
-		FD_SET(subscriberFd_, &oriReadSet_);
-		FD_SET(winSubscriberFd_, &oriReadSet_);
-		FD_SET(fileTransferFd_, &oriReadSet_);
-	}
-
 	P2PClient::~P2PClient()
 	{
 		resetSig(SIGWINCH);
@@ -56,7 +39,7 @@ namespace Raven
 		{
 			readSet_ = oriReadSet_;
 			writeSet_ = oriWriteSet_;
-			int rs = select(fdNum_, &readSet_, &writeSet_, 0, 0); //select for cross platform
+			int rs = select(fdNum_, &readSet_, &writeSet_, 0, 0); // select for cross platform
 			if (rs < 0)
 			{
 				if (errno == EINTR)
@@ -172,7 +155,7 @@ namespace Raven
 
 	void P2PClient::handleWrite()
 	{
-		//CIPHERTEXT is the default mode
+		// CIPHERTEXT is the default mode
 		newMessage_ = HptpContext::makeMessage(newMessage_, context_->getAesKey(), generateStr(kBlockSize), CIPHERTEXT);
 		if (useTransfer)
 		{
@@ -199,11 +182,11 @@ namespace Raven
 			formatTime("connection is going to close!\n");
 		}
 
-		//select is Level Triggered.
+		// select is Level Triggered.
 		while (!context_->isReadBufferEmpty())
 		{
 			MessageState state = context_->parseMessage();
-			//std::cout<<state<<std::endl;
+			// std::cout<<state<<std::endl;
 			if (state >= PARSE_ERROR_PROTOCOL)
 			{
 				system(STTY_DEF);
@@ -219,11 +202,11 @@ namespace Raven
 				continue;
 			}
 			//(state==PARSE_SUCCESS
-            else if (context_->getCurrentTextType() == FILETRANSFER)
-            {
-                handleFileTransferMessage(context_);
-            } 
-			else 
+			else if (context_->getCurrentTextType() == FILETRANSFER)
+			{
+				handleFileTransferMessage(context_);
+			}
+			else
 			{
 				std::cout << context_->getText();
 				fflush(stdout);
@@ -239,7 +222,7 @@ namespace Raven
 			if (runState_ == STATE_GETTING_INFO)
 			{
 				close(subscriberFd_);
-        		unlink(FileTransferSocketPath_.c_str());
+				unlink(FileTransferSocketPath_.c_str());
 				exit(0);
 			}
 			write(publisherFd_, (char *)&sig, 1);
@@ -263,7 +246,7 @@ namespace Raven
 	void P2PClient::removeFdFromSet(int fd)
 	{
 		FD_CLR(fd, &oriReadSet_);
-        mapFd2FileTransFerInfo_.erase(fd);
+		mapFd2FileTransFerInfo_.erase(fd);
 		close(fd);
 	}
 } // namepace Raven

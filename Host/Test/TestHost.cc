@@ -11,7 +11,7 @@ int main()
                                 RavenConfigIns.serverIp_,
                                 RavenConfigIns.serverPort_,
                                 Global::EndPointType::TYPE_HOST);
-            host.init();
+            host.init<Raven::P2PHost>(host);
             host.run();
         }
         catch (const char *msg)

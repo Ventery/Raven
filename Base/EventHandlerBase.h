@@ -11,8 +11,6 @@ namespace Global
     {
     public:
         typedef std::function<void()> CallBack;
-
-    protected:
         virtual void signalHandler(int sig)
         {
             throw "You should not use this function";

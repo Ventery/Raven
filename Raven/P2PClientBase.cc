@@ -12,34 +12,6 @@ namespace Raven
                                  EndPointType type)
         : ClientBase(localPort, serverIp, serverPort), endPointType_(type) {}
 
-    void P2PClientBase::init()
-    {
-        ClientBase::init();
-        createTransferSocket();
-        FileTransferSocketPath_ = generateStr(8);
-        Global::PeerInfo peerInfo = getPeerInfo(localPort_, true, endPointType_);
-        formatTime();
-        std::cout << "Peer :" << peerInfo.ip << " " << peerInfo.port << std::endl;
-
-        int fdToPeer = socketReUsePort(localPort_);
-        if (!noBlockConnect(fdToPeer, peerInfo,
-                            RavenConfigIns.connectTimeout_)) // use transfer
-        {
-            formatTime("Connect to Host failed.Now use server as transfer...\n");
-            close(fdToPeer);
-            setNoBlocking(peerInfo.sockToServer);
-            contactFd_ = peerInfo.sockToServer;
-            useTransfer = true;
-        }
-        else // use P2P
-        {
-            formatTime("Connect to Host Success!(use P2P)\n");
-            close(peerInfo.sockToServer);
-            contactFd_ = fdToPeer;
-            useTransfer = false;
-        }
-    }
-
     void P2PClientBase::createTransferSocket()
     {
         FileTransferSocketPath_ = kFileTransferPath + generateStr(8) + "server.socket";

@@ -21,7 +21,7 @@
 #include <gcrypt.h>
 #include <libgen.h>
 
-#include "ClientBase.h"
+#include "EventHandlerBase.h"
 #include "MutexLock.h"
 #include "ReadConfig.h"
 #include "Singleton.h"

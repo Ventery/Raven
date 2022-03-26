@@ -1,9 +1,3 @@
-#include <fcntl.h>
-#include <sys/ioctl.h>
-#include <sys/wait.h>
-#include <stdlib.h>
-#include <termios.h>
-
 #include "P2PHost.h"
 
 namespace Raven
@@ -17,36 +11,6 @@ namespace Raven
         unlockpt(masterFd_);
         setNoBlocking(masterFd_);
         fdNum_ = 20;
-    }
-
-    void P2PHost::init()
-    {
-        runState_ = STATE_GETTING_INFO;
-        addSig(SIGCHLD, std::bind(&P2PHost::signalHandler, this, SIGCHLD));
-        P2PClientBase::init();
-
-        slaveFd_ = open(ptsname(masterFd_), O_RDWR);
-        bashPid_ = getBash(slaveFd_);
-        formatTime("bash Pid = ");
-        if (bashPid_ < 0)
-        {
-            throw "Bash start failed";
-        }
-        std::cout << bashPid_ << std::endl;
-
-        context_ = std::make_shared<HptpContext>(contactFd_, RavenConfigIns.aesKeyToPeer_, true);
-        ifDaemon();
-        setSocketFD_CLOEXEC(publisherFd_);
-        setSocketFD_CLOEXEC(subscriberFd_);
-        setSocketFD_CLOEXEC(contactFd_);
-
-        FD_ZERO(&oriReadSet_);
-        FD_ZERO(&oriWriteSet_);
-        FD_SET(contactFd_, &oriReadSet_);
-        FD_SET(masterFd_, &oriReadSet_);
-        FD_SET(subscriberFd_, &oriReadSet_);
-        FD_SET(fileTransferFd_,&oriReadSet_);
-
     }
 
     P2PHost::~P2PHost()
@@ -205,7 +169,7 @@ namespace Raven
             isRunning_ = false;
             formatTime("connection error! Prepare to reconnect!\n");
         }
-        //select is Level Triggered.
+        // select is Level Triggered.
         while (!context_->isReadBufferEmpty())
         {
             MessageState state = context_->parseMessage();
@@ -227,8 +191,8 @@ namespace Raven
             else if (context_->getCurrentTextType() == FILETRANSFER)
             {
                 handleFileTransferMessage(context_);
-            } 
-            else 
+            }
+            else
             {
                 std::string tempMsg;
                 tempMsg = context_->getText();
@@ -259,7 +223,7 @@ namespace Raven
 
     void P2PHost::handleWrite()
     {
-        //CIPHERTEXT is the default mode
+        // CIPHERTEXT is the default mode
         newMessage_ = HptpContext::makeMessage(newMessage_, context_->getAesKey(), generateStr(kBlockSize), CIPHERTEXT);
         if (useTransfer)
         {
@@ -288,10 +252,10 @@ namespace Raven
         formatTime("Stopping......\n");
         if (isBashRunning_)
         {
-            kill(bashPid_, SIGHUP); //bash has it's own session,so we sent SIGHUP to it.
+            kill(bashPid_, SIGHUP); // bash has it's own session,so we sent SIGHUP to it.
             std::string msg;
             setNoBlocking(subscriberFd_);
-            read(subscriberFd_, buff_, MAX_BUFF); //handle remain signal
+            read(subscriberFd_, buff_, MAX_BUFF); // handle remain signal
         }
         runState_ = STATE_END;
         formatTime("Stopped\n");
@@ -323,4 +287,4 @@ namespace Raven
         mapFd2FileTransFerInfo_.erase(fd);
         close(fd);
     }
-} //namespace Raven
+} // namespace Raven
