@@ -1,11 +1,11 @@
 # Raven
 ## 中文
-Raven类似于一个实现了NAT穿透的简化版SSH。
+Raven类似于一个实现了NAT穿透的简化版SSH，由C++编写。
 
--	服务器为linux，客户端和主机均支持linux和macos。
 - 使用AES加密。
 - 支持文件传输。
 - 使用P2P模式，有服务器中转模式作为替代
+- 服务器为linux，客户端和主机均支持linux和macos。
 
 现在仍在开发中...
 但是你仍然可以来试一试！
@@ -17,7 +17,7 @@ Raven类似于一个实现了NAT穿透的简化版SSH。
 
 ## English
 
-Raven works like a simplified SSH with NAT traversal.
+Raven works like a simplified SSH with NAT traversal,written in C++.
 
 Now developing...
 But you can still have a test for fun!
