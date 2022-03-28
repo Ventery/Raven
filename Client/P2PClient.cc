@@ -217,12 +217,20 @@ namespace Raven
 	void P2PClient::signalHandler(int sig)
 	{
 		int saveErrno = errno;
+		std::cout << std::endl
+				  << "P2PClient::signalHandler : " << sig << std::endl;
+		std::cout << "STATE_GETTING_INFO : " << runState_ << std::endl;
 		if (sig != SIGWINCH)
 		{
 			if (runState_ == STATE_GETTING_INFO)
 			{
 				close(subscriberFd_);
-				unlink(FileTransferSocketPath_.c_str());
+				close(fileTransferFd_);
+				if (unlink(FileTransferSocketPath_.c_str()) == -1)
+				{
+					perror("Unlink fali");
+					std::cout << "File path : " << FileTransferSocketPath_.c_str() << std::endl;
+				}
 				exit(0);
 			}
 			write(publisherFd_, (char *)&sig, 1);

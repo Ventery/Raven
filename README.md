@@ -1,4 +1,5 @@
 # Raven
+[![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://opensource.org/licenses/MIT)  [![Build Status](https://api.travis-ci.com/Ventery/Raven.svg?branch=master)](https://travis-ci.com/github/Ventery/Raven)
 ## 中文
 Raven类似于一个实现了NAT穿透的简化版SSH，由C++编写。
 

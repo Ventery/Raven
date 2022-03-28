@@ -76,7 +76,6 @@ namespace Raven
     {
         ClientBase::init<T>(t);
         createTransferSocket();
-        FileTransferSocketPath_ = generateStr(8);
         Global::PeerInfo peerInfo = getPeerInfo(localPort_, true, endPointType_);
         formatTime();
         std::cout << "Peer :" << peerInfo.ip << " " << peerInfo.port << std::endl;
