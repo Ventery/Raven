@@ -55,8 +55,8 @@ namespace Raven
         template <typename T>
         void init(T &t);
 
-        std::string unixSocketPath;
-        bool useTransfer;
+        std::string unixSocketPath_;
+        bool useTransfer_;
         ProgressState runState_;
         EndPointType endPointType_;
         std::string FileTransferSocketPath_;
@@ -88,14 +88,14 @@ namespace Raven
             close(fdToPeer);
             setNoBlocking(peerInfo.sockToServer);
             contactFd_ = peerInfo.sockToServer;
-            useTransfer = true;
+            useTransfer_ = true;
         }
         else // use P2P
         {
             formatTime("Connect to Host Success!(use P2P)\n");
             close(peerInfo.sockToServer);
             contactFd_ = fdToPeer;
-            useTransfer = false;
+            useTransfer_ = false;
         }
     }
 } // namespace Raven

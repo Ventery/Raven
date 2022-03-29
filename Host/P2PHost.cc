@@ -225,7 +225,7 @@ namespace Raven
     {
         // CIPHERTEXT is the default mode
         newMessage_ = HptpContext::makeMessage(newMessage_, context_->getAesKey(), generateStr(kBlockSize), CIPHERTEXT);
-        if (useTransfer)
+        if (useTransfer_)
         {
             newMessage_ = HptpContext::makeMessage(newMessage_, "", "", TRANSFER);
         }
