@@ -10,7 +10,7 @@ namespace Raven
     public:
         P2PHost() = delete;
         P2PHost(int localPort, std::string serverIp, int serverPort, EndPointType type);
-        ~P2PHost();
+        virtual~P2PHost();
 
         virtual void run();
         virtual void signalHandler(int sig);
