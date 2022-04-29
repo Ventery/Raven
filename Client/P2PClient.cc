@@ -31,7 +31,7 @@ namespace Raven
 		runState_ = STATE_PROCESSING;
 		formatTime("Running...\n");
 		addAlarm(contactFd_);
-		fflush(nullptr);
+		std::cout << std::flush;
 		system(STTY_US);
 		isRunning_ = true;
 		signalHandler(SIGWINCH); // init win sizes
