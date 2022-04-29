@@ -16,7 +16,7 @@ int main()
         }
         catch (const char *msg)
         {
-            std::cout << msg << std::endl;
+            std::cout <<"Host : "<<msg << std::endl;
         }
     }
 

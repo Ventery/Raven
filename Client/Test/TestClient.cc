@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     }
     catch (const char *msg)
     {
-        std::cout << msg << std::endl;
+        std::cout <<"Client : "<< msg << std::endl;
     }
 
     return 0;
