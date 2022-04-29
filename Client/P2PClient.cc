@@ -235,7 +235,7 @@ namespace Raven
 				exit(0);
 			}
 			write(publisherFd_, (char *)&sig, 1);
-			system(STTY_DEF);
+			//system(STTY_DEF);
 			isRunning_ = false;
 		}
 		else // (sig == SIGWINCH)
