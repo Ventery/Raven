@@ -47,7 +47,14 @@ namespace Raven
     {
         runState_ = STATE_GETTING_INFO;
         addSig(SIGWINCH, std::bind(&T::signalHandler, &t, SIGWINCH));
-        P2PClientBase::init<T>(t);
+        try
+        {
+            P2PClientBase::init<T>(t);
+        }
+        catch(const char *msg)
+        {
+            throw msg;
+        }
         context_ = std::make_shared<HptpContext>(contactFd_, RavenConfigIns.aesKeyToPeer_, false);
         setSocketNodelay(subscriberFd_);
 
