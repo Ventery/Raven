@@ -75,14 +75,7 @@ namespace Raven
     void P2PClientBase::init(T &t)
     {
         ClientBase::init<T>(t);
-        try
-        {
-            createTransferSocket();
-        }
-        catch(const char *msg)
-        {
-            throw msg;
-        }
+        createTransferSocket();
         
         Global::PeerInfo peerInfo = getPeerInfo(localPort_, true, endPointType_);
         formatTime();
