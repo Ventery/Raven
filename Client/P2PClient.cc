@@ -24,6 +24,7 @@ namespace Raven
 		resetSig(SIGWINCH);
 		close(winPublisherFd_);
 		close(winSubscriberFd_);
+		system(STTY_DEF);
 	}
 
 	void P2PClient::run()
