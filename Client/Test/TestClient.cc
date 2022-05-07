@@ -10,6 +10,7 @@ int main(int argc, char *argv[])
                                 RavenConfigIns.serverPort_,
                                 Global::EndPointType::TYPE_CLIENT);
         client.init<Raven::P2PClient>(client);
+        client.run();
     }
     catch (const char *msg)
     {
