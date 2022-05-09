@@ -82,6 +82,9 @@ namespace Raven
             now = end;
         }
 
+        char empty;
+        write(fd, &empty, 1); // sync
+        
         char filePath[256];
         memset(filePath, 0, 256);
         int fileLength;

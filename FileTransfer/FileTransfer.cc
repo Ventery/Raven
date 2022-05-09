@@ -169,6 +169,9 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
     write(clientFd, tempStream.c_str(), tempStream.length());
     write(clientFd, " ", 1);
 
+    char empty;
+    read(clientFd, &empty, 1); // sync
+
     FILE *filePtr = fopen(fullPath.c_str(), "r");
     int fileBlock = min(MAX_SEND_BUFF, statBuff.st_size / 10);
     char buff[fileBlock];
