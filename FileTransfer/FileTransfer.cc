@@ -161,7 +161,7 @@ int min(int a, int b) { return a < b ? a : b; }
 void beginTrans(string fullPath, string fileName, int clientFd, struct stat &statBuff)
 {
     int fileSize = statBuff.st_size;
-    std::cout << "File size:" << fileSize << endl;
+    cout << "File size:" << fileSize << endl;
     write(clientFd, fileName.c_str(), fileName.length());
     write(clientFd, " ", 1);
 

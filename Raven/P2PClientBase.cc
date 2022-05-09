@@ -65,11 +65,13 @@ namespace Raven
         while (true)
         {
             int ret = read(fd, fileBuff_ + now, MAX_FILE_BUFFER);
+            end += ret;
+            fileBuff_[end] = '/0';
+            std::cout<<"Size : "<< end << " "<<fileBuff_<<std::endl;
             if (ret == 0)
             {
                 throw "Error occurred while receving tranfers info!";
             }
-            end += ret;
             for (int i = now; i < end; i++)
             {
                 if (fileBuff_[i] == ' ')
