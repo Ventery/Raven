@@ -145,7 +145,7 @@ int connectToSocket(string serverSocket)
 
     memset(&servefrConfig, 0, sizeof(servefrConfig));
     servefrConfig.sun_family = AF_UNIX;
-    strcpy(servefrConfig.sun_path, serverSocket.c_str());
+    strcpy(servefrConfig.sun_path, (Global::kFileTransferPath + serverSocket).c_str());
     len = offsetof(struct sockaddr_un, sun_path) + strlen(servefrConfig.sun_path);
     if (connect(clientSockFd, (struct sockaddr *)&servefrConfig, len) < 0)
     {
