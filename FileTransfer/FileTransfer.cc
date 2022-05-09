@@ -149,6 +149,7 @@ int connectToSocket(string serverSocket)
     len = offsetof(struct sockaddr_un, sun_path) + strlen(servefrConfig.sun_path);
     if (connect(clientSockFd, (struct sockaddr *)&servefrConfig, len) < 0)
     {
+        std::cout << "Server socket : " << servefrConfig.sun_path << std::endl;
         perror("connect error");
         exit(1);
     }
