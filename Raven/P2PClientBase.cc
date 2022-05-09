@@ -84,7 +84,8 @@ namespace Raven
         memset(filePath, 0, 256);
         int fileLength;
         sscanf(fileBuff_, "%s %d ", filePath, &fileLength);
-
+        std::cout << "Begin File Transfer " << std::endl
+                  << "File : " << filePath << "  Size: " << fileLength << std::endl;
         mapFd2FileTransFerInfo_[fd] =
             std::make_shared<FileTransFerInfo>(fd, filePath, fileLength);
     }
