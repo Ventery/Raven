@@ -133,7 +133,7 @@ int connectToSocket(string serverSocket)
     }
 
     memset(&clientConfig, 0, sizeof(clientConfig));
-    memset(&servefrConfig, 0, sizeof(servefrConfig));
+    clientConfig.sun_family = AF_UNIX;
     strcpy(clientConfig.sun_path, clientSocket.c_str());
     int len = offsetof(struct sockaddr_un, sun_path) + strlen(clientConfig.sun_path);
     unlink(clientConfig.sun_path);
@@ -143,6 +143,7 @@ int connectToSocket(string serverSocket)
         exit(1);
     }
 
+    memset(&servefrConfig, 0, sizeof(servefrConfig));
     servefrConfig.sun_family = AF_UNIX;
     strcpy(servefrConfig.sun_path, serverSocket.c_str());
     len = offsetof(struct sockaddr_un, sun_path) + strlen(servefrConfig.sun_path);
