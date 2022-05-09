@@ -219,9 +219,9 @@ namespace Raven
 	void P2PClient::signalHandler(int sig)
 	{
 		int saveErrno = errno;
-		std::cout << std::endl
+		/*std::cout << std::endl
 				  << "P2PClient::signalHandler : " << sig << std::endl;
-		std::cout << "STATE_GETTING_INFO : " << runState_ << std::endl;
+		std::cout << "STATE_GETTING_INFO : " << runState_ << std::endl;*/
 		if (sig != SIGWINCH)
 		{
 			if (runState_ == STATE_GETTING_INFO)
