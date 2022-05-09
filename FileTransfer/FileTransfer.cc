@@ -19,7 +19,7 @@ void usage();
 void fileNotReadable();
 void isNotFile();
 int connectToSocket(string);
-void beginTrans(string, string, int, int, struct stat &);
+void beginTrans(string, string, int, struct stat &);
 int main(int argc, char *argv[])
 {
     if (argc < 2)
@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
 
         string socket = socketList[socketIndex - 1];
         int clientFd = connectToSocket(socket);
-        beginTrans(fullPath, fileName, statBuff.st_size, clientFd, statBuff);
+        beginTrans(fullPath, fileName,clientFd, statBuff);
     }
     return 0;
 }
@@ -158,8 +158,9 @@ int connectToSocket(string serverSocket)
 }
 int min(int a, int b) { return a < b ? a : b; }
 
-void beginTrans(string fullPath, string fileName, int fileSize, int clientFd, struct stat &statBuff)
+void beginTrans(string fullPath, string fileName, int clientFd, struct stat &statBuff)
 {
+    int fileSize = statBuff.st_size;
     write(clientFd, fileName.c_str(), fileName.length());
     write(clientFd, " ", 1);
 
