@@ -64,7 +64,7 @@ namespace Raven
         int spaceCount = 0;
         while (true)
         {
-            int ret = read(fd, fileBuff_, MAX_FILE_BUFFER);
+            int ret = read(fd, fileBuff_ + now, MAX_FILE_BUFFER);
             if (ret == 0)
             {
                 throw "Error occurred while receving tranfers info!";
