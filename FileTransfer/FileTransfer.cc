@@ -172,6 +172,8 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
     char empty;
     read(clientFd, &empty, 1); // sync
 
+    cout << "Begin trans:" << endl;
+
     FILE *filePtr = fopen(fullPath.c_str(), "r");
     int fileBlock = min(MAX_SEND_BUFF, statBuff.st_size / 10);
     char buff[fileBlock];

@@ -66,7 +66,7 @@ namespace Raven
         {
             int ret = read(fd, fileBuff_ + now, MAX_FILE_BUFFER);
             end += ret;
-            fileBuff_[end] = '/0';
+            fileBuff_[end] = 0;
             std::cout<<"Size : "<< end << " "<<fileBuff_<<std::endl;
             if (ret == 0)
             {
@@ -84,7 +84,7 @@ namespace Raven
 
         char empty;
         write(fd, &empty, 1); // sync
-        
+
         char filePath[256];
         memset(filePath, 0, 256);
         int fileLength;
