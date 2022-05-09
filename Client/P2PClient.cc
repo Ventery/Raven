@@ -253,10 +253,16 @@ namespace Raven
 		errno = saveErrno;
 	}
 
-	void P2PClient::removeFdFromSet(int fd)
+	void P2PClient::removeFileFdFromSet(int fd)
 	{
 		FD_CLR(fd, &oriReadSet_);
 		mapFd2FileTransFerInfo_.erase(fd);
 		close(fd);
 	}
+
+	void P2PClient::addFileFdToSet(int fd)
+	{
+		FD_SET(fd, &oriReadSet_);
+	}
+
 } // namepace Raven

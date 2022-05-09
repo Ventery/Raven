@@ -44,7 +44,8 @@ namespace Raven
         virtual void handleRead() = 0;
         virtual void handleWrite() = 0;
         virtual void handleWriteRemains() = 0;
-        virtual void removeFdFromSet(int fd) = 0;
+        virtual void removeFileFdFromSet(int fd) = 0;
+        virtual void addFileFdToSet(int fd) = 0;
 
         // for file trans
         virtual void handleNewFileTransFd();

@@ -289,10 +289,15 @@ namespace Raven
         errno = saveErrno;
     }
 
-    void P2PHost::removeFdFromSet(int fd)
+    void P2PHost::removeFileFdFromSet(int fd)
     {
         FD_CLR(fd, &oriReadSet_);
         mapFd2FileTransFerInfo_.erase(fd);
         close(fd);
     }
+
+	void P2PHost::addFileFdToSet(int fd)
+	{
+		FD_SET(fd, &oriReadSet_);
+	}
 } // namespace Raven

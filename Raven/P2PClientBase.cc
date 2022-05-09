@@ -93,6 +93,8 @@ namespace Raven
                   << "File : " << filePath << "  Size: " << fileLength << std::endl;
         mapFd2FileTransFerInfo_[fd] =
             std::make_shared<FileTransFerInfo>(fd, filePath, fileLength);
+            
+        addFileFdToSet(fd);
     }
 
     void P2PClientBase::handleReadFileTransfer(
@@ -110,7 +112,7 @@ namespace Raven
 
         if (ret == 0)
         {
-            removeFdFromSet(it->fd);
+            removeFileFdFromSet(it->fd);
         }
     }
 

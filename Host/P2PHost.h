@@ -23,7 +23,8 @@ namespace Raven
         virtual void handleRead();
         virtual void handleWrite();
         virtual void handleWriteRemains();
-        virtual void removeFdFromSet(int fd);
+        virtual void removeFileFdFromSet(int fd);
+        virtual void addFileFdToSet(int fd);
 
         // new virtual
         virtual void handleBashWriteRemains();
