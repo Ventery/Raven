@@ -18,7 +18,6 @@ namespace Raven
         std::cout << "FileTransferSocket :" << FileTransferSocketPath_ << std::endl;
 
         struct sockaddr_un serverConfig;
-        int fileTransferFd_;
 
         if ((fileTransferFd_ = socket(AF_UNIX, SOCK_STREAM, 0)) < 0)
         {
