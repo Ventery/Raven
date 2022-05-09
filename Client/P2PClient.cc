@@ -50,7 +50,7 @@ namespace Raven
 				}
 				system(STTY_DEF);
 				isRunning_ = false;
-				formatTime("select() error! ");
+				formatTime("select() error! \n");
 				std::cout << errno << std::endl;
 			}
 			else
@@ -120,14 +120,14 @@ namespace Raven
 			for (int i = 0; i < ret; ++i)
 			{
 				system(STTY_DEF);
-				formatTime("Received signal : ");
+				formatTime("Received signal : \n");
 				switch (signals[i])
 				{
 				case SIGHUP:
 				case SIGTERM:
 				case SIGINT:
 					isRunning_ = false;
-					formatTime("Terminated signal");
+					formatTime("Terminated signal\n");
 					continue;
 				default:
 					std::cout << "Unknown signal : " << signals[i] << std::endl;
@@ -193,7 +193,7 @@ namespace Raven
 			{
 				system(STTY_DEF);
 				isRunning_ = false;
-				formatTime("Parse error");
+				formatTime("Parse error\n");
 				break;
 			}
 			else if (state == PARSE_AGAIN)

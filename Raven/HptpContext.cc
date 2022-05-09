@@ -15,7 +15,8 @@ namespace Raven
 		case PLAINTEXT:
 		case PLAINTEXT_WINCTL:
 		case TRANSFER:
-		{ // treat TRANSFER message as plaintext
+		case FILETRANSFER:
+		{ // treat FILETRANSFER message as plaintext
 			message += "length: " + std::to_string(msg.size()) + "\r\n";
 			break;
 		}

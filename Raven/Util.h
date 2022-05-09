@@ -35,9 +35,9 @@ namespace Raven
 		PLAINTEXT = 100,		 
 		PLAINTEXT_WINCTL = 101,	 
 		CIPHERTEXT = 200,		 
-		KEEPALIVE = 300,		 
+		KEEPALIVE = 300,	
 		TRANSFER = 400,
-		FILETRANSFER = 500
+		FILETRANSFER = 500,
 	};
 
 	enum SocketState
