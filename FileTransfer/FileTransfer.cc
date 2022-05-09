@@ -2,8 +2,8 @@
 #include <iostream>
 #include <string>
 #include <stdio.h>
-#include <stddef.h>  
-#include <stdlib.h>  
+#include <stddef.h>
+#include <stdlib.h>
 #include <sys/stat.h>
 #include <sys/socket.h>
 #include <sys/types.h>
@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
         cout << "--------------------------------" << endl;
         cout << "Please select a socket,input index:" << endl;
         int socketIndex;
-        while(true)
+        while (true)
         {
             cin >> socketIndex;
             if (socketIndex > 0 && socketIndex <= (int)(socketList.size()))
@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
             }
         }
 
-        string socket = socketList[socketIndex];
+        string socket = socketList[socketIndex - 1];
         int clientFd = connectToSocket(socket);
         beginTrans(fullPath, fileName, statBuff.st_size, clientFd, statBuff);
     }
@@ -176,16 +176,17 @@ void beginTrans(string fullPath, string fileName, int fileSize, int clientFd, st
         {
             write(clientFd, buff, ret);
             int readNum = 0;
-            while(true){
+            while (true)
+            {
                 readNum += read(clientFd, readBuff, 1024);
-                if (readBuff[readNum-1] == ' ') 
+                if (readBuff[readNum - 1] == ' ')
                 {
                     break;
                 }
             }
             int confirmedBytes;
-            sscanf(readBuff,"%d ",&confirmedBytes);
-            cout<<confirmedBytes<<endl;
+            sscanf(readBuff, "%d ", &confirmedBytes);
+            cout << confirmedBytes << endl;
         }
 
         if (feof(filePtr))
