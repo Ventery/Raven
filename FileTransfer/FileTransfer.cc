@@ -181,9 +181,11 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
     while (true)
     {
         int ret = fread(buff, 1, fileBlock, filePtr);
+        cout << "Fread bytes:" <<ret<< endl;
         if (ret > 0)
         {
-            write(clientFd, buff, ret);
+            int writeRet = write(clientFd, buff, ret);
+            cout << "Write bytes:" <<writeRet<< endl;
             int readNum = 0;
             while (true)
             {
