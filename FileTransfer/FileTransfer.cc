@@ -181,15 +181,16 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
     while (true)
     {
         int ret = fread(buff, 1, fileBlock, filePtr);
-        cout << "Fread bytes:" <<ret<< endl;
+        cout << "Fread bytes:" << ret << endl;
         if (ret > 0)
         {
             int writeRet = write(clientFd, buff, ret);
-            cout << "Write bytes:" <<writeRet<< endl;
+            cout << "Write bytes:" << writeRet << endl;
             int readNum = 0;
             while (true)
             {
-                readNum += read(clientFd, readBuff, 1024);
+                readNum += read(clientFd, readBuff + readNum, 1024);
+                cout << "Read bytes:" << readNum << endl;
                 if (readBuff[readNum - 1] == ' ')
                 {
                     break;
@@ -199,6 +200,7 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
             sscanf(readBuff, "%d ", &confirmedBytes);
             cout << confirmedBytes << endl;
         }
+        cout << endl;
 
         if (feof(filePtr))
         {
