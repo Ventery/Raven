@@ -126,8 +126,8 @@ namespace Raven
 				case SIGHUP:
 				case SIGTERM:
 				case SIGINT:
-					std::cout << "Terminated signal" << std::endl;
 					isRunning_ = false;
+					formatTime("Terminated signal");
 					continue;
 				default:
 					std::cout << "Unknown signal : " << signals[i] << std::endl;
@@ -193,6 +193,7 @@ namespace Raven
 			{
 				system(STTY_DEF);
 				isRunning_ = false;
+				formatTime("Parse error");
 				break;
 			}
 			else if (state == PARSE_AGAIN)
@@ -237,7 +238,6 @@ namespace Raven
 			}
 			write(publisherFd_, (char *)&sig, 1);
 			//system(STTY_DEF);
-			isRunning_ = false;
 		}
 		else // (sig == SIGWINCH)
 		{
