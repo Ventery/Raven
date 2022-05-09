@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
 
         string socket = socketList[socketIndex - 1];
         int clientFd = connectToSocket(socket);
-        beginTrans(fullPath, fileName,clientFd, statBuff);
+        beginTrans(fullPath, fileName, clientFd, statBuff);
     }
     return 0;
 }
@@ -122,7 +122,7 @@ void isNotFile()
 
 int connectToSocket(string serverSocket)
 {
-    string clientSocket = serverSocket.substr(0, 8) + "_client.socket";
+    string clientSocket = Global::kFileTransferPath + serverSocket.substr(0, 8) + "_client.socket";
     struct sockaddr_un clientConfig, servefrConfig;
 
     int clientSockFd;
@@ -161,6 +161,7 @@ int min(int a, int b) { return a < b ? a : b; }
 void beginTrans(string fullPath, string fileName, int clientFd, struct stat &statBuff)
 {
     int fileSize = statBuff.st_size;
+    std::cout<<"File size:"<< fileSize<<endl;
     write(clientFd, fileName.c_str(), fileName.length());
     write(clientFd, " ", 1);
 
