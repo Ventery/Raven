@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
             if (!strcmp(ent->d_name, ".") || !strcmp(ent->d_name, ".."))
                 continue;
             fileList.push_back(ent->d_name);
-            if (string(ent->d_name).find("server.socket"))
+            if (string(ent->d_name).find("_server.socket"))
             {
                 socketList.push_back(ent->d_name);
             }
@@ -122,7 +122,7 @@ void isNotFile()
 
 int connectToSocket(string serverSocket)
 {
-    string clientSocket = serverSocket.substr(0, 8) + "client.socket";
+    string clientSocket = serverSocket.substr(0, 8) + "_client.socket";
     struct sockaddr_un clientConfig, servefrConfig;
 
     int clientSockFd;

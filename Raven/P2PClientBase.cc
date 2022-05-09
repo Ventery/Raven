@@ -14,7 +14,7 @@ namespace Raven
 
     void P2PClientBase::createTransferSocket()
     {
-        FileTransferSocketPath_ = kFileTransferPath + generateStr(8) + "server.socket";
+        FileTransferSocketPath_ = kFileTransferPath + generateStr(8) + "_server.socket";
         std::cout << "FileTransferSocket :" << FileTransferSocketPath_ << std::endl;
 
         struct sockaddr_un serverConfig;
