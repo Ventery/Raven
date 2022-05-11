@@ -117,9 +117,9 @@ namespace Raven
     {
         if (!it->getValueByKey("Confirmed").empty()) // For sender
         {
-            std::cout<<"Confirmed!"<<std::endl;
             int localSockFd = stoi(it->getValueByKey("IdentifyId"));
-            std::string bytesHaveReceived = it->getValueByKey("Confirmed") + " ";
+            std::string bytesHaveReceived = it->getValueByKey("Confirmed");
+            std::cout<<"Confirmed :" <<bytesHaveReceived<<std::endl;
             mapFd2FileTransFerInfo_[localSockFd]->alreadySentLength = stoi(it->getValueByKey("Confirmed"));
             write(localSockFd, bytesHaveReceived.c_str(), bytesHaveReceived.size());
             write(localSockFd, " ", 1);
