@@ -45,7 +45,6 @@ add_definitions(-D${BUILD_TYPE}_VERSION)
 
 MESSAGE(STATUS "CXX_FLAGS = " ${CMAKE_CXX_FLAGS} " " ${CMAKE_CXX_FLAGS_${BUILD_TYPE}})
 
-
 add_subdirectory(Base)
 add_subdirectory(Raven)
 add_subdirectory(Host)
