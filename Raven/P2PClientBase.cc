@@ -100,7 +100,6 @@ namespace Raven
     void P2PClientBase::handleReadFileTransfer(
         std::shared_ptr<FileTransFerInfo> it)
     {
-        std::cout<<"file fd data in!  : "<<it->fd<<std::endl;
         int ret = read(it->fd, fileBuff_, MAX_FILE_BUFFER);
         std::cout<<"file fd data in!  : "<<it->fd<<"  bytes:" <<ret<<std::endl;
         Dict dict;
@@ -111,6 +110,8 @@ namespace Raven
 
         newMessage_ += HptpContext::makeMessage(std::string(fileBuff_, ret), "",
                                                 "", FILETRANSFER, dict);
+
+        std::cout<<newMessage_<<std::endl;
 
         if (ret == 0)
         {
