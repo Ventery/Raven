@@ -111,11 +111,6 @@ namespace Raven
         newMessage_ += HptpContext::makeMessage(std::string(fileBuff_, ret), "",
                                                 "", FILETRANSFER, dict);
 
-        if (ret == 0)
-        {
-            removeFileFdFromSet(it->fd);
-            std::cout<<"file trans over !" <<ret<<std::endl;
-        }
     }
 
     void P2PClientBase::handleFileTransferMessage(std::shared_ptr<HptpContext> it)
@@ -128,6 +123,12 @@ namespace Raven
             mapFd2FileTransFerInfo_[localSockFd]->alreadySentLength = stoi(it->getValueByKey("Confirmed"));
             write(localSockFd, bytesHaveReceived.c_str(), bytesHaveReceived.size());
             write(localSockFd, " ", 1);
+
+            if (atoi(it->getValueByKey("Confirmed").c_str()) == mapFd2FileTransFerInfo_[localSockFd]->length)
+            {
+                removeFileFdFromSet(localSockFd);
+                std::cout<<"file trans over !" <<std::endl;
+            }
         }
         else if (!it->getValueByKey("AlreadySentLength").empty()) // For receiver
         {
