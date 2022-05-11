@@ -224,7 +224,7 @@ namespace Raven
     void P2PHost::handleWrite()
     {
         // CIPHERTEXT is the default mode
-        newMessage_ = HptpContext::makeMessage(newMessage_, context_->getAesKey(), generateStr(kBlockSize), CIPHERTEXT);
+        //newMessage_ = HptpContext::makeMessage(newMessage_, context_->getAesKey(), generateStr(kBlockSize), CIPHERTEXT);
         if (useTransfer_)
         {
             newMessage_ = HptpContext::makeMessage(newMessage_, "", "", TRANSFER);
