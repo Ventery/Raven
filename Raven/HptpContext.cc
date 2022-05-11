@@ -123,6 +123,8 @@ namespace Raven
 			}
 			else
 			{
+				std::cout<<sockInfo_.readBuffer<<std::endl;
+				std::cout<<sockInfo_.readBuffer.length()<<std::endl;
 				return PARSE_ERROR_TEXT;
 			}
 		}
