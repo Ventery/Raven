@@ -186,6 +186,8 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
             cout << "File eof" << endl;
             close(clientFd);
             fclose(filePtr);
+
+            break;
         }
         int ret = fread(buff, 1, fileBlock, filePtr);
         cout << "Fread bytes:" << ret << endl;
