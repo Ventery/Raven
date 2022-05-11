@@ -4,7 +4,7 @@
 
 namespace Raven
 {
-	//static
+	// static
 	std::string HptpContext::makeMessage(const std::string &msg, const std::string &key, const std::string &iv, const HPTPMessageType &textType, const Dict &addtionHeaders)
 	{
 		std::string message = "HPTP/1.0 " + std::to_string((int)textType) + "\r\n";
@@ -38,7 +38,7 @@ namespace Raven
 		{
 			break;
 		}
-		} //end switch
+		} // end switch
 
 		if (!addtionHeaders.empty())
 		{
@@ -54,8 +54,8 @@ namespace Raven
 
 	MessageState HptpContext::parseMessage()
 	{
-		//std::cout<<sockInfo_.readBuffer<<std::endl;
-		//std::cout<<sockInfo_.readBuffer.length()<<std::endl;
+		// std::cout<<sockInfo_.readBuffer<<std::endl;
+		// std::cout<<sockInfo_.readBuffer.length()<<std::endl;
 
 		switch (sockInfo_.sockState)
 		{
@@ -123,8 +123,8 @@ namespace Raven
 			}
 			else
 			{
-				std::cout<<sockInfo_.readBuffer<<std::endl;
-				std::cout<<sockInfo_.readBuffer.length()<<std::endl;
+				std::cout << sockInfo_.readBuffer << std::endl;
+				std::cout << sockInfo_.readBuffer.length() << std::endl;
 				return PARSE_ERROR_TEXT;
 			}
 		}
@@ -134,23 +134,23 @@ namespace Raven
 			formatTime("Program should not come here!\n");
 			return PARSE_ERROR_PROTOCOL;
 		}
-		} //end switch
+		} // end switch
 	}
 
 	ProtocolState HptpContext::parseProtocol()
 	{
-		//std::cout<<"parseProtocol"<<std::endl;
+		// std::cout<<"parseProtocol"<<std::endl;
 		std::string &str = sockInfo_.readBuffer;
 		size_t posEnd = str.find(std::string("\r\n"));
 		if (posEnd == std::string::npos)
 		{
-			std::cout<<sockInfo_.readBuffer.length()<<std::endl;
+			std::cout << "PARSE_PROTOCOL_AGAIN sockInfo_.readBuffer.length():" << sockInfo_.readBuffer.length() << std::endl;
 			return PARSE_PROTOCOL_AGAIN;
 		}
 		size_t posProtocol = str.rfind("HPTP/1.0", posEnd);
 		if (posProtocol == std::string::npos || posEnd - posProtocol != 12)
 		{
-			std::cout<<"PARSE_PROTOCOL_ERROR"<<std::endl;
+			std::cout << "PARSE_PROTOCOL_ERROR" << std::endl;
 			return PARSE_PROTOCOL_ERROR;
 		}
 		sockInfo_.textType = (HPTPMessageType)stoi(str.substr(posProtocol + 9, 3));
@@ -168,7 +168,7 @@ namespace Raven
 
 	HeaderState HptpContext::parseHeader()
 	{
-		//std::cout<<"parseHeader"<<std::endl;
+		// std::cout<<"parseHeader"<<std::endl;
 		std::string &str = sockInfo_.readBuffer;
 		while (true)
 		{
@@ -179,32 +179,35 @@ namespace Raven
 				break;
 			}
 			if (posLineEnd == std::string::npos)
+			{
+				std::cout << "PARSE_HEADER_AGAIN str:" << str << std::endl;
 				return PARSE_HEADER_AGAIN;
+			}
 			size_t posMid = str.rfind(":", posLineEnd);
 			if (posMid > 0 && posLineEnd > posMid + 2)
 			{
 				std::string key = str.substr(0, posMid);
 				std::string value = str.substr(posMid + 2, posLineEnd - posMid - 2);
-				//cout << key << " " << value << endl;
+				// cout << key << " " << value << endl;
 				sockInfo_.headers[key] = value;
 				str = str.substr(posLineEnd + 2);
 			}
 			else
 			{
-				std::cout<<"PARSE_HEADER_ERROR"<<std::endl;
+				std::cout << "PARSE_HEADER_ERROR" << std::endl;
 				return PARSE_HEADER_ERROR;
 			}
 		}
 		return PARSE_HEADER_SUCCESS;
 	}
 
-	//check the length
+	// check the length
 	TextState HptpContext::parseText()
 	{
-		//std::cout<<"parseText"<<std::endl;
+		// std::cout<<"parseText"<<std::endl;
 		if (sockInfo_.headers.find("length") == sockInfo_.headers.end())
 		{
-			std::cout<<"PARSE_TEXT_ERROR : length not found!"<<std::endl;
+			std::cout << "PARSE_TEXT_ERROR : length not found!" << std::endl;
 			return PARSE_TEXT_ERROR;
 		}
 		int textLength = atoi((sockInfo_.headers["length"]).c_str());
@@ -215,17 +218,19 @@ namespace Raven
 		}
 		else
 		{
-			trueLength = (textLength % kBlockSize == 0 ? textLength : ((textLength) / kBlockSize + 1) * kBlockSize); //encrypted text
+			trueLength = (textLength % kBlockSize == 0 ? textLength : ((textLength) / kBlockSize + 1) * kBlockSize); // encrypted text
 		}
 
 		if (sockInfo_.readBuffer.size() < (unsigned int)(trueLength + 2))
 		{
+			std::cout << "PARSE_TEXT_AGAIN : sockInfo_.readBuffer.size() :" << sockInfo_.readBuffer.size() << std::endl;
+			std::cout << "str:" << sockInfo_.readBuffer << std::endl;
 			return PARSE_TEXT_AGAIN;
 		}
 
 		if (sockInfo_.readBuffer.c_str()[trueLength] != '\r' || sockInfo_.readBuffer.c_str()[trueLength + 1] != '\n')
 		{
-			std::cout<<"PARSE_TEXT_ERROR : suffix not found!"<<std::endl;
+			std::cout << "PARSE_TEXT_ERROR : suffix not found!" << std::endl;
 			return PARSE_TEXT_ERROR;
 		}
 
@@ -268,4 +273,4 @@ namespace Raven
 	{
 		sockInfo_.writeBuffer += message;
 	}
-} //namespace Raven
+} // namespace Raven
