@@ -111,8 +111,6 @@ namespace Raven
         newMessage_ += HptpContext::makeMessage(std::string(fileBuff_, ret), "",
                                                 "", FILETRANSFER, dict);
 
-        std::cout<<newMessage_<<std::endl;
-
         if (ret == 0)
         {
             removeFileFdFromSet(it->fd);
