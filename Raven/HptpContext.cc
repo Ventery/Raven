@@ -224,6 +224,7 @@ namespace Raven
 		if (sockInfo_.readBuffer.size() < (unsigned int)(trueLength + 2))
 		{
 			std::cout << "PARSE_TEXT_AGAIN : sockInfo_.readBuffer.size() :" << sockInfo_.readBuffer.size() << std::endl;
+			std::cout << "trueLength"<<trueLength<<std::endl;
 			std::cout << "str:" << sockInfo_.readBuffer << std::endl;
 			return PARSE_TEXT_AGAIN;
 		}
