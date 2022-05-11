@@ -98,6 +98,7 @@ int main(int argc, char *argv[])
         string socket = socketList[socketIndex - 1];
         int clientFd = connectToSocket(socket);
         beginTrans(fullPath, fileName, clientFd, statBuff);
+        close(clientFd);
     }
     return 0;
 }
@@ -181,6 +182,8 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
     while (true)
     {
         int ret = fread(buff, 1, fileBlock, filePtr);
+        if (ret == -1)
+            break;
         cout << "Fread bytes:" << ret << endl;
         if (ret > 0)
         {

@@ -114,6 +114,7 @@ namespace Raven
         if (ret == 0)
         {
             removeFileFdFromSet(it->fd);
+            std::cout<<"file trans over !" <<ret<<std::endl;
         }
     }
 
