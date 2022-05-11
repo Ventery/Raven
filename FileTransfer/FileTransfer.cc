@@ -13,7 +13,7 @@
 
 #include "../Base/Global.h"
 #include "../Raven/Util.h"
-#define MAX_SEND_BUFF 1024
+#define MAX_SEND_BUFF 1024*64     
 using namespace std;
 void usage();
 void fileNotReadable();
