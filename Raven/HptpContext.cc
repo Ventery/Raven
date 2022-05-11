@@ -123,8 +123,8 @@ namespace Raven
 			}
 			else
 			{
-				std::cout << sockInfo_.readBuffer << std::endl;
-				std::cout << sockInfo_.readBuffer.length() << std::endl;
+				//std::cout << sockInfo_.readBuffer << std::endl;
+				//std::cout << sockInfo_.readBuffer.length() << std::endl;
 				return PARSE_ERROR_TEXT;
 			}
 		}
@@ -144,13 +144,13 @@ namespace Raven
 		size_t posEnd = str.find(std::string("\r\n"));
 		if (posEnd == std::string::npos)
 		{
-			std::cout << "PARSE_PROTOCOL_AGAIN sockInfo_.readBuffer.length():" << sockInfo_.readBuffer.length() << std::endl;
+			//std::cout << "PARSE_PROTOCOL_AGAIN sockInfo_.readBuffer.length():" << sockInfo_.readBuffer.length() << std::endl;
 			return PARSE_PROTOCOL_AGAIN;
 		}
 		size_t posProtocol = str.rfind("HPTP/1.0", posEnd);
 		if (posProtocol == std::string::npos || posEnd - posProtocol != 12)
 		{
-			std::cout << "PARSE_PROTOCOL_ERROR" << std::endl;
+			//std::cout << "PARSE_PROTOCOL_ERROR" << std::endl;
 			return PARSE_PROTOCOL_ERROR;
 		}
 		sockInfo_.textType = (HPTPMessageType)stoi(str.substr(posProtocol + 9, 3));
@@ -180,7 +180,7 @@ namespace Raven
 			}
 			if (posLineEnd == std::string::npos)
 			{
-				std::cout << "PARSE_HEADER_AGAIN str:" << str << std::endl;
+				//std::cout << "PARSE_HEADER_AGAIN str:" << str << std::endl;
 				return PARSE_HEADER_AGAIN;
 			}
 			size_t posMid = str.rfind(":", posLineEnd);
@@ -194,7 +194,7 @@ namespace Raven
 			}
 			else
 			{
-				std::cout << "PARSE_HEADER_ERROR" << std::endl;
+				//std::cout << "PARSE_HEADER_ERROR" << std::endl;
 				return PARSE_HEADER_ERROR;
 			}
 		}
@@ -207,7 +207,7 @@ namespace Raven
 		// std::cout<<"parseText"<<std::endl;
 		if (sockInfo_.headers.find("length") == sockInfo_.headers.end())
 		{
-			std::cout << "PARSE_TEXT_ERROR : length not found!" << std::endl;
+			//std::cout << "PARSE_TEXT_ERROR : length not found!" << std::endl;
 			return PARSE_TEXT_ERROR;
 		}
 		int textLength = atoi((sockInfo_.headers["length"]).c_str());
@@ -223,14 +223,14 @@ namespace Raven
 
 		if (sockInfo_.readBuffer.size() < (unsigned int)(trueLength + 2))
 		{
-			std::cout << "PARSE_TEXT_AGAIN : sockInfo_.readBuffer.size() :" << sockInfo_.readBuffer.size() << std::endl;
-			std::cout << "trueLength : "<<trueLength<<std::endl;
+			//std::cout << "PARSE_TEXT_AGAIN : sockInfo_.readBuffer.size() :" << sockInfo_.readBuffer.size() << std::endl;
+			//std::cout << "trueLength : "<<trueLength<<std::endl;
 			return PARSE_TEXT_AGAIN;
 		}
 
 		if (sockInfo_.readBuffer.c_str()[trueLength] != '\r' || sockInfo_.readBuffer.c_str()[trueLength + 1] != '\n')
 		{
-			std::cout << "PARSE_TEXT_ERROR : suffix not found!" << std::endl;
+			//std::cout << "PARSE_TEXT_ERROR : suffix not found!" << std::endl;
 			return PARSE_TEXT_ERROR;
 		}
 
