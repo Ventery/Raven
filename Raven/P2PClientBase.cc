@@ -100,6 +100,7 @@ namespace Raven
     void P2PClientBase::handleReadFileTransfer(
         std::shared_ptr<FileTransFerInfo> it)
     {
+        std::cout<<"file fd data in!  : "<<it->fd<<std::endl;
         int ret = read(it->fd, fileBuff_, MAX_FILE_BUFFER);
         Dict dict;
         dict["FileName"] = it->fileName;
