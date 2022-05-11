@@ -54,8 +54,8 @@ namespace Raven
 
 	MessageState HptpContext::parseMessage()
 	{
-		std::cout<<sockInfo_.readBuffer.length()<<std::endl;
-		std::cout<<sockInfo_.readBuffer<<std::endl;
+		//std::cout<<sockInfo_.readBuffer.length()<<std::endl;
+		//std::cout<<sockInfo_.readBuffer<<std::endl;
 
 		switch (sockInfo_.sockState)
 		{
