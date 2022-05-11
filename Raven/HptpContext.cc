@@ -148,12 +148,9 @@ namespace Raven
 			return PARSE_PROTOCOL_AGAIN;
 		}
 		size_t posProtocol = str.rfind("HPTP/1.0", posEnd);
-		if (posProtocol == std::string::npos)
+		if (posProtocol == std::string::npos || posEnd - posProtocol != 12)
 		{
-			return PARSE_PROTOCOL_ERROR;
-		}
-		if (posEnd - posProtocol != 12)
-		{
+			std::cout<<"PARSE_PROTOCOL_ERROR"<<std::endl;
 			return PARSE_PROTOCOL_ERROR;
 		}
 		sockInfo_.textType = (HPTPMessageType)stoi(str.substr(posProtocol + 9, 3));
@@ -194,6 +191,7 @@ namespace Raven
 			}
 			else
 			{
+				std::cout<<"PARSE_HEADER_ERROR"<<std::endl;
 				return PARSE_HEADER_ERROR;
 			}
 		}
@@ -206,6 +204,7 @@ namespace Raven
 		//std::cout<<"parseText"<<std::endl;
 		if (sockInfo_.headers.find("length") == sockInfo_.headers.end())
 		{
+			std::cout<<"PARSE_TEXT_ERROR : length not found!"<<std::endl;
 			return PARSE_TEXT_ERROR;
 		}
 		int textLength = atoi((sockInfo_.headers["length"]).c_str());
@@ -226,6 +225,7 @@ namespace Raven
 
 		if (sockInfo_.readBuffer.c_str()[trueLength] != '\r' || sockInfo_.readBuffer.c_str()[trueLength + 1] != '\n')
 		{
+			std::cout<<"PARSE_TEXT_ERROR : suffix not found!"<<std::endl;
 			return PARSE_TEXT_ERROR;
 		}
 
