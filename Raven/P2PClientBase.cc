@@ -102,6 +102,7 @@ namespace Raven
     {
         std::cout<<"file fd data in!  : "<<it->fd<<std::endl;
         int ret = read(it->fd, fileBuff_, MAX_FILE_BUFFER);
+        std::cout<<"file fd data in!  : "<<it->fd<<"  bytes:" <<ret<<std::endl;
         Dict dict;
         dict["FileName"] = it->fileName;
         dict["FileLength"] = std::to_string(it->length);
@@ -121,6 +122,7 @@ namespace Raven
     {
         if (!it->getValueByKey("Confirmed").empty()) // For sender
         {
+            std::cout<<"Confirmed!"<<std::endl;
             int localSockFd = stoi(it->getValueByKey("IdentifyId"));
             std::string bytesHaveReceived = it->getValueByKey("Confirmed") + " ";
             mapFd2FileTransFerInfo_[localSockFd]->alreadySentLength = stoi(it->getValueByKey("Confirmed"));
@@ -129,6 +131,7 @@ namespace Raven
         }
         else if (!it->getValueByKey("AlreadySentLength").empty()) // For receiver
         {
+            std::cout<<"Client received!"<<std::endl;
             int identifyId = stoi(it->getValueByKey("IdentifyId"));
             if (mapIdentify2FilePtr_.find(identifyId) == mapIdentify2FilePtr_.end())
             {
