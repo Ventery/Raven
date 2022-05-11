@@ -181,9 +181,13 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
     char readBuff[1024];
     while (true)
     {
+        if (feof(filePtr))
+        {
+            cout << "File eof" << endl;
+            close(clientFd);
+            fclose(filePtr);
+        }
         int ret = fread(buff, 1, fileBlock, filePtr);
-        if (ret == -1)
-            break;
         cout << "Fread bytes:" << ret << endl;
         if (ret > 0)
         {
@@ -204,11 +208,5 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
             cout << confirmedBytes << endl;
         }
         cout << endl;
-
-        if (feof(filePtr))
-        {
-            close(clientFd);
-            fclose(filePtr);
-        }
     }
 }
