@@ -2,6 +2,11 @@
 
 #include "HptpContext.h"
 
+#include <fstream>
+#include <iostream>
+using namespace std;
+
+
 namespace Raven
 {
 	// static
@@ -237,14 +242,17 @@ namespace Raven
 		sockInfo_.payload = sockInfo_.readBuffer.substr(0, trueLength);
 		if (sockInfo_.textType == CIPHERTEXT)
 		{
-			std::cout<<"trueLength : "<<trueLength<<std::endl;
-			std::cout<<"textLength : "<<textLength<<std::endl;
-			std::cout<<"sockInfo_.readBuffer.length() : "<<sockInfo_.readBuffer.length()<<std::endl;
-			std::cout<<"sockInfo_.payload.length() : "<<sockInfo_.payload.length()<<std::endl;
+            ofstream outfile;
+			outfile.open("～/RavenTrans/log",ios::app);
+
+			outfile<<"trueLength : "<<trueLength<<std::endl;
+			outfile<<"textLength : "<<textLength<<std::endl;
+			outfile<<"sockInfo_.readBuffer.length() : "<<sockInfo_.readBuffer.length()<<std::endl;
+			outfile<<"sockInfo_.payload.length() : "<<sockInfo_.payload.length()<<std::endl;
 
 			sockInfo_.readBuffer = decode(sockInfo_.payload, getAesKey(), sockInfo_.headers["iv"], trueLength) + sockInfo_.readBuffer.substr(trueLength + 2);
-			std::cout<<sockInfo_.readBuffer<<std::endl;
-			std::cout<<sockInfo_.readBuffer.length()<<std::endl;
+			outfile<<sockInfo_.readBuffer<<std::endl;
+			outfile<<sockInfo_.readBuffer.length()<<std::endl;
 		}
 		else
 		{
