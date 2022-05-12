@@ -56,7 +56,7 @@ namespace Global
 			gcry_cipher_encrypt(cipherHd, cipherBuffer, blockRequired * kBlockSize, NULL, 0);
 			gcry_cipher_close(cipherHd);
 		}
-		//encode over
+		// encode over
 
 		if (fileSize)
 		{
@@ -78,7 +78,7 @@ namespace Global
 
 		gcry_cipher_decrypt(cipherHd, decodeBuf, length, NULL, 0);
 		gcry_cipher_close(cipherHd);
-		return std::string(decodeBuf).substr(0, sourceLength);
+		return std::string(decodeBuf, sourceLength);
 	}
 
 #ifdef __linux__
@@ -294,9 +294,9 @@ namespace Global
 	}
 
 	char number2Char(long num)
-	//0~25 a~z
-	//26~51 A~Z	
-	//52~61 0~9
+	// 0~25 a~z
+	// 26~51 A~Z
+	// 52~61 0~9
 	{
 		if (num < 26)
 		{
@@ -316,7 +316,7 @@ namespace Global
 		{
 			tempStr[i] = number2Char(rand() % 62);
 		}
-		return std::string(tempStr,length);
+		return std::string(tempStr, length);
 	}
 
 	pid_t getBash(const int slaveFd)
@@ -327,7 +327,7 @@ namespace Global
 		{
 			return pid;
 		}
-		setsid(); //new bash is a new session
+		setsid(); // new bash is a new session
 
 		close(STDIN_FILENO);
 		close(STDOUT_FILENO);
@@ -436,4 +436,4 @@ namespace Global
 #endif
 	}
 
-} //namespace Global
+} // namespace Global
