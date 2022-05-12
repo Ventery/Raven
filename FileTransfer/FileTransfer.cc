@@ -17,7 +17,7 @@ using namespace std;
 void usage();
 void fileNotReadable();
 void isNotFile();
-int connectToSocket(string);
+int connectToSocket(string, string &);
 void beginTrans(string, string, int, struct stat &);
 int main(int argc, char *argv[])
 {
@@ -64,11 +64,7 @@ int main(int argc, char *argv[])
         closedir(dir);
         cout << "--------------------------------" << endl;
         cout << "Raven file transfer path: " << TransferPath << endl;
-        for (auto it : fileList)
-        {
-            cout << it << endl;
-        }
-        cout << "--------------------------------" << endl;
+
         if (socketList.empty())
         {
             cout << "Please run RavenClient or RavenHost first!" << endl;
@@ -95,9 +91,11 @@ int main(int argc, char *argv[])
         }
 
         string socket = socketList[socketIndex - 1];
-        int clientFd = connectToSocket(socket);
+        string clientSocket;
+        int clientFd = connectToSocket(socket, clientSocket);
         beginTrans(fullPath, fileName, clientFd, statBuff);
         close(clientFd);
+        unlink(clientSocket.c_str());
     }
     return 0;
 }
@@ -120,9 +118,9 @@ void isNotFile()
     exit(0);
 }
 
-int connectToSocket(string serverSocket)
+int connectToSocket(string serverSocket, string &clientSocket)
 {
-    string clientSocket = Global::kFileTransferPath + serverSocket.substr(0, 8) + "_client.socket";
+    clientSocket = Global::kFileTransferPath + serverSocket.substr(0, 8) + "_client.socket";
     struct sockaddr_un clientConfig, servefrConfig;
 
     int clientSockFd;
