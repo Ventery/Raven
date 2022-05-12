@@ -143,6 +143,7 @@ namespace Raven
                 }
                 mapIdentify2FilePtr_[identifyId] = filePtr;
             }
+            std::cout<<"Client received!2"<<std::endl;
 
             FILE *filePtr = mapIdentify2FilePtr_[identifyId];
             int ret = fwrite(it->getText().c_str(), 1, it->getText().length(), filePtr);
@@ -151,6 +152,7 @@ namespace Raven
             dict["IdentifyId"] = it->getValueByKey("IdentifyId");
             dict["Confirmed"] = std::to_string(confirmed);
             newMessage_ += HptpContext::makeMessage("", "", "", FILETRANSFER, dict);
+            std::cout<<"Client received!3"<<std::endl;
 
             if (confirmed == stoi(it->getValueByKey("FileLength")))
             {
@@ -158,6 +160,7 @@ namespace Raven
                 fclose(filePtr);
                 mapIdentify2FilePtr_.erase(identifyId);
             }
+            std::cout<<"Client received!4"<<std::endl;
         }
     }
 } // namespace Raven
