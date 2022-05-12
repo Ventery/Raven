@@ -245,17 +245,15 @@ namespace Raven
             ofstream outfile;
 			outfile.open((kFileTransferPath+"log").c_str(),ios::app);
 
-			outfile<<"trueLength : "<<trueLength<<std::endl;
-			outfile<<"textLength : "<<textLength<<std::endl;
-			outfile<<"sockInfo_.readBuffer.length() : "<<sockInfo_.readBuffer.length()<<std::endl;
-			outfile<<"sockInfo_.payload.length() : "<<sockInfo_.payload.length()<<std::endl;
+			outfile<<"1---------------------------------"<<std::endl;
+			outfile<<sockInfo_.payload<<std::endl;
+
+			outfile<<"2---------------------------------"<<std::endl;
+			outfile<<decode(sockInfo_.payload, getAesKey(), sockInfo_.headers["iv"], trueLength)<<std::endl;
+
+			outfile<<"3---------------------------------"<<std::endl;
 
 			sockInfo_.readBuffer = decode(sockInfo_.payload, getAesKey(), sockInfo_.headers["iv"], trueLength) + sockInfo_.readBuffer.substr(trueLength + 2);
-			outfile<<decode(sockInfo_.payload, getAesKey(), sockInfo_.headers["iv"], trueLength)<<std::endl;
-			outfile<<"-----------------------------"<<std::endl;
-
-			outfile<<sockInfo_.readBuffer<<std::endl;
-			outfile<<sockInfo_.readBuffer.length()<<std::endl;
 		}
 		else
 		{
