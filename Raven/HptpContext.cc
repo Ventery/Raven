@@ -243,7 +243,7 @@ namespace Raven
 		if (sockInfo_.textType == CIPHERTEXT)
 		{
             ofstream outfile;
-			outfile.open("～/RavenTrans/log",ios::app);
+			outfile.open((kFileTransferPath+"log").c_str(),ios::app);
 
 			outfile<<"trueLength : "<<trueLength<<std::endl;
 			outfile<<"textLength : "<<textLength<<std::endl;
