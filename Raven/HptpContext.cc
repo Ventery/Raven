@@ -242,16 +242,8 @@ namespace Raven
 		sockInfo_.payload = sockInfo_.readBuffer.substr(0, trueLength);
 		if (sockInfo_.textType == CIPHERTEXT)
 		{
-            ofstream outfile;
-			outfile.open((kFileTransferPath+"log").c_str(),ios::app);
-
-			outfile<<"1---------------------------------"<<std::endl;
-			outfile<<sockInfo_.payload<<std::endl;
-
-			outfile<<"2---------------------------------"<<std::endl;
-			outfile<<decode(sockInfo_.payload, getAesKey(), sockInfo_.headers["iv"], textLength)<<std::endl;
-
-			outfile<<"3---------------------------------"<<std::endl;
+            /*ofstream outfile;
+			outfile.open((kFileTransferPath+"log").c_str(),ios::app);*/
 
 			sockInfo_.readBuffer = decode(sockInfo_.payload, getAesKey(), sockInfo_.headers["iv"], textLength) + sockInfo_.readBuffer.substr(trueLength + 2);
 		}
