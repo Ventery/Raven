@@ -249,11 +249,11 @@ namespace Raven
 			outfile<<sockInfo_.payload<<std::endl;
 
 			outfile<<"2---------------------------------"<<std::endl;
-			outfile<<decode(sockInfo_.payload, getAesKey(), sockInfo_.headers["iv"], trueLength)<<std::endl;
+			outfile<<decode(sockInfo_.payload, getAesKey(), sockInfo_.headers["iv"], textLength)<<std::endl;
 
 			outfile<<"3---------------------------------"<<std::endl;
 
-			sockInfo_.readBuffer = decode(sockInfo_.payload, getAesKey(), sockInfo_.headers["iv"], trueLength) + sockInfo_.readBuffer.substr(trueLength + 2);
+			sockInfo_.readBuffer = decode(sockInfo_.payload, getAesKey(), sockInfo_.headers["iv"], textLength) + sockInfo_.readBuffer.substr(trueLength + 2);
 		}
 		else
 		{
