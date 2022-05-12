@@ -12,5 +12,3 @@ add_library(raven_log ${LIB_SRC})
 target_link_libraries(raven_log pthread rt)
 
 #set_target_properties(libserver_base PROPERTIES OUTPUT_NAME "server_base")
-
-#add_subdirectory(tests)

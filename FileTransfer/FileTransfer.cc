@@ -13,7 +13,6 @@
 
 #include "../Base/Global.h"
 #include "../Raven/Util.h"
-#define MAX_SEND_BUFF 1024     
 using namespace std;
 void usage();
 void fileNotReadable();
@@ -176,7 +175,7 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
     cout << "Begin trans:" << endl;
 
     FILE *filePtr = fopen(fullPath.c_str(), "r");
-    int fileBlock = min(MAX_SEND_BUFF, statBuff.st_size / 10);
+    int fileBlock = min(MAX_BUFF, statBuff.st_size / 10);
     char buff[fileBlock];
     char readBuff[1024];
     while (true)
