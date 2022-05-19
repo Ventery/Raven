@@ -42,7 +42,6 @@ int main(int argc, char *argv[])
     string fileName = fullPath.substr(fullPath.find_last_of("/") + 1);
     cout << "File name is : " << fileName << endl;
 
-    vector<string> fileList;
     vector<string> socketList;
 
     DIR *dir;
@@ -55,7 +54,6 @@ int main(int argc, char *argv[])
         {
             if (!strcmp(ent->d_name, ".") || !strcmp(ent->d_name, ".."))
                 continue;
-            fileList.push_back(ent->d_name);
             if (string(ent->d_name).find("_server.socket"))
             {
                 socketList.push_back(ent->d_name);
