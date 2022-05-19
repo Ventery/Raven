@@ -54,7 +54,8 @@ int main(int argc, char *argv[])
         {
             if (!strcmp(ent->d_name, ".") || !strcmp(ent->d_name, ".."))
                 continue;
-            if (string(ent->d_name).find("_server.socket"))
+            string fileName = string(ent->d_name);
+            if (fileName.find("_server.socket") != string::npos)
             {
                 socketList.push_back(ent->d_name);
             }
