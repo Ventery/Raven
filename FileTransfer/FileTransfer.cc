@@ -204,9 +204,9 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
                     break;
                 }
             }
-            // int confirmedBytes;
-            // sscanf(readBuff, "%d ", &confirmedBytes);
-            // cout << confirmedBytes << endl;
+            int confirmedBytes;
+            sscanf(readBuff, "%d ", &confirmedBytes);
+            cout << confirmedBytes << " " << (confirmedBytes * 1.0) / fileSize << endl;
         }
         cout << endl;
     }
