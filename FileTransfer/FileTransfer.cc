@@ -170,7 +170,7 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
     char empty;
     read(clientFd, &empty, 1); // sync
 
-    //cout << "Begin trans:" << endl;
+    // cout << "Begin trans:" << endl;
 
     FILE *filePtr = fopen(fullPath.c_str(), "r");
     int fileBlock = min(MAX_BUFF, statBuff.st_size / 10);
@@ -187,24 +187,28 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
             break;
         }
         int ret = fread(buff, 1, fileBlock, filePtr);
-        //cout << "Fread bytes:" << ret << endl;
+        // cout << "Fread bytes:" << ret << endl;
         if (ret > 0)
         {
-            int writeRet = write(clientFd, buff, ret);
-            //cout << "Write bytes:" << writeRet << endl;
+            int writeNum = 0;
+            while (ret - writeNum)
+            {
+                writeNum += write(clientFd, buff + writeNum, ret - writeNum);
+            }
+            // cout << "Write bytes:" << writeNum << endl;
             int readNum = 0;
             while (true)
             {
                 readNum += read(clientFd, readBuff + readNum, 1024);
-                //cout << "Read bytes:" << readNum << endl;
+                // cout << "Read bytes:" << readNum << endl;
                 if (readBuff[readNum - 1] == ' ')
                 {
                     break;
                 }
             }
-            int confirmedBytes;
-            sscanf(readBuff, "%d ", &confirmedBytes);
-            //cout << confirmedBytes << endl;
+            // int confirmedBytes;
+            // sscanf(readBuff, "%d ", &confirmedBytes);
+            // cout << confirmedBytes << endl;
         }
         cout << endl;
     }

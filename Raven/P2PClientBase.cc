@@ -119,7 +119,7 @@ namespace Raven
         {
             int localSockFd = stoi(it->getValueByKey("IdentifyId"));
             std::string bytesHaveReceived = it->getValueByKey("Confirmed");
-            std::cout<<"Confirmed :" <<bytesHaveReceived<<std::endl;
+            //std::cout<<"Confirmed :" <<bytesHaveReceived<<std::endl;
             mapFd2FileTransFerInfo_[localSockFd]->alreadySentLength = stoi(it->getValueByKey("Confirmed"));
             write(localSockFd, bytesHaveReceived.c_str(), bytesHaveReceived.size());
             write(localSockFd, " ", 1);
@@ -127,12 +127,12 @@ namespace Raven
             if (atoi(it->getValueByKey("Confirmed").c_str()) == mapFd2FileTransFerInfo_[localSockFd]->length)
             {
                 removeFileFdFromSet(localSockFd);
-                std::cout<<"file trans over !" <<std::endl;
+                //std::cout<<"file trans over !" <<std::endl;
             }
         }
         else if (!it->getValueByKey("AlreadySentLength").empty()) // For receiver
         {
-            std::cout<<"Client received!"<<std::endl;
+            //std::cout<<"Client received!"<<std::endl;
             int identifyId = stoi(it->getValueByKey("IdentifyId"));
             if (mapIdentify2FilePtr_.find(identifyId) == mapIdentify2FilePtr_.end())
             {
