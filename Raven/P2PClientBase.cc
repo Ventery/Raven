@@ -101,7 +101,7 @@ namespace Raven
         std::shared_ptr<FileTransFerInfo> it)
     {
         int ret = read(it->fd, fileBuff_, MAX_BUFF);
-        std::cout<<"file fd data in!  : "<<it->fd<<"  bytes:" <<ret<<std::endl;
+        //std::cout<<"file fd data in!  : "<<it->fd<<"  bytes:" <<ret<<std::endl;
         Dict dict;
         dict["FileName"] = it->fileName;
         dict["FileLength"] = std::to_string(it->length);
@@ -136,7 +136,7 @@ namespace Raven
             int identifyId = stoi(it->getValueByKey("IdentifyId"));
             if (mapIdentify2FilePtr_.find(identifyId) == mapIdentify2FilePtr_.end())
             {
-                FILE *filePtr = fopen(it->getValueByKey("FileName").c_str(), "a");
+                FILE *filePtr = fopen(it->getValueByKey("FileName").c_str(), "w");
                 if (filePtr == nullptr)
                 {
                     throw "Creat file error!";
