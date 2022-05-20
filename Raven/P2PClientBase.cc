@@ -117,7 +117,7 @@ namespace Raven
         if (!it->getValueByKey("Confirmed").empty()) // For sender
         {
             int localSockFd = stoi(it->getValueByKey("IdentifyId"));
-            std::string bytesHaveReceived = it->getValueByKey("Confirmed") + " ";       //space for message end.
+            std::string bytesHaveReceived = it->getValueByKey("Confirmed") + " "; // space for message end.
             std::cout << "Confirmed :" << bytesHaveReceived << std::endl;
             mapFd2FileTransFerInfo_[localSockFd]->alreadySentLength = stoi(it->getValueByKey("Confirmed"));
             write(localSockFd, bytesHaveReceived.c_str(), bytesHaveReceived.size());
@@ -145,7 +145,7 @@ namespace Raven
 
             FILE *filePtr = mapIdentify2FilePtr_[identifyId];
             int ret = fwrite(it->getText().c_str(), 1, it->getText().length(), filePtr);
-            std::cout << "Client fwrite!" << std::endl;
+            std::cout << "Client fwrite : " << ret << std::endl;
             int confirmed = ret + stoi(it->getValueByKey("AlreadySentLength"));
             Dict dict;
             dict["IdentifyId"] = it->getValueByKey("IdentifyId");
