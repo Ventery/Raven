@@ -77,12 +77,20 @@ namespace Raven
     {
         ClientBase::init<T>(t);
         createTransferSocket();
-        
+        formatTime();
+
         Global::PeerInfo peerInfo = getPeerInfo(localPort_, true, endPointType_);
         formatTime();
         std::cout << "Peer :" << peerInfo.ip << " " << peerInfo.port << std::endl;
 
         int fdToPeer = socketReUsePort(localPort_);
+
+        close(fdToPeer);
+        setNoBlocking(peerInfo.sockToServer);
+        contactFd_ = peerInfo.sockToServer;
+        useTransfer_ = true;
+
+        /*废弃基于TCP的P2P，直接用以上的中转模式
         if (!noBlockConnect(fdToPeer, peerInfo,
                             RavenConfigIns.connectTimeout_)) // use transfer
         {
@@ -98,7 +106,7 @@ namespace Raven
             close(peerInfo.sockToServer);
             contactFd_ = fdToPeer;
             useTransfer_ = false;
-        }
+        }*/
     }
 } // namespace Raven
 
