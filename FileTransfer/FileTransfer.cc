@@ -194,12 +194,12 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
             {
                 writeNum += write(clientFd, buff + writeNum, ret - writeNum);
             }
-            cout << "Write bytes:" << writeNum << endl;
+            //cout << "Write bytes:" << writeNum << endl;
             int readNum = 0;
             while (true)
             {
                 readNum += read(clientFd, readBuff + readNum, 1024);
-                cout << "Read bytes:" << readNum << endl;
+                //cout << "Read bytes:" << readNum << endl;
                 if (readBuff[readNum - 1] == ' ')
                 {
                     break;
