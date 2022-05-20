@@ -81,9 +81,9 @@ namespace Raven
 				{
 					handleNewFileTransFd();
 				}
+				std::cout << "mapFd2FileTransFerInfo_.size()" << mapFd2FileTransFerInfo_.size() << std::endl;
 				for (auto it : mapFd2FileTransFerInfo_)
 				{
-					std::cout << "mapFd2FileTransFerInfo_.size()" << mapFd2FileTransFerInfo_.size() << std::endl;
 					if (FD_ISSET(it.first, &readSet_))
 					{
 						handleReadFileTransfer(it.second);
