@@ -83,6 +83,7 @@ namespace Raven
 				}
 				for (auto it : mapFd2FileTransFerInfo_)
 				{
+					std::cout << "mapFd2FileTransFerInfo_.size()" << mapFd2FileTransFerInfo_.size() << std::endl;
 					if (FD_ISSET(it.first, &readSet_))
 					{
 						handleReadFileTransfer(it.second);
@@ -189,7 +190,7 @@ namespace Raven
 		while (!context_->isReadBufferEmpty())
 		{
 			MessageState state = context_->parseMessage();
-			//std::cout<<state<<std::endl;
+			// std::cout<<state<<std::endl;
 			if (state >= PARSE_ERROR_PROTOCOL)
 			{
 				system(STTY_DEF);
@@ -238,7 +239,7 @@ namespace Raven
 				exit(0);
 			}
 			write(publisherFd_, (char *)&sig, 1);
-			//system(STTY_DEF);
+			// system(STTY_DEF);
 		}
 		else // (sig == SIGWINCH)
 		{
