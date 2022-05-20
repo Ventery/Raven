@@ -174,7 +174,7 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
     FILE *filePtr = fopen(fullPath.c_str(), "r");
     int fileBlock = min(MAX_BUFF, statBuff.st_size / 10);
     char buff[fileBlock];
-    char readBuff[1024];
+    char readBuff[NORMAL_BUFF];
     while (true)
     {
         if (feof(filePtr))
@@ -198,7 +198,7 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
             int readNum = 0;
             while (true)
             {
-                readNum += read(clientFd, readBuff + readNum, 1024);
+                readNum += read(clientFd, readBuff + readNum, NORMAL_BUFF);
                 //cout << "Read bytes:" << readNum << endl;
                 if (readBuff[readNum - 1] == ' ')
                 {
