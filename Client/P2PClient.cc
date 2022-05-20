@@ -25,6 +25,7 @@ namespace Raven
 		close(winPublisherFd_);
 		close(winSubscriberFd_);
 		system(STTY_DEF);
+		fflush(stdout);
 	}
 
 	void P2PClient::run()
