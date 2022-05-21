@@ -40,7 +40,6 @@ namespace Global
             {
                 std::cout << "\b";
             }
-            std::cout << std::flush;
         }
 
         std::shared_ptr<MutexLockGuard> gardPtr_;
@@ -50,40 +49,29 @@ namespace Global
     class ProgressBarDemo : public Noncopyable
     {
     public:
-        ProgressBarDemo(const std::string &title, const std::string &measure, long amount) : title_(title), measure_(measure), amount_(amount) {}
+        ProgressBarDemo(const std::string &measure, long amount) : measure_(measure), amount_(amount) {}
         std::string getBar(long number)
         {
-            static int sBarLength = 40;
+            static int sBarLength = 60;
             std::string result;
             int percentage = (int)((number * 10000.0) / amount_);
             int first = percentage / 100;
             int second = percentage % 100;
-            std::string titleLine = title_ + " : " + std::to_string(number) + " " + measure_ + " (" + std::to_string(first) + "." + std::to_string(second) + "%)";
-            int adjustLength = titleLine.length() - 2 > sBarLength ? titleLine.length() - 2 : sBarLength;
-            std::string crossLine = "+";
-            for (int i = 0; i < adjustLength; i++)
-                crossLine += "-";
-            crossLine += "+";
-
-            result += crossLine + "\n";
-            result += titleLine + "\n";
             result += "[";
-            int sum = (int)((number * adjustLength * 1.0) / amount_);
-            for (int i = 1; i <= adjustLength; i++)
+            int sum = (int)((number * sBarLength * 1.0) / amount_);
+            for (int i = 1; i <= sBarLength; i++)
             {
                 if (i <= sum)
-                    result += "-";
+                    result += "#";
                 else
                     (result += " ");
             }
-            result += "]\n";
-            result += crossLine + "\n";
+            result += "]" + std::to_string(number) + " " + measure_ + " (" + std::to_string(first) + "." + std::to_string(second) + "%)";
 
             return result;
         }
 
     private:
-        std::string title_;
         std::string measure_;
         long amount_;
     };

@@ -192,7 +192,7 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
         // cout << "Fread bytes:" << ret << endl;
 
         Global::ScreenRefresher outputer;
-        Global::ProgressBarDemo progressBar("文件 " + fileName + " 传输中", "bytes", fileSize);
+        Global::ProgressBarDemo progressBar("bytes", fileSize);
         if (ret > 0)
         {
             int writeNum = 0;
@@ -213,7 +213,7 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
             }
             long confirmedBytes;
             sscanf(readBuff, "%ld ", &confirmedBytes);
-            //std::cout << confirmedBytes << std::endl;
+            // std::cout << confirmedBytes << std::endl;
             outputer.rePrint(progressBar.getBar(confirmedBytes));
         }
         cout << endl;
