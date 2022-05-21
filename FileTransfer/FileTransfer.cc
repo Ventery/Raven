@@ -12,13 +12,16 @@
 #include <vector>
 
 #include "../Base/Global.h"
+#include "../Base/ScreenRefresher.h"
 #include "../Raven/Util.h"
 using namespace std;
+
 void usage();
 void fileNotReadable();
 void isNotFile();
 int connectToSocket(string, string &);
 void beginTrans(string, string, int, struct stat &);
+
 int main(int argc, char *argv[])
 {
     if (argc < 2)
@@ -187,6 +190,9 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
         }
         int ret = fread(buff, 1, fileBlock, filePtr);
         // cout << "Fread bytes:" << ret << endl;
+
+        Global::ScreenRefresher outputer;
+        Global::ProgressBarDemo progressBar("文件 " + fileName + " 传输中", "bytes", fileSize);
         if (ret > 0)
         {
             int writeNum = 0;
@@ -194,20 +200,20 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
             {
                 writeNum += write(clientFd, buff + writeNum, ret - writeNum);
             }
-            //cout << "Write bytes:" << writeNum << endl;
+            // cout << "Write bytes:" << writeNum << endl;
             int readNum = 0;
             while (true)
             {
                 readNum += read(clientFd, readBuff + readNum, NORMAL_BUFF);
-                //cout << "Read bytes:" << readNum << endl;
+                // cout << "Read bytes:" << readNum << endl;
                 if (readBuff[readNum - 1] == ' ')
                 {
                     break;
                 }
             }
-            int confirmedBytes;
+            long confirmedBytes;
             sscanf(readBuff, "%d ", &confirmedBytes);
-            cout << "Sent "<<confirmedBytes << " bytes (" << ((int)((confirmedBytes * 10000.0) / fileSize)) / 100.0 << "%)" << endl;
+            outputer.rePrint(progressBar.getBar(confirmedBytes));
         }
         cout << endl;
     }
