@@ -193,6 +193,8 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
 
         Global::ScreenRefresher outputer;
         Global::ProgressBarDemo progressBar("bytes", fileSize);
+        long confirmedBytes;
+
         if (ret > 0)
         {
             int writeNum = 0;
@@ -211,7 +213,6 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
                     break;
                 }
             }
-            long confirmedBytes;
             sscanf(readBuff, "%ld ", &confirmedBytes);
             //std::cout << confirmedBytes << std::endl;
             outputer.rePrint(progressBar.getBar(confirmedBytes));
