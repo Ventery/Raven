@@ -28,17 +28,17 @@ namespace Global
         {
             for (int i = 0; i < num; i++)
             {
-                std::cout << '\b';
+                std::cout << "\b";
             }
 
             for (int i = 0; i < num; i++)
             {
-                std::cout << ' ';
+                std::cout << " ";
             }
 
             for (int i = 0; i < num; i++)
             {
-                std::cout << '\b';
+                std::cout << "\b";
             }
         }
 
