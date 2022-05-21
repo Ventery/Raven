@@ -17,9 +17,7 @@ namespace Global
 
         void rePrint(const std::string &string)
         {
-            std::cout << "----------------"<<std::endl;;
             backSpace(formerLength_);
-            std::cout << "----------------"<<std::endl;;
             std::cout << string;
             std::cout << std::flush;
             formerLength_ = string.length();
@@ -42,6 +40,7 @@ namespace Global
             {
                 std::cout << "\b";
             }
+            std::cout << std::flush;
         }
 
         std::shared_ptr<MutexLockGuard> gardPtr_;
