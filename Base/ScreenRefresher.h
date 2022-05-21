@@ -40,6 +40,8 @@ namespace Global
             {
                 std::cout << "\b";
             }
+
+            std::cout << std::flush;
         }
 
         std::shared_ptr<MutexLockGuard> gardPtr_;
