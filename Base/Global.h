@@ -74,6 +74,7 @@ namespace Global
     extern std::map<int, EventHandlerBase::CallBack> signalHandlerMap;
     extern MutexLock mSignalHandlerMap;
     extern MutexLock mGetBash;
+    extern MutexLock mRefreshScreamer;
 
     //Func
     //aes
