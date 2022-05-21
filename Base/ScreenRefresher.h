@@ -13,7 +13,7 @@ namespace Global
     class ScreenRefresher : public Noncopyable
     {
     public:
-        ScreenRefresher() { gardPtr_ = std::make_shared<MutexLockGuard>(mRefreshScreamer); }
+        ScreenRefresher() : formerLength_(0) { gardPtr_ = std::make_shared<MutexLockGuard>(mRefreshScreamer); }
 
         void rePrint(const std::string &string)
         {
