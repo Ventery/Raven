@@ -179,7 +179,7 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
     {
         if (feof(filePtr))
         {
-            cout << "File eof" << endl;
+            cout << "Transmission complete!" << endl;
             close(clientFd);
             fclose(filePtr);
 
@@ -207,7 +207,7 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
             }
             int confirmedBytes;
             sscanf(readBuff, "%d ", &confirmedBytes);
-            cout << confirmedBytes << " " << ((int)((confirmedBytes * 10000.0) / fileSize)) / 100.0 << "%" << endl;
+            cout << "Sent "<<confirmedBytes << " bytes (" << ((int)((confirmedBytes * 10000.0) / fileSize)) / 100.0 << "%)" << endl;
         }
         cout << endl;
     }
