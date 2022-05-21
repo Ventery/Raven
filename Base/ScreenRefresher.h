@@ -17,11 +17,12 @@ namespace Global
 
         void rePrint(const std::string &string)
         {
+            std::cout << "----------------"<<std::endl;;
             backSpace(formerLength_);
+            std::cout << "----------------"<<std::endl;;
             std::cout << string;
             std::cout << std::flush;
             formerLength_ = string.length();
-            std::cout << formerLength_ << std::endl;
         }
 
     private:
