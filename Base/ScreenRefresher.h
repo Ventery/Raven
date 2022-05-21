@@ -21,6 +21,7 @@ namespace Global
             std::cout << string;
             std::cout << std::flush;
             formerLength_ = string.length();
+            std::cout << formerLength_ << std::endl;
         }
 
     private:
