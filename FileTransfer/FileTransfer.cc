@@ -218,6 +218,6 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
             //std::cout << confirmedBytes << std::endl;
             outputer.rePrint(progressBar.getBar(confirmedBytes));
         }
-        cout << endl;
     }
+    cout << endl;
 }
