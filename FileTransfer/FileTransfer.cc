@@ -178,6 +178,11 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
     int fileBlock = min(MAX_BUFF, statBuff.st_size / 10);
     char buff[fileBlock];
     char readBuff[NORMAL_BUFF];
+
+    Global::ScreenRefresher outputer;
+    Global::ProgressBarDemo progressBar("bytes", fileSize);
+    long confirmedBytes;
+
     while (true)
     {
         if (feof(filePtr))
@@ -190,10 +195,6 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
         }
         int ret = fread(buff, 1, fileBlock, filePtr);
         // cout << "Fread bytes:" << ret << endl;
-
-        Global::ScreenRefresher outputer;
-        Global::ProgressBarDemo progressBar("bytes", fileSize);
-        long confirmedBytes;
 
         if (ret > 0)
         {
