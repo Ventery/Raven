@@ -187,6 +187,7 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
     {
         if (feof(filePtr))
         {
+            cout << endl;
             cout << "Transmission complete!" << endl;
             close(clientFd);
             fclose(filePtr);
@@ -219,5 +220,4 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
             outputer.rePrint(progressBar.getBar(confirmedBytes));
         }
     }
-    cout << endl;
 }
