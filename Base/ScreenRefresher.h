@@ -18,7 +18,8 @@ namespace Global
         void rePrint(const std::string &string)
         {
             backSpace(formerLength_);
-            std::cout << string << std::fflush;
+            std::cout << string;
+            std::cout << std::flush;
             formerLength_ = string.length();
         }
 

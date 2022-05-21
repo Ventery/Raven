@@ -212,7 +212,7 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
                 }
             }
             long confirmedBytes;
-            sscanf(readBuff, "%d ", &confirmedBytes);
+            sscanf(readBuff, "%ld ", &confirmedBytes);
             outputer.rePrint(progressBar.getBar(confirmedBytes));
         }
         cout << endl;
