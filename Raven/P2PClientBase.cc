@@ -135,7 +135,7 @@ namespace Raven
             int identifyId = stoi(it->getValueByKey("IdentifyId"));
             if (mapIdentify2FilePtr_.find(identifyId) == mapIdentify2FilePtr_.end())
             {
-                FILE *filePtr = fopen(it->getValueByKey("FileName").c_str(), "w");
+                FILE *filePtr = fopen((kFileTransferPath+it->getValueByKey("FileName")).c_str(), "w");
                 if (filePtr == nullptr)
                 {
                     throw "Creat file error!";
