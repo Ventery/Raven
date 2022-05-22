@@ -145,7 +145,7 @@ namespace Raven
 
             FILE *filePtr = mapIdentify2FilePtr_[identifyId];
             const char *buffPtr = it->getText().c_str();
-            long bytesHadWroten = it->getText().length();
+            auto bytesHadWroten = it->getText().length();
             while (bytesHadWroten < it->getText().length())
             {
                 bytesHadWroten += fwrite(buffPtr + bytesHadWroten, 1, it->getText().length() - bytesHadWroten, filePtr);
