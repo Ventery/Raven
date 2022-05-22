@@ -78,11 +78,12 @@ int main(int argc, char *argv[])
         }
         cout << "--------------------------------" << endl;
         cout << "Please select a socket,input index:" << endl;
-        int socketIndex;
+        string socketIndex;
         while (true)
         {
             cin >> socketIndex;
-            if (socketIndex > 0 && socketIndex <= (int)(socketList.size()))
+            int index = stoi(socketIndex);
+            if (index > 0 && index <= (int)(socketList.size()))
             {
                 break;
             }
@@ -92,7 +93,7 @@ int main(int argc, char *argv[])
             }
         }
 
-        string socket = socketList[socketIndex - 1];
+        string socket = socketList[stoi(socketIndex) - 1];
         string clientSocket;
         int clientFd = connectToSocket(socket, clientSocket);
         beginTrans(fullPath, fileName, clientFd, statBuff);
