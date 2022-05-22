@@ -196,7 +196,7 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
             break;
         }
         int ret = fread(buff, 1, fileBlock, filePtr);
-         cout << "Fread bytes:" << ret << endl;
+        // cout << "Fread bytes:" << ret << endl;
 
         if (ret > 0)
         {
@@ -205,19 +205,19 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
             {
                 writeNum += write(clientFd, buff + writeNum, ret - writeNum);
             }
-             cout << "Write bytes:" << writeNum << endl;
+            // cout << "Write bytes:" << writeNum << endl;
             int readNum = 0;
             while (true)
             {
                 readNum += read(clientFd, readBuff + readNum, NORMAL_BUFF);
-                 cout << "Read bytes:" << readNum << endl;
+                // cout << "Read bytes:" << readNum << endl;
                 if (readBuff[readNum - 1] == ' ')
                 {
                     break;
                 }
             }
             sscanf(readBuff, "%ld ", &confirmedBytes);
-            std::cout << confirmedBytes << std::endl;
+            //std::cout << confirmedBytes << std::endl;
             outputer.rePrint(progressBar.getBar(confirmedBytes));
         }
     }

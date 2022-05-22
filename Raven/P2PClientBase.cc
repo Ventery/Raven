@@ -145,7 +145,7 @@ namespace Raven
 
             FILE *filePtr = mapIdentify2FilePtr_[identifyId];
             int ret = fwrite(it->getText().c_str(), 1, it->getText().length(), filePtr);
-            //std::cout << "Client fwrite : " << ret << std::endl;
+            std::cout << "Client fwrite : " << ret << std::endl;
             int confirmed = ret + stoi(it->getValueByKey("AlreadySentLength"));
             Dict dict;
             dict["IdentifyId"] = it->getValueByKey("IdentifyId");
