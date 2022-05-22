@@ -90,7 +90,9 @@ namespace Raven
         contactFd_ = peerInfo.sockToServer;
         useTransfer_ = true;
 
-        /*废弃基于TCP的P2P，直接用以上的中转模式
+        //暂时废弃基于TCP的P2P，直接用以上的中转模式,原因是NAT往往不支持，传输文件有时候会断开。不排除未来会尝试基于UDP的P2P
+        //Deprecated：P2P based on TCP have some big shortages so we just use a server as transfer.
+        /*  
         if (!noBlockConnect(fdToPeer, peerInfo,
                             RavenConfigIns.connectTimeout_)) // use transfer
         {

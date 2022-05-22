@@ -67,7 +67,7 @@ namespace Raven
             int ret = read(fd, fileBuff_ + now, MAX_FILE_BUFFER);
             end += ret;
             fileBuff_[end] = 0;
-            std::cout << "Size : " << end << " " << fileBuff_ << std::endl;
+            //std::cout << "Size : " << end << " " << fileBuff_ << std::endl;
             if (ret == 0)
             {
                 throw "Error occurred while receving tranfers info!";
@@ -89,8 +89,8 @@ namespace Raven
         memset(filePath, 0, 256);
         int fileLength;
         sscanf(fileBuff_, "%s %d ", filePath, &fileLength);
-        std::cout << "Begin File Transfer " << std::endl
-                  << "File : " << filePath << "  Size: " << fileLength << std::endl;
+        //std::cout << "Begin File Transfer " << std::endl
+                  //<< "File : " << filePath << "  Size: " << fileLength << std::endl;
         mapFd2FileTransFerInfo_[fd] =
             std::make_shared<FileTransFerInfo>(fd, filePath, fileLength);
 
