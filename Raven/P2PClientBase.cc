@@ -101,7 +101,7 @@ namespace Raven
         std::shared_ptr<FileTransFerInfo> it)
     {
         int ret = read(it->fd, fileBuff_, MAX_BUFF);
-        std::cout << "file fd data in!  : " << it->fd << "  bytes:" << ret <<" AlreadySentLength:"<<it->alreadySentLength<< std::endl;
+        std::cout << "file fd data in!  : " << it->fd << "  bytes:" << ret << " AlreadySentLength:" << it->alreadySentLength << std::endl;
         Dict dict;
         dict["FileName"] = it->fileName;
         dict["FileLength"] = std::to_string(it->length);
@@ -117,21 +117,22 @@ namespace Raven
         if (!it->getValueByKey("Confirmed").empty()) // For sender
         {
             int localSockFd = stoi(it->getValueByKey("IdentifyId"));
-            std::string bytesHaveReceived = it->getValueByKey("Confirmed") + " "; // space for message end.
-             std::cout << "Confirmed :" << bytesHaveReceived << std::endl;
-            mapFd2FileTransFerInfo_[localSockFd]->alreadySentLength = stoi(it->getValueByKey("Confirmed"));
+            mapFd2FileTransFerInfo_[localSockFd]->alreadySentLength += stoi(it->getValueByKey("Confirmed"));
+
+            std::string bytesHaveReceived = std::to_string(mapFd2FileTransFerInfo_[localSockFd]->alreadySentLength) + " "; // space for message end.
+            std::cout << "Confirmed :" << bytesHaveReceived << std::endl;
             write(localSockFd, bytesHaveReceived.c_str(), bytesHaveReceived.size());
-             std::cout << "Host write to FileTransfer!" << std::endl;
+            std::cout << "Host write to FileTransfer!" << std::endl;
 
             if (atoi(it->getValueByKey("Confirmed").c_str()) == mapFd2FileTransFerInfo_[localSockFd]->length)
             {
                 removeFileFdFromSet(localSockFd);
-                 std::cout<<"file trans over !" <<std::endl;
+                std::cout << "file trans over !" << std::endl;
             }
         }
         else if (!it->getValueByKey("AlreadySentLength").empty()) // For receiver
         {
-             std::cout << "Client received!" << std::endl;
+            std::cout << "Client received!" << std::endl;
             int identifyId = stoi(it->getValueByKey("IdentifyId"));
             if (mapIdentify2FilePtr_.find(identifyId) == mapIdentify2FilePtr_.end())
             {
@@ -150,14 +151,14 @@ namespace Raven
             {
                 bytesHadWroten += fwrite(buffPtr + bytesHadWroten, 1, it->getText().length() - bytesHadWroten, filePtr);
             }
-            int confirmed = bytesHadWroten + stoi(it->getValueByKey("AlreadySentLength"));
+            int confirmed = bytesHadWroten;
             Dict dict;
             dict["IdentifyId"] = it->getValueByKey("IdentifyId");
             dict["Confirmed"] = std::to_string(confirmed);
             newMessage_ += HptpContext::makeMessage("", "", "", FILETRANSFER, dict);
-             std::cout << "Client return to host!" << std::endl;
+            std::cout << "Client return to host!" << std::endl;
 
-            if (confirmed == stoi(it->getValueByKey("FileLength")))
+            if (confirmed + stoi(it->getValueByKey("AlreadySentLength")) == stoi(it->getValueByKey("FileLength")))
             {
                 fflush(filePtr);
                 fclose(filePtr);
