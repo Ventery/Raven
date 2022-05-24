@@ -86,6 +86,8 @@ namespace Raven
                         handleReadFileTransfer(it.second);
                     }
                 }
+
+                //先处理读⬆，再处理写⬇
                 if (!newMessage_.empty())
                 {
                     handleWrite();

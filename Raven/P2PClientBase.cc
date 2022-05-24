@@ -104,8 +104,6 @@ namespace Raven
         std::cout << "file fd data in!  : " << it->fd << "  bytes:" << ret << " AlreadySentLength:" << it->alreadySentLength << std::endl;
         Dict dict;
         dict["FileName"] = it->fileName;
-        dict["FileLength"] = std::to_string(it->length);
-        dict["AlreadySentLength"] = std::to_string(it->alreadySentLength);
         dict["IdentifyId"] = std::to_string(it->fd);
 
         newMessage_ += HptpContext::makeMessage(std::string(fileBuff_, ret), "",
@@ -114,25 +112,32 @@ namespace Raven
 
     void P2PClientBase::handleFileTransferMessage(std::shared_ptr<HptpContext> it)
     {
-        if (!it->getValueByKey("Confirmed").empty()) // For sender
+        if (!it->getValueByKey("Confirmed").empty()) // For sender from receiver
         {
             int localSockFd = stoi(it->getValueByKey("IdentifyId"));
-            mapFd2FileTransFerInfo_[localSockFd]->alreadySentLength = stoi(it->getValueByKey("Confirmed"));
+            long confirmed = stoi(it->getValueByKey("Confirmed"));
+            auto info = mapFd2FileTransFerInfo_[localSockFd];
 
-            std::string bytesHaveReceived = std::to_string(mapFd2FileTransFerInfo_[localSockFd]->alreadySentLength) + " "; // space for message end.
-            std::cout << "Confirmed :" << bytesHaveReceived << std::endl;
-            write(localSockFd, bytesHaveReceived.c_str(), bytesHaveReceived.size());
-            std::cout << "Host write to FileTransfer!" << std::endl;
-
-            if (atoi(it->getValueByKey("Confirmed").c_str()) == mapFd2FileTransFerInfo_[localSockFd]->length)
+            info->alreadySentLength += confirmed;
+            if (info->alreadySentLength == info->length)        //Sender notifies receiver and filetransfer that the file is over. 
             {
+                Dict dict;
+                dict["IdentifyId"] = std::to_string(info->fd);
+                newMessage_ += HptpContext::makeMessage("", "",
+                                                        "", FILETRANSFER, dict);
                 removeFileFdFromSet(localSockFd);
                 std::cout << "file trans over !" << std::endl;
             }
+
+            std::string bytesHaveReceived = std::to_string(info->alreadySentLength) + " "; // space for message end.
+            std::cout << "Confirmed :" << bytesHaveReceived << std::endl;
+            write(localSockFd, bytesHaveReceived.c_str(), bytesHaveReceived.size());
+            std::cout << "Host write to FileTransfer!" << std::endl;
         }
-        else if (!it->getValueByKey("AlreadySentLength").empty()) // For receiver
+        else  // For receiver from sender
         {
             std::cout << "Client received!" << std::endl;
+
             int identifyId = stoi(it->getValueByKey("IdentifyId"));
             if (mapIdentify2FilePtr_.find(identifyId) == mapIdentify2FilePtr_.end())
             {
@@ -145,25 +150,26 @@ namespace Raven
             }
 
             FILE *filePtr = mapIdentify2FilePtr_[identifyId];
+            if (it->getText().length() == 0)    //Trans over
+            {
+                fflush(filePtr);
+                fclose(filePtr);
+                mapIdentify2FilePtr_.erase(identifyId);
+                return ;
+            }
+
             const char *buffPtr = it->getText().c_str();
             std::size_t bytesHadWroten = 0;
             while (bytesHadWroten < it->getText().length())
             {
                 bytesHadWroten += fwrite(buffPtr + bytesHadWroten, 1, it->getText().length() - bytesHadWroten, filePtr);
             }
-            long confirmed = bytesHadWroten + stoi(it->getValueByKey("AlreadySentLength"));
+            long confirmed = bytesHadWroten;
             Dict dict;
             dict["IdentifyId"] = it->getValueByKey("IdentifyId");
             dict["Confirmed"] = std::to_string(confirmed);
             newMessage_ += HptpContext::makeMessage("", "", "", FILETRANSFER, dict);
             std::cout << "Client return to host!" << std::endl;
-
-            if (confirmed == stoi(it->getValueByKey("FileLength")))
-            {
-                fflush(filePtr);
-                fclose(filePtr);
-                mapIdentify2FilePtr_.erase(identifyId);
-            }
         }
     }
 } // namespace Raven
