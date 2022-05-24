@@ -156,15 +156,14 @@ namespace Raven
             }
 
             FILE *filePtr = mapIdentify2FilePtr_[identifyId];
-            /*if (textLength == 0)    //Trans over
+            if (textLength == 0)    //Trans over
             {
+                std::cout << "textLength: "<< textLength << std::endl;
                 fflush(filePtr);
                 fclose(filePtr);
                 mapIdentify2FilePtr_.erase(identifyId);
                 return ;
-            }*/
-            std::cout << "textLength: "<< textLength << std::endl;
-
+            }
 
             const char *buffPtr = it->getText().c_str();
             std::size_t bytesHadWroten = 0;
