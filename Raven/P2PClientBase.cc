@@ -163,6 +163,8 @@ namespace Raven
                 mapIdentify2FilePtr_.erase(identifyId);
                 return ;
             }*/
+            std::cout << "textLength: "<< textLength << std::endl;
+
 
             const char *buffPtr = it->getText().c_str();
             std::size_t bytesHadWroten = 0;
