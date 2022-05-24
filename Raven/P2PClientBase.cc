@@ -101,7 +101,7 @@ namespace Raven
         std::shared_ptr<FileTransFerInfo> it)
     {
         int ret = read(it->fd, fileBuff_, MAX_BUFF);
-        std::cout << "file fd data in!  : " << it->fd << "  bytes:" << ret << std::endl;
+        //std::cout << "file fd data in!  : " << it->fd << "  bytes:" << ret << std::endl;
         
         if (ret == 0)
         {
@@ -127,13 +127,13 @@ namespace Raven
             info->alreadySentLength += confirmed;
 
             std::string bytesHaveReceived = std::to_string(info->alreadySentLength) + " "; // space for message end.
-            std::cout << "Confirmed :" << bytesHaveReceived << std::endl;
+            //std::cout << "Confirmed :" << bytesHaveReceived << std::endl;
             write(localSockFd, bytesHaveReceived.c_str(), bytesHaveReceived.size());
-            std::cout << "Host write to FileTransfer!" << std::endl;
+            //std::cout << "Host write to FileTransfer!" << std::endl;
         }
         else  // For receiver from sender
         {
-            std::cout << "Client received!" << std::endl;
+            //std::cout << "Client received!" << std::endl;
 
             int identifyId = stoi(it->getValueByKey("IdentifyId"));
             std::size_t textLength = it->getText().length();
@@ -150,7 +150,6 @@ namespace Raven
             FILE *filePtr = mapIdentify2FilePtr_[identifyId];
             if (textLength == 0)    //Trans over
             {
-                std::cout << "textLength: "<< textLength << std::endl;
                 fflush(filePtr);
                 fclose(filePtr);
                 mapIdentify2FilePtr_.erase(identifyId);
@@ -168,7 +167,7 @@ namespace Raven
             dict["IdentifyId"] = it->getValueByKey("IdentifyId");
             dict["Confirmed"] = std::to_string(confirmed);
             newMessage_ += HptpContext::makeMessage("", "", "", FILETRANSFER, dict);
-            std::cout << "Client return to host! confirmd: "<< confirmed << std::endl;
+            //std::cout << "Client return to host! confirmd: "<< confirmed << std::endl;
         }
     }
 } // namespace Raven
