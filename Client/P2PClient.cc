@@ -81,7 +81,8 @@ namespace Raven
 				{
 					handleNewFileTransFd();
 				}
-				for (auto it : mapFd2FileTransFerInfo_)
+                auto backup = mapFd2FileTransFerInfo_;
+				for (auto it : backup)
 				{
 					if (FD_ISSET(it.first, &readSet_))
 					{
