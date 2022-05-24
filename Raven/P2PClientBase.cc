@@ -144,7 +144,7 @@ namespace Raven
             std::cout << "Client received!" << std::endl;
 
             int identifyId = stoi(it->getValueByKey("IdentifyId"));
-            long textLength = it->getText().length();
+            std::size_t textLength = it->getText().length();
             if (mapIdentify2FilePtr_.find(identifyId) == mapIdentify2FilePtr_.end())
             {
                 FILE *filePtr = fopen((kFileTransferPath + it->getValueByKey("FileName")).c_str(), "w");
