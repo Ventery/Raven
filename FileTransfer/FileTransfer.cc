@@ -196,7 +196,7 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
             break;
         }
         int ret = fread(buff, 1, fileBlock, filePtr);
-         cout << "Fread bytes:" << ret << endl;
+        //cout << "Fread bytes:" << ret << endl;
 
         if (ret > 0)
         {
@@ -205,7 +205,7 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
             {
                 writeNum += write(clientFd, buff + writeNum, ret - writeNum);
             }
-             cout << "Write bytes:" << writeNum << endl;
+             //cout << "Write bytes:" << writeNum << endl;
              long lastConfirmBytes = confirmedBytes;
              while (lastConfirmBytes + writeNum > confirmedBytes)
              {
@@ -219,7 +219,6 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
                     }
                 }
                 sscanf(readBuff, "%ld ", &confirmedBytes);
-                std::cout << confirmedBytes << std::endl;
                 outputer.rePrint(progressBar.getBar(confirmedBytes));
              }
         }
