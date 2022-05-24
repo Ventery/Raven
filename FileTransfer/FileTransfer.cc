@@ -212,8 +212,7 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
                 long readNum = 0;
                 while (true)
                 {
-                    readNum += read(clientFd, readBuff + readNum, NORMAL_BUFF);
-                        cout << "Read bytes:" << readNum << endl;
+                    readNum += read(clientFd, readBuff + readNum, 1);
                     if (readBuff[readNum - 1] == ' ')
                     {
                         break;
