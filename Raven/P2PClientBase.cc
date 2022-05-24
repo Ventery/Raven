@@ -101,7 +101,7 @@ namespace Raven
         std::shared_ptr<FileTransFerInfo> it)
     {
         int ret = read(it->fd, fileBuff_, MAX_BUFF);
-        std::cout << "file fd data in!  : " << it->fd << "  bytes:" << ret << " AlreadySentLength:" << it->alreadySentLength << std::endl;
+        std::cout << "file fd data in!  : " << it->fd << "  bytes:" << ret << std::endl;
         Dict dict;
         dict["FileName"] = it->fileName;
         dict["IdentifyId"] = std::to_string(it->fd);
@@ -169,7 +169,7 @@ namespace Raven
             dict["IdentifyId"] = it->getValueByKey("IdentifyId");
             dict["Confirmed"] = std::to_string(confirmed);
             newMessage_ += HptpContext::makeMessage("", "", "", FILETRANSFER, dict);
-            std::cout << "Client return to host!" << std::endl;
+            std::cout << "Client return to host! confirmd: "<< confirmed << std::endl;
         }
     }
 } // namespace Raven
