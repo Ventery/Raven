@@ -144,6 +144,7 @@ namespace Raven
             std::cout << "Client received!" << std::endl;
 
             int identifyId = stoi(it->getValueByKey("IdentifyId"));
+            long textLength = it->getText().length();
             if (mapIdentify2FilePtr_.find(identifyId) == mapIdentify2FilePtr_.end())
             {
                 FILE *filePtr = fopen((kFileTransferPath + it->getValueByKey("FileName")).c_str(), "w");
@@ -155,19 +156,19 @@ namespace Raven
             }
 
             FILE *filePtr = mapIdentify2FilePtr_[identifyId];
-            if (it->getText().length() == 0)    //Trans over
+            /*if (textLength == 0)    //Trans over
             {
                 fflush(filePtr);
                 fclose(filePtr);
                 mapIdentify2FilePtr_.erase(identifyId);
                 return ;
-            }
+            }*/
 
             const char *buffPtr = it->getText().c_str();
             std::size_t bytesHadWroten = 0;
-            while (bytesHadWroten < it->getText().length())
+            while (bytesHadWroten < textLength)
             {
-                bytesHadWroten += fwrite(buffPtr + bytesHadWroten, 1, it->getText().length() - bytesHadWroten, filePtr);
+                bytesHadWroten += fwrite(buffPtr + bytesHadWroten, 1, textLength - bytesHadWroten, filePtr);
             }
             long confirmed = bytesHadWroten;
             Dict dict;
