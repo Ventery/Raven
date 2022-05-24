@@ -106,7 +106,6 @@ namespace Raven
         if (ret == 0)
         {
             removeFileFdFromSet(it->fd);
-            std::cout << "file trans over !" << std::endl;
         }
 
         Dict dict;
