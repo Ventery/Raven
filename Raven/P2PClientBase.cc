@@ -101,18 +101,21 @@ namespace Raven
         std::shared_ptr<FileTransFerInfo> it)
     {
         int ret = read(it->fd, fileBuff_, MAX_BUFF);
+        std::cout << "file fd data in!  : " << it->fd << "  bytes:" << ret << std::endl;
+
         if (ret == 0)
         {
             removeFileFdFromSet(it->fd);
             std::cout << "file trans over !" << std::endl;
         }
 
-        std::cout << "file fd data in!  : " << it->fd << "  bytes:" << ret << std::endl;
         Dict dict;
         dict["FileName"] = it->fileName;
         dict["IdentifyId"] = std::to_string(it->fd);
 
-        newMessage_ += HptpContext::makeMessage(std::string(fileBuff_, ret), "",
+        std::string message = ret > 0 ? std::string(fileBuff_, ret) : "";
+
+        newMessage_ += HptpContext::makeMessage(message, "",
                                                 "", FILETRANSFER, dict);
     }
 
@@ -125,7 +128,7 @@ namespace Raven
             auto info = mapFd2FileTransFerInfo_[localSockFd];
 
             info->alreadySentLength += confirmed;
-            if (info->alreadySentLength == info->length)        //Sender notifies receiver and filetransfer that the file is over. 
+            if (info->alreadySentLength == info->length) // Sender notifies receiver and filetransfer that the file is over.
             {
                 Dict dict;
                 dict["IdentifyId"] = std::to_string(info->fd);
@@ -138,7 +141,7 @@ namespace Raven
             write(localSockFd, bytesHaveReceived.c_str(), bytesHaveReceived.size());
             std::cout << "Host write to FileTransfer!" << std::endl;
         }
-        else  // For receiver from sender
+        else // For receiver from sender
         {
             std::cout << "Client received!" << std::endl;
 
@@ -154,12 +157,12 @@ namespace Raven
             }
 
             FILE *filePtr = mapIdentify2FilePtr_[identifyId];
-            if (it->getText().length() == 0)    //Trans over
+            if (it->getText().length() == 0) // Trans over
             {
                 fflush(filePtr);
                 fclose(filePtr);
                 mapIdentify2FilePtr_.erase(identifyId);
-                return ;
+                return;
             }
 
             const char *buffPtr = it->getText().c_str();
@@ -173,7 +176,7 @@ namespace Raven
             dict["IdentifyId"] = it->getValueByKey("IdentifyId");
             dict["Confirmed"] = std::to_string(confirmed);
             newMessage_ += HptpContext::makeMessage("", "", "", FILETRANSFER, dict);
-            std::cout << "Client return to host! confirmd: "<< confirmed << std::endl;
+            std::cout << "Client return to host! confirmd: " << confirmed << std::endl;
         }
     }
 } // namespace Raven
