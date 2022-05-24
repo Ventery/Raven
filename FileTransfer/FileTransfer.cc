@@ -207,7 +207,7 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
             }
              cout << "Write bytes:" << writeNum << endl;
              long lastConfirmBytes = confirmedBytes;
-             while (lastConfirmBytes + writeNum < confirmedBytes)
+             while (lastConfirmBytes + writeNum > confirmedBytes)
              {
                 long readNum = 0;
                 while (true)
