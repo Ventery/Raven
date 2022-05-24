@@ -206,8 +206,8 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
                 writeNum += write(clientFd, buff + writeNum, ret - writeNum);
             }
              cout << "Write bytes:" << writeNum << endl;
-             long numToConfirm = writeNum;
-             while (numToConfirm > 0)
+             long lastConfirmBytes = confirmedBytes;
+             while (lastConfirmBytes + writeNum < confirmedBytes)
              {
                 long readNum = 0;
                 while (true)
@@ -222,7 +222,6 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
                 sscanf(readBuff, "%ld ", &confirmedBytes);
                 std::cout << confirmedBytes << std::endl;
                 outputer.rePrint(progressBar.getBar(confirmedBytes));
-                numToConfirm -=confirmedBytes;
              }
         }
     }
