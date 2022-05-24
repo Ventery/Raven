@@ -182,7 +182,7 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
 
     Global::ScreenRefresher outputer;
     Global::ProgressBarDemo progressBar("bytes", fileSize);
-    long confirmedBytes;
+    long confirmedBytes = 0;
 
     while (true)
     {
