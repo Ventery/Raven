@@ -124,15 +124,7 @@ namespace Raven
             int localSockFd = stoi(it->getValueByKey("IdentifyId"));
             long confirmed = stoi(it->getValueByKey("Confirmed"));
             auto info = mapFd2FileTransFerInfo_[localSockFd];
-
             info->alreadySentLength += confirmed;
-            if (info->alreadySentLength == info->length)        //Sender notifies receiver and filetransfer that the file is over. 
-            {
-                Dict dict;
-                dict["IdentifyId"] = std::to_string(info->fd);
-                newMessage_ += HptpContext::makeMessage("", "",
-                                                        "", FILETRANSFER, dict);
-            }
 
             std::string bytesHaveReceived = std::to_string(info->alreadySentLength) + " "; // space for message end.
             std::cout << "Confirmed :" << bytesHaveReceived << std::endl;
