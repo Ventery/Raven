@@ -101,6 +101,12 @@ namespace Raven
         std::shared_ptr<FileTransFerInfo> it)
     {
         int ret = read(it->fd, fileBuff_, MAX_BUFF);
+        if (ret == 0)
+        {
+            removeFileFdFromSet(it->fd);
+            std::cout << "file trans over !" << std::endl;
+        }
+
         std::cout << "file fd data in!  : " << it->fd << "  bytes:" << ret << std::endl;
         Dict dict;
         dict["FileName"] = it->fileName;
@@ -125,8 +131,6 @@ namespace Raven
                 dict["IdentifyId"] = std::to_string(info->fd);
                 newMessage_ += HptpContext::makeMessage("", "",
                                                         "", FILETRANSFER, dict);
-                removeFileFdFromSet(localSockFd);
-                std::cout << "file trans over !" << std::endl;
             }
 
             std::string bytesHaveReceived = std::to_string(info->alreadySentLength) + " "; // space for message end.
