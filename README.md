@@ -110,9 +110,9 @@ After installation ,your program should find gcrypt.h
           3、Creat ～/RavenTrans to store upload/download files and IPC sockets.
           
  ### III、Run
- -	In server excute TestRavenServer.In host excute TestRavenHost.In client excute TestRaClient。Client should connect to host's shell through server.
- -  Download file: After client connected to host, execute TestFileTransfer [filename] and then select one socket(host's local server socket) and press enter.Then the file wild bt downloaded to client's ~/RavenTrans/（use the very connection between client and host）。
- -  Upload file :After client connected to host，execute TestFileTransfer [filename] and then select one socket(client's local server socket) and press enter.Then the file wild bt upload to host's ~/RavenTrans/（use the very connection between client and host）。
+ -	In server excute TestRavenServer.In host excute TestRavenHost.In client excute TestRaClient.Client should connect to host's shell through server.
+ -  Download file: After client connected to host, execute TestFileTransfer [filename] and then select one socket(host's local server socket) and press enter.Then the file will be downloaded to client's ~/RavenTrans/（use the very connection between client and host）.
+ -  Upload file :After client connected to host，execute TestFileTransfer [filename] and then select one socket(client's local server socket) and press enter.Then the file will be upload to host's ~/RavenTrans/（use the very connection between client and host）.
 
 
 
