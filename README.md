@@ -1,9 +1,10 @@
 # Raven
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://opensource.org/licenses/MIT)  [![Build Status](https://api.travis-ci.com/Ventery/Raven.svg?branch=master)](https://travis-ci.com/github/Ventery/Raven)
-## 中文(https://github.com/Ventery/Raven/edit/master/README.md#raven%E7%B1%BB%E4%BC%BC%E4%BA%8E%E4%B8%80%E4%B8%AA%E5%AE%9E%E7%8E%B0%E4%BA%86nat%E7%A9%BF%E9%80%8F%E7%9A%84%E7%AE%80%E5%8C%96%E7%89%88ssh%E7%94%B1c%E7%BC%96%E5%86%99)
-## English([https://github.com/Ventery/WebServer#%E4%BA%8C%E8%BF%90%E8%A1%8C](https://github.com/Ventery/Raven/edit/master/README.md#raven-works-like-a-simplified-ssh-with-nat-traversalwritten-in-c))
+## [中文](https://github.com/Ventery/Raven/edit/master/README.md#%E4%BB%8B%E7%BB%8D)
+## [English](https://github.com/Ventery/Raven/edit/master/README.md#ipreparation)
 
-### Raven类似于一个实现了NAT穿透的简化版SSH，由C++编写。
+### 介绍
+Raven类似于一个实现了NAT穿透的简化版SSH，由C++编写。
 
 - 使用AES加密。
 - 使用P2P模式，有服务器中转模式作为替代
@@ -60,7 +61,8 @@ apt-get install libgcrypt-dev
 
 
 
-### Raven works like a simplified SSH with NAT traversal,written in C++.
+### Introduce
+Raven works like a simplified SSH with NAT traversal,written in C++.
 - AES encryption.
 - Use server as mid transprot.
 - Server is linux only,host and client can be run in both linux and macos.
