@@ -1,9 +1,9 @@
 # Raven
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://opensource.org/licenses/MIT)  [![Build Status](https://api.travis-ci.com/Ventery/Raven.svg?branch=master)](https://travis-ci.com/github/Ventery/Raven)
-## 中文
-## English(https://github.com/Ventery/WebServer#%E4%BA%8C%E8%BF%90%E8%A1%8C)
+## 中文(https://github.com/Ventery/Raven/edit/master/README.md#raven%E7%B1%BB%E4%BC%BC%E4%BA%8E%E4%B8%80%E4%B8%AA%E5%AE%9E%E7%8E%B0%E4%BA%86nat%E7%A9%BF%E9%80%8F%E7%9A%84%E7%AE%80%E5%8C%96%E7%89%88ssh%E7%94%B1c%E7%BC%96%E5%86%99)
+## English([https://github.com/Ventery/WebServer#%E4%BA%8C%E8%BF%90%E8%A1%8C](https://github.com/Ventery/Raven/edit/master/README.md#raven-works-like-a-simplified-ssh-with-nat-traversalwritten-in-c))
 
-Raven类似于一个实现了NAT穿透的简化版SSH，由C++编写。
+### Raven类似于一个实现了NAT穿透的简化版SSH，由C++编写。
 
 - 使用AES加密。
 - 使用P2P模式，有服务器中转模式作为替代
@@ -56,10 +56,11 @@ apt-get install libgcrypt-dev
  -  下载文件:client连接上host的shell后，执行TestFileTransfer [文件名],选择一个socket回车（这里是当前host的本地socket）,然后文件会被下载到client机器~/RavenTrans目录下（利用当前的加密传输连接）。
  -  上传文件:client连接上host的shell后，在client机器上另外开一个shell，执行TestFileTransfer [文件名],选择一个socket回车（这里是当前client的本地socket）,然后文件会被上传到client机器~/RavenTrans目录下（利用当前的加密传输连接）。
 
+//以前那版是黑历史，希望各位忘了吧。
 
-## English
 
-Raven works like a simplified SSH with NAT traversal,written in C++.
+
+### Raven works like a simplified SSH with NAT traversal,written in C++.
 - AES encryption.
 - Use server as mid transprot.
 - Server is linux only,host and client can be run in both linux and macos.
@@ -114,7 +115,4 @@ After installation ,your program should find gcrypt.h
 
 
 //The former version was my bad work，please forget it.
-
-//以前那版是黑历史，希望各位忘了吧。
-
 
