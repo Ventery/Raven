@@ -44,7 +44,7 @@ apt-get install libgcrypt-dev
 
 ### 二、安装：
 -	下载Raven并解压进入目录或者直接pull，打开Raven.conf文件，修改server_ip为你的服务器ip，其他的你可以不用变。有安全需求的话，identify_key、aes_key_to_peer、aes_key_to_server三个字符串为16字节随机字符串可以自己生成。修改完毕后保存。log_path可以先不管。
--	对三台机器均作出以上操作，保证Raven.conf一样即可。然后在项目目录执行./build.sh开始编译，脚本会创建几个目录然后开始编译并在/usr/local/bin生成可执行文件的链接,可能需要一定权限。
+-	对三台机器均作出以上操作，保证Raven.conf一样即可。然后在项目目录执行./build.sh开始编译，脚本会创建几个目录然后开始编译并在/usr/local/bin生成可执行文件的链接,可能需要一定权限。脚本创建的目录：
 
           1、在上级目录../建立../build目录作为build目录。
 
@@ -100,7 +100,7 @@ After installation ,your program should find gcrypt.h
 
 ### II、Installation：
 -	Download or pull Raven and enter the directory.Open Raven.conf and modify server_ip to your server ip，all the others can be stay the same.But I recommend you rebuild these 16 bytes string : identify_key、aes_key_to_peer、aes_key_to_server.Then save all.Some variables like log_path is not used yet so leave them aside。
--	You should do the above operations in all three instance and ensure that those Raven.conf is the same copy.Then excute ./build.sh in each directory to begin complile.The script will creat several directories and generate links in /usr/local/bin which point to executable files. 
+-	You should do the above operations in all three instance and ensure that those Raven.conf is the same copy.Then excute ./build.sh in each directory to begin complile.The script will creat several directories and generate links in /usr/local/bin which point to executable files. Directories will be created:
 
 
           1、In parent directory creat ../build/ as build directory.
