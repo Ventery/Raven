@@ -1,6 +1,6 @@
 # Raven
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://opensource.org/licenses/MIT)  [![Build Status](https://api.travis-ci.com/Ventery/Raven.svg?branch=master)](https://travis-ci.com/github/Ventery/Raven)
-## [中文](https://github.com/Ventery/Raven/edit/master/README.md#%E4%BB%8B%E7%BB%8D)
+## [中文](https://github.com/Ventery/Raven/blob/master/README.md#%E4%B8%AD%E6%96%87)
 ## [English](https://github.com/Ventery/Raven/edit/master/README.md#ipreparation)
 
 ### 介绍
