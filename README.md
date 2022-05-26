@@ -100,7 +100,7 @@ After installation ,your program should find gcrypt.h
 
 ### II、Installation：
 -	Download or pull Raven and enter the directory.Open Raven.conf and modify server_ip to your server ip，all the others can be stay the same.But I recommend you rebuild these 16 bytes string : identify_key、aes_key_to_peer、aes_key_to_server.Then save all.Some variables like log_path is not used yet so leave them aside。
--	You should do the above operations in all three instances and ensure that those Raven.conf is the same copy.Then excute ./build.sh in each directory to begin complile.The script will creat several directories and generate links in /usr/local/bin which point to executable files. Directories will be created:
+-	You should do the above operations in all three instances and ensure that their Raven.conf is the same copy.Then excute ./build.sh in each directory to begin complile.The script will creat several directories and generate links in /usr/local/bin which point to executable files. Directories will be created:
 
 
           1、In parent directory creat ../build/ as build directory.
