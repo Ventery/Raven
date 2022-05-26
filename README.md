@@ -57,7 +57,8 @@ apt-get install libgcrypt-dev
  -  下载文件:client连接上host的shell后，执行TestFileTransfer [文件名],选择一个socket回车（这里是当前host的本地socket）,然后文件会被下载到client机器~/RavenTrans目录下（利用当前的加密传输连接）。
  -  上传文件:client连接上host的shell后，在client机器上另外开一个shell，执行TestFileTransfer [文件名],选择一个socket回车（这里是当前client的本地socket）,然后文件会被上传到client机器~/RavenTrans目录下（利用当前的加密传输连接）。
 
-//以前那版是黑历史，希望各位忘了吧。
+
+以前那版是黑历史，希望各位忘了吧!:-)
 
 
 
@@ -116,5 +117,6 @@ After installation ,your program should find gcrypt.h
 
 
 
-//The former version was my bad work，please forget it.
+
+The former version was my bad work，please forget it. :-)
 
