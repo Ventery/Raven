@@ -60,16 +60,6 @@ apt-get install libgcrypt-dev
 
 以前那版是黑历史，希望各位忘了吧!:-)
 
-
-###
-###
-###
-###
-###
-###
-###
-###
-
 ### Introduce
 Raven works like a simplified SSH with NAT traversal,written in C++.
 - AES encryption.
