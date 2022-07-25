@@ -10,7 +10,7 @@ namespace Raven
 {
 	static const Dict emptyDict;
 
-	class HptpContext : public Global::Noncopyable
+	class HptpContext : public Noncopyable
 	{
 	public:
 		HptpContext(int fd, const std::string aesKey, const bool isHost = false, std::string ip = "", int port = -1) : sockInfo_(fd, aesKey, isHost, ip, port){};

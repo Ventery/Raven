@@ -180,8 +180,8 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
     char buff[fileBlock];
     char readBuff[NORMAL_BUFF];
 
-    Global::ScreenRefresher outputer;
-    Global::ProgressBarDemo progressBar("bytes", fileSize);
+    ScreenRefresher outputer;
+    ProgressBarDemo progressBar("bytes", fileSize);
     long confirmedBytes = 0;
 
     while (true)

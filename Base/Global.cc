@@ -28,8 +28,7 @@ namespace Global
 	std::map<int, EventHandlerBase::CallBack> signalHandlerMap;
 	MutexLock mSignalHandlerMap;
 	MutexLock mGetBash;
-	MutexLock mRefreshScreamer;
-
+	
 	std::string encode(const std::string &buf, const std::string &key, const std::string &init_vec)
 	{
 		std::string message;

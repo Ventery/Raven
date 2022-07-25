@@ -1,11 +1,9 @@
-//role : noncopyable base class.
-//Author : Ventery
+// role : noncopyable base class.
+// Author : Ventery
 
-#ifndef BASE_NONCOPYABLE_H
-#define BASE_NONCOPYABLE_H
+#ifndef NONCOPYABLE_H
+#define NONCOPYABLE_H
 
-namespace Global
-{
 class Noncopyable
 {
 protected:
@@ -17,6 +15,4 @@ private:
   const Noncopyable &operator=(const Noncopyable &);
 };
 
-} // namespace Global
-
-#endif // BASE_NONCOPYABLE_H
+#endif // NONCOPYABLE_H
