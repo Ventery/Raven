@@ -180,8 +180,7 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
     char buff[fileBlock];
     char readBuff[NORMAL_BUFF];
 
-    ScreenRefresher outputer;
-    ProgressBarDemo progressBar("bytes", fileSize);
+    ScreenRefresher outputer("bytes", fileSize);
     long confirmedBytes = 0;
 
     while (true)
@@ -219,7 +218,7 @@ void beginTrans(string fullPath, string fileName, int clientFd, struct stat &sta
                     }
                 }
                 sscanf(readBuff, "%ld ", &confirmedBytes);
-                outputer.rePrint(progressBar.getBar(confirmedBytes));
+                outputer.rePrint(confirmedBytes);
              }
         }
     }
