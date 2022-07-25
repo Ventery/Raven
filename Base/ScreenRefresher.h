@@ -92,8 +92,8 @@ private:
         std::cout << std::flush;
     }
 
-    std::shared_ptr<MutexLockGuard> gardPtr_;
     int formerLength_;
+    std::shared_ptr<MutexLockGuard> gardPtr_;
 
     static MutexLock mRefreshScreamer_;
     ProgressBarDemo progressBar_;

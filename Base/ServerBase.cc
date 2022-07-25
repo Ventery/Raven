@@ -24,6 +24,7 @@ namespace Global
         addSig(SIGTERM, std::bind(&ServerBase::signalHandler, this, SIGTERM));
         addSig(SIGINT, std::bind(&ServerBase::signalHandler, this, SIGINT));
         addSig(SIGHUP, std::bind(&ServerBase::signalHandler, this, SIGHUP));
+        addSig(SIGPIPE, std::bind(&ServerBase::signalHandler, this, SIGPIPE));
     }
 
     ServerBase::~ServerBase()
