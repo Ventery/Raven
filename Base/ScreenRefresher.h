@@ -94,9 +94,9 @@ private:
 
     int formerLength_;
     std::shared_ptr<MutexLockGuard> gardPtr_;
+    ProgressBarDemo progressBar_;
 
     static MutexLock mRefreshScreamer_;
-    ProgressBarDemo progressBar_;
 };
 MutexLock ScreenRefresher::mRefreshScreamer_;
 
